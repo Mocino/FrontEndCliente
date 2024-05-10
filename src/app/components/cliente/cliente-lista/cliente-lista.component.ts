@@ -7,6 +7,8 @@ import { ClienteAgregarComponent } from '../cliente-agregar/cliente-agregar.comp
 import { ClienteService } from 'src/app/services/Cliente.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
+import { ContantoListaComponent } from '../../contacto/contanto-lista/contanto-lista.component';
+import { MetodoPagoListaComponent } from '../../metodoPago/metodo-pago-lista/metodo-pago-lista.component';
 
 
 
@@ -113,6 +115,43 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
     })
   }
 
+  /**
+   * Método para abrir el diálogo de ver contacto cliente.
+   */
+  dialogoVerContacto(dataCliente: Cliente){
+    this._dialog.open(ContantoListaComponent,{
+      disableClose: true,
+      data:dataCliente
+    }).afterClosed().subscribe(resultado=>{
+      if(resultado === "Contacto"){
+        this._clienteService.deleteCliente(dataCliente.id).subscribe({
+          next:(data)=>{
+            this.mostrarAlerta("Vista Contacto", "Listo");
+            this.mostrarCliente();
+          }
+        })
+      }
+    })
+  }
+
+  /**
+   * Método para abrir el diálogo de ver cliente.
+   */
+  dialogoVerMetodosPago(dataCliente: Cliente){
+    this._dialog.open(MetodoPagoListaComponent,{
+      disableClose: true,
+      data:dataCliente
+    }).afterClosed().subscribe(resultado=>{
+      if(resultado === "metodoPago"){
+        this._clienteService.deleteCliente(dataCliente.id).subscribe({
+          next:(data)=>{
+            this.mostrarAlerta("Vista Contacto", "Listo");
+            this.mostrarCliente();
+          }
+        })
+      }
+    })
+  }
 
   /**
    * Método para mostrar una alerta utilizando MatSnackBar.

@@ -12,25 +12,14 @@ export interface Cliente {
 }
 
 export interface Contacto {
-  tipoContacto: TipoContacto;
+  tipoContacto: string;
   valorContacto: string;
 }
 
-export enum TipoContacto {
-  Email = 'Email',
-  Telefono = 'Telefono',
-  Direccion = 'Direccion'
-}
-
 export interface MetodoDePago {
-  tipo: TipoPago;
+  tipo: string;
   numero: string;
   fechaVencimiento: Date;
   nombreTitular: string;
 }
 
-export enum TipoPago {
-  TarjetaDeCredito = 'Tarjeta de Crédito',
-  PayPal = 'PayPal',
-  Otra = 'Otra'
-}

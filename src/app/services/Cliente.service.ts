@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Cliente, TipoContacto, TipoPago } from '../interfaces/Cliente';
+import { Cliente} from '../interfaces/Cliente';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -21,11 +21,11 @@ export class ClienteService {
         nit: 'C123456789',
         empresa: 'Empresa A',
         contactos: [
-          { tipoContacto: TipoContacto.Email, valorContacto: 'juan@example.com' },
-          { tipoContacto: TipoContacto.Telefono, valorContacto: '123456789' }
+          { tipoContacto: 'TipoContacto.Email', valorContacto: 'juan@example.com' },
+          { tipoContacto: 'TipoContacto.Email', valorContacto: '123456789' }
         ],
         metodosDePago: [
-          { tipo: TipoPago.TarjetaDeCredito, numero: '1234 5678 9012 3456', fechaVencimiento: new Date('2026-12-01'), nombreTitular: 'Juan Pérez' }
+          { tipo: 'AAA', numero: '1234 5678 9012 3456', fechaVencimiento: new Date('2026-12-01'), nombreTitular: 'Juan Pérez' }
         ]
       },
       {
@@ -38,11 +38,11 @@ export class ClienteService {
         nit: 'C987654321',
         empresa: 'Empresa B',
         contactos: [
-          { tipoContacto: TipoContacto.Email, valorContacto: 'maria@example.com' },
-          { tipoContacto: TipoContacto.Telefono, valorContacto: '987654321' }
+          { tipoContacto: 'TipoContacto.Email', valorContacto: 'maria@example.com' },
+          { tipoContacto: 'TipoContacto.Email', valorContacto: '987654321' }
         ],
         metodosDePago: [
-          { tipo: TipoPago.PayPal, numero: 'maria@example.com', fechaVencimiento: new Date('2027-01-01'), nombreTitular: 'María López' }
+          { tipo: 'TipoPago.PayPal', numero: 'maria@example.com', fechaVencimiento: new Date('2027-01-01'), nombreTitular: 'María López' }
         ]
       },
       {
@@ -55,10 +55,10 @@ export class ClienteService {
         nit: 'C456789012',
         empresa: 'Empresa C',
         contactos: [
-          { tipoContacto: TipoContacto.Telefono, valorContacto: '654321987' }
+          { tipoContacto: 'TipoContacto.Telefono', valorContacto: '654321987' }
         ],
         metodosDePago: [
-          { tipo: TipoPago.TarjetaDeCredito, numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
+          { tipo: 'TipoPago.TarjetaDeCredito', numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
         ]
       },
       {
@@ -71,10 +71,10 @@ export class ClienteService {
         nit: 'C654321098',
         empresa: 'Empresa D',
         contactos: [
-          { tipoContacto: TipoContacto.Telefono, valorContacto: '123987456' }
+          { tipoContacto: 'TipoContacto.Telefono', valorContacto: '123987456' }
         ],
         metodosDePago: [
-          { tipo: TipoPago.TarjetaDeCredito, numero: '5678 9012 3456 7890', fechaVencimiento: new Date('2024-10-01'), nombreTitular: 'Luisa Martínez' }
+          { tipo: 'TipoPago.TarjetaDeCredito', numero: '5678 9012 3456 7890', fechaVencimiento: new Date('2024-10-01'), nombreTitular: 'Luisa Martínez' }
         ]
       },
       {
@@ -87,10 +87,10 @@ export class ClienteService {
         nit: 'C789012345',
         empresa: 'Empresa E',
         contactos: [
-          { tipoContacto: TipoContacto.Email, valorContacto: 'carlos@example.com' }
+          { tipoContacto: 'TipoContacto.Email', valorContacto: 'carlos@example.com' }
         ],
         metodosDePago: [
-          { tipo: TipoPago.Otra, numero: '1234567890', fechaVencimiento: new Date('2023-06-01'), nombreTitular: 'Carlos Rodríguez' }
+          { tipo: 'TipoPago.Otra', numero: '1234567890', fechaVencimiento: new Date('2023-06-01'), nombreTitular: 'Carlos Rodríguez' }
         ]
       },
       {
@@ -103,10 +103,10 @@ export class ClienteService {
         nit: 'C456789012',
         empresa: 'Empresa C',
         contactos: [
-          { tipoContacto: TipoContacto.Telefono, valorContacto: '654321987' }
+          { tipoContacto: 'aaa', valorContacto: '654321987' }
         ],
         metodosDePago: [
-          { tipo: TipoPago.TarjetaDeCredito, numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
+          { tipo: 'TipoPago.TarjetaDeCredito', numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
         ]
       }
     ];
