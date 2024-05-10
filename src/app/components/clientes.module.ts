@@ -17,10 +17,15 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ClienteAgregarComponent } from './cliente/cliente-agregar/cliente-agregar.component';
+import { ClienteListaComponent } from './cliente/cliente-lista/cliente-lista.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ClienteAgregarComponent,
+    ClienteListaComponent
+  ],
   imports: [
     CommonModule,
     HttpClientModule,
