@@ -5,6 +5,8 @@ import { Cliente } from 'src/app/interfaces/Cliente';
 import { MatDialog } from '@angular/material/dialog';
 import { ClienteAgregarComponent } from '../cliente-agregar/cliente-agregar.component';
 import { ClienteService } from 'src/app/services/Cliente.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
 
 
 
@@ -25,7 +27,8 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
 
   constructor(
     private _clienteService: ClienteService,
-    public _dialog: MatDialog
+    public _dialog: MatDialog,
+    private _snackBar: MatSnackBar
 
   ) { }
 
@@ -65,7 +68,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   /**
    * Método para abrir el diálogo de agregar cliente.
    */
-  openDialog(){
+  openDialogCrearCliente(){
     this._dialog.open(ClienteAgregarComponent,{
       disableClose: true,
       width:"330px"
@@ -76,6 +79,9 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
     })
   }
 
+  /**
+   * Método para abrir el diálogo de editar cliente.
+   */
   dialogoEditarCliente(dataCliente: Cliente){
     this._dialog.open(ClienteAgregarComponent,{
       disableClose: true,
@@ -86,5 +92,38 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
         this.mostrarCliente();
       }
     })
+  }
+
+  /**
+   * Método para abrir el diálogo de editar cliente.
+   */
+  dialogoEliminarCliente(dataCliente: Cliente){
+    this._dialog.open(ClienteEliminarComponent,{
+      disableClose: true,
+      data:dataCliente
+    }).afterClosed().subscribe(resultado=>{
+      if(resultado === "Eliminar"){
+        this._clienteService.deleteCliente(dataCliente.id).subscribe({
+          next:(data)=>{
+            this.mostrarAlerta("Empleado eliminado", "Listo");
+            this.mostrarCliente();
+          }
+        })
+      }
+    })
+  }
+
+
+  /**
+   * Método para mostrar una alerta utilizando MatSnackBar.
+   * @param msg Mensaje a mostrar en la alerta.
+   * @param accion Acción de la alerta.
+   */
+  mostrarAlerta(msg:string, accion: string){
+    this._snackBar.open(msg, accion,{
+      horizontalPosition: "end",
+      verticalPosition: "top",
+      duration: 3000
+    });
   }
 }
