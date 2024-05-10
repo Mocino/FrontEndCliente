@@ -22,12 +22,14 @@ import { ClienteListaComponent } from './cliente/cliente-lista/cliente-lista.com
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ClienteEliminarComponent } from './cliente/cliente-eliminar/cliente-eliminar.component';
 
 
 @NgModule({
   declarations: [
     ClienteAgregarComponent,
-    ClienteListaComponent
+    ClienteListaComponent,
+    ClienteEliminarComponent
   ],
   imports: [
     CommonModule,

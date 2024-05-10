@@ -124,4 +124,8 @@ export class ClienteService {
     return of(modelo);
   }
 
+  deleteCliente(idCliente: number): Observable<void> {
+    console.log(`Solicitud de eliminación del cliente con ID ${idCliente} recibida`);
+    return of();
+  }
 }
