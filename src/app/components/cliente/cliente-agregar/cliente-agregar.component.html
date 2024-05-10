@@ -1,1 +1,74 @@
-<p>cliente-agregar works!</p>
+<h1 mat-dialog-title>{{tituloaccion}} Empleado</h1>
+<mat-dialog-content>
+  <form [formGroup]="formCliente">
+    <mat-grid-list cols="1" rowHeight="80px">
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput placeholder="Nombres" formControlName="nombres" autocomplete="off">
+          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">Nombres requeridos</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Apellidos</mat-label>
+          <input matInput placeholder="Apellidos" formControlName="apellidos" autocomplete="off">
+          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">Apellidos requeridos</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput placeholder="Dirección" formControlName="direccion" autocomplete="off">
+          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">Direccion requerido</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>DPI</mat-label>
+          <input matInput placeholder="DPI" formControlName="dpi" autocomplete="off">
+          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">DPI requerido</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>NIT</mat-label>
+          <input matInput placeholder="NIT" formControlName="nit" autocomplete="off">
+          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">NIT requerido</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Empresa</mat-label>
+          <input matInput placeholder="Empresa" formControlName="empresa" autocomplete="off">
+          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">Empresa requerida</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaNacimiento" autocomplete="off">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">Fecha requerida</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="addEditEmpleado()"
+    [disabled]="formCliente.invalid">Ok</button>
+</mat-dialog-actions>

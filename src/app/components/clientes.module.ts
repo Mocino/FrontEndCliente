@@ -19,6 +19,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ClienteAgregarComponent } from './cliente/cliente-agregar/cliente-agregar.component';
 import { ClienteListaComponent } from './cliente/cliente-lista/cliente-lista.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatDialogModule} from '@angular/material/dialog';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -45,6 +48,9 @@ import { ClienteListaComponent } from './cliente/cliente-lista/cliente-lista.com
     MatTooltipModule,
     MatSlideToggleModule,
     MatSelectModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports:[
     HttpClientModule,
@@ -64,6 +70,9 @@ import { ClienteListaComponent } from './cliente/cliente-lista/cliente-lista.com
     MatTooltipModule,
     MatSlideToggleModule,
     MatSelectModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 

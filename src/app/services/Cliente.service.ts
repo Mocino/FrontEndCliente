@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class EmpleadoService {
+export class ClienteService {
 
   constructor() { }
 
@@ -169,4 +169,9 @@ export class EmpleadoService {
     return of(clientesMock);
   }
 
+
+  guardarCliente(nuevoCliente: Cliente): Observable<boolean> {
+    console.log('Nuevo cliente guardado:', nuevoCliente);
+    return of(true);
+  }
 }

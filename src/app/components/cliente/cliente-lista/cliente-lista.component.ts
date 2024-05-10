@@ -2,7 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Cliente } from 'src/app/interfaces/Cliente';
-import { EmpleadoService } from 'src/app/services/empleado.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ClienteAgregarComponent } from '../cliente-agregar/cliente-agregar.component';
+import { ClienteService } from 'src/app/services/Cliente.service';
 
 
 
@@ -17,11 +19,15 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   /** Columnas que se mostrarán en la tabla. */
-  displayedColumns: string[] = ['numero', 'nombres', 'apellidos', 'direccion', 'empresa'];
+  displayedColumns: string[] = ['numero', 'nombres', 'apellidos', 'direccion', 'empresa', 'acciones'];
   /** Fuente de datos para la tabla. */
   dataSource = new MatTableDataSource<Cliente>();
 
-  constructor(private _empleadoService: EmpleadoService) { }
+  constructor(
+    private _empleadoService: ClienteService,
+    public _dialog: MatDialog
+
+  ) { }
 
   ngOnInit(): void {
     this.mostrarCliente();
@@ -54,5 +60,19 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  /**
+   * Método para abrir el diálogo de agregar cliente.
+   */
+  openDialog(){
+    this._dialog.open(ClienteAgregarComponent,{
+      disableClose: true,
+      width:"330px"
+    }).afterClosed().subscribe(resultado=>{
+      if(resultado=="Creado"){
+        this.mostrarCliente();
+      }
+    })
   }
 }

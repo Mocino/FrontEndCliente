@@ -6,8 +6,8 @@ export interface Cliente {
   dpi: string;
   nit: string;
   empresa: string;
-  contactos: Contacto[];
-  metodosDePago: MetodoDePago[];
+  contactos?: Contacto[];
+  metodosDePago?: MetodoDePago[];
 }
 
 export interface Contacto {
