@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{tituloaccion}} Empleado</h1>
+<h1 mat-dialog-title>{{tituloaccion}} Cliente</h1>
 <mat-dialog-content>
   <form [formGroup]="formCliente">
     <mat-grid-list cols="1" rowHeight="80px">
@@ -69,6 +69,6 @@
   <button
     mat-raised-button
     color="primary"
-    (click)="addEditEmpleado()"
-    [disabled]="formCliente.invalid">Ok</button>
+    (click)="addEditCliente()"
+    [disabled]="formCliente.invalid">{{botonAccion}}</button>
 </mat-dialog-actions>

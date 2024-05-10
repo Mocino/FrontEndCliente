@@ -24,7 +24,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource<Cliente>();
 
   constructor(
-    private _empleadoService: ClienteService,
+    private _clienteService: ClienteService,
     public _dialog: MatDialog
 
   ) { }
@@ -45,7 +45,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
    * Método para obtener y mostrar la lista de clientes.
    */
   mostrarCliente(){
-    this._empleadoService.getClientes().subscribe({
+    this._clienteService.getClientes().subscribe({
       next:(dataResponse)=>{
         console.log(dataResponse)
         this.dataSource.data = dataResponse;
@@ -71,6 +71,18 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       width:"330px"
     }).afterClosed().subscribe(resultado=>{
       if(resultado=="Creado"){
+        this.mostrarCliente();
+      }
+    })
+  }
+
+  dialogoEditarCliente(dataCliente: Cliente){
+    this._dialog.open(ClienteAgregarComponent,{
+      disableClose: true,
+      width:"330px",
+      data:dataCliente
+    }).afterClosed().subscribe(resultado=>{
+      if(resultado=="Editado"){
         this.mostrarCliente();
       }
     })
