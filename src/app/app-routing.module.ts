@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ClientesComponent } from './components/clientes/clientes.component';
+import { ClienteListaComponent } from './components/cliente/cliente-lista/cliente-lista.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'listaClientes', pathMatch: 'full'},
-  { path: 'listaClientes', component: ClientesComponent},
+  { path: 'listaClientes', component: ClienteListaComponent},
 ];
 
 @NgModule({
