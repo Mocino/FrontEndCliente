@@ -1,5 +1,5 @@
 export interface Cliente {
-  id: number,
+  idCliente: number,
   nombres: string;
   apellidos: string;
   direccion: string;
@@ -11,7 +11,10 @@ export interface Cliente {
   metodosDePago?: MetodoDePago[];
 }
 
+
 export interface Contacto {
+  idContacto: number,
+  idCliente: number,
   tipoContacto: string;
   valorContacto: string;
 }
@@ -23,3 +26,8 @@ export interface MetodoDePago {
   nombreTitular: string;
 }
 
+
+export interface TipoContacto {
+  valor: string;
+  nombre: string;
+}

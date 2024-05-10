@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Cliente } from 'src/app/interfaces/Cliente';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ClienteAgregarComponent } from '../cliente-agregar/cliente-agregar.component';
 import { ClienteService } from 'src/app/services/Cliente.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -31,7 +31,6 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
     private _clienteService: ClienteService,
     public _dialog: MatDialog,
     private _snackBar: MatSnackBar
-
   ) { }
 
   ngOnInit(): void {
@@ -105,7 +104,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       data:dataCliente
     }).afterClosed().subscribe(resultado=>{
       if(resultado === "Eliminar"){
-        this._clienteService.deleteCliente(dataCliente.id).subscribe({
+        this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
           next:(data)=>{
             this.mostrarAlerta("Empleado eliminado", "Listo");
             this.mostrarCliente();
@@ -119,19 +118,29 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
    * Método para abrir el diálogo de ver contacto cliente.
    */
   dialogoVerContacto(dataCliente: Cliente){
-    this._dialog.open(ContantoListaComponent,{
-      disableClose: true,
-      data:dataCliente
-    }).afterClosed().subscribe(resultado=>{
-      if(resultado === "Contacto"){
-        this._clienteService.deleteCliente(dataCliente.id).subscribe({
-          next:(data)=>{
-            this.mostrarAlerta("Vista Contacto", "Listo");
-            this.mostrarCliente();
-          }
-        })
-      }
-    })
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = dataCliente;
+
+    dialogConfig.position = {
+      right: '0', // Ajusta la posición del modal a la derecha
+      top: '0'   // Puedes ajustar la posición vertical si es necesario
+    };
+    dialogConfig.width = '70%'; // Establece el ancho del modal al 70% de la pantalla
+    dialogConfig.height = '100%'; // Establece la altura del modal al 80% de la pantalla
+
+    this._dialog.open(ContantoListaComponent, dialogConfig)
+      .afterClosed()
+      .subscribe(resultado => {
+        if(resultado === "Contacto"){
+          this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
+            next:(data)=>{
+              this.mostrarAlerta("Vista Contacto", "Listo");
+              this.mostrarCliente();
+            }
+          })
+        }
+      });
   }
 
   /**
@@ -143,7 +152,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       data:dataCliente
     }).afterClosed().subscribe(resultado=>{
       if(resultado === "metodoPago"){
-        this._clienteService.deleteCliente(dataCliente.id).subscribe({
+        this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
           next:(data)=>{
             this.mostrarAlerta("Vista Contacto", "Listo");
             this.mostrarCliente();

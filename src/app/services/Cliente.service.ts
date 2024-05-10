@@ -12,7 +12,7 @@ export class ClienteService {
   getClientes(): Observable<Cliente[]> {
     const clientesMock: Cliente[] = [
       {
-        id: 1,
+        idCliente: 1,
         nombres: 'Juan',
         apellidos: 'Pérez',
         direccion: 'Calle 123, Ciudad',
@@ -20,16 +20,13 @@ export class ClienteService {
         dpi: '1234567890101',
         nit: 'C123456789',
         empresa: 'Empresa A',
-        contactos: [
-          { tipoContacto: 'TipoContacto.Email', valorContacto: 'juan@example.com' },
-          { tipoContacto: 'TipoContacto.Email', valorContacto: '123456789' }
-        ],
+        contactos: [],
         metodosDePago: [
           { tipo: 'AAA', numero: '1234 5678 9012 3456', fechaVencimiento: new Date('2026-12-01'), nombreTitular: 'Juan Pérez' }
         ]
       },
       {
-        id: 2,
+        idCliente: 2,
         nombres: 'María',
         apellidos: 'López',
         direccion: 'Avenida 456, Pueblo',
@@ -37,16 +34,13 @@ export class ClienteService {
         dpi: '9876543210101',
         nit: 'C987654321',
         empresa: 'Empresa B',
-        contactos: [
-          { tipoContacto: 'TipoContacto.Email', valorContacto: 'maria@example.com' },
-          { tipoContacto: 'TipoContacto.Email', valorContacto: '987654321' }
-        ],
+        contactos: [],
         metodosDePago: [
           { tipo: 'TipoPago.PayPal', numero: 'maria@example.com', fechaVencimiento: new Date('2027-01-01'), nombreTitular: 'María López' }
         ]
       },
       {
-        id: 3,
+        idCliente: 3,
         nombres: 'Pedro',
         apellidos: 'García',
         direccion: 'Avenida 789, Pueblo',
@@ -54,15 +48,13 @@ export class ClienteService {
         dpi: '4567890120101',
         nit: 'C456789012',
         empresa: 'Empresa C',
-        contactos: [
-          { tipoContacto: 'TipoContacto.Telefono', valorContacto: '654321987' }
-        ],
+        contactos: [],
         metodosDePago: [
           { tipo: 'TipoPago.TarjetaDeCredito', numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
         ]
       },
       {
-        id: 4,
+        idCliente: 4,
         nombres: 'Luisa',
         apellidos: 'Martínez',
         direccion: 'Calle 456, Ciudad',
@@ -70,15 +62,13 @@ export class ClienteService {
         dpi: '6543210980101',
         nit: 'C654321098',
         empresa: 'Empresa D',
-        contactos: [
-          { tipoContacto: 'TipoContacto.Telefono', valorContacto: '123987456' }
-        ],
+        contactos: [],
         metodosDePago: [
           { tipo: 'TipoPago.TarjetaDeCredito', numero: '5678 9012 3456 7890', fechaVencimiento: new Date('2024-10-01'), nombreTitular: 'Luisa Martínez' }
         ]
       },
       {
-        id: 5,
+        idCliente: 5,
         nombres: 'Carlos',
         apellidos: 'Rodríguez',
         direccion: 'Calle 789, Ciudad',
@@ -86,15 +76,13 @@ export class ClienteService {
         dpi: '7890123450101',
         nit: 'C789012345',
         empresa: 'Empresa E',
-        contactos: [
-          { tipoContacto: 'TipoContacto.Email', valorContacto: 'carlos@example.com' }
-        ],
+        contactos: [],
         metodosDePago: [
           { tipo: 'TipoPago.Otra', numero: '1234567890', fechaVencimiento: new Date('2023-06-01'), nombreTitular: 'Carlos Rodríguez' }
         ]
       },
       {
-        id: 6,
+        idCliente: 6,
         nombres: 'Pedro',
         apellidos: 'García',
         direccion: 'Avenida 789, Pueblo',
@@ -102,9 +90,7 @@ export class ClienteService {
         dpi: '4567890120101',
         nit: 'C456789012',
         empresa: 'Empresa C',
-        contactos: [
-          { tipoContacto: 'aaa', valorContacto: '654321987' }
-        ],
+        contactos: [],
         metodosDePago: [
           { tipo: 'TipoPago.TarjetaDeCredito', numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
         ]

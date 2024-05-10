@@ -91,7 +91,7 @@ export class ClienteAgregarComponent implements OnInit{
   addEditCliente(){
     console.log(this.botonAccion, this.formCliente.value)
     const modelo: Cliente = {
-      id: 0,
+      idCliente: 0,
       nombres: this.formCliente.value.nombres,
       apellidos: this.formCliente.value.apellidos,
       direccion: this.formCliente.value.direccion,
@@ -111,7 +111,7 @@ export class ClienteAgregarComponent implements OnInit{
         }
       })
     } else {
-      this._clienteServicio.updateCliente(this.dataCliente.id, modelo).subscribe({
+      this._clienteServicio.updateCliente(this.dataCliente.idCliente, modelo).subscribe({
         next:(data)=>{
           this.mostrarAlerta("Cliente Editado", "Listo");
           this.dialogReferencia.close("Editado")
