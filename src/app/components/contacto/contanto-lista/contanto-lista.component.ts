@@ -14,10 +14,11 @@ import { ContactoService } from 'src/app/services/contacto.service';
 export class ContantoListaComponent {
 
   formContacto!:  FormGroup;
-  displayedColumns: string[] = ['tipoContacto', 'valorContacto'];
+  displayedColumns: string[] = ['tipoContacto', 'valorContacto', 'acciones'];
   tiposContacto: TipoContacto[] = [];
   dataSource = new MatTableDataSource<Contacto>();
   showForm: boolean = false;
+  contactoSeleccionado!: Contacto;
 
   constructor(
     private dialogReferencia: MatDialogRef<ContantoListaComponent>,
@@ -36,7 +37,6 @@ export class ContantoListaComponent {
     this.obtenerContactosPorCliente(this.dataCliente.idCliente);
     this.agregarValidadorValorContacto();
     this.obtenerTiposContacto();
-
   }
 
 
@@ -59,22 +59,53 @@ export class ContantoListaComponent {
    */
   addEditContacto(){
     const modelo: Contacto = {
-      idContacto: 0,
+      idContacto: this.formContacto.value.idContacto || 0, // Si es edición, utiliza el valor existente, de lo contrario, 0 para agregar.
       idCliente: this.dataCliente.idCliente,
       tipoContacto: this.formContacto.value.tipoContacto,
       valorContacto: this.formContacto.value.valorContacto,
     }
 
-      this._contactoService.AgregarContacto(this.dataCliente.idCliente, modelo).subscribe({
-        next:(data)=>{
-          this.mostrarAlerta("Cliente Creado", "Listo");
-          this.dialogReferencia.close("Creado")
-        }, error:(e)=>{
-          this.mostrarAlerta("No se pudo crear", "Error")
-        }
-      })
 
+      if (!this.contactoSeleccionado) {
+        // Agregar nuevo contacto
+        this._contactoService.AgregarContacto(this.dataCliente.idCliente, modelo).subscribe({
+          next: () => {
+            this.mostrarAlerta("Cliente Creado", "Listo");
+            this.dialogReferencia.close("Creado")
+          },
+          error: () => {
+            this.mostrarAlerta("No se pudo crear", "Error")
+          }
+        });
+      } else {
+        // Editar contacto existente
+        this._contactoService.EditarContacto(this.dataCliente.idCliente, modelo.idContacto, modelo).subscribe({
+          next: () => {
+            this.mostrarAlerta("Contacto Editado", "Listo");
+            this.dialogReferencia.close("Editado")
+          },
+          error: () => {
+            this.mostrarAlerta("No se pudo editar", "Error")
+          }
+        });
+      }
   }
+
+  openEditForm(contacto: Contacto) {
+    // Asignar el contacto seleccionado a la variable de contactoSeleccionado
+    this.contactoSeleccionado = contacto;
+
+    // Rellenar los campos del formulario con los detalles del contacto seleccionado
+    console.log("openEditForm",contacto)
+    this.formContacto.patchValue({
+      tipoContacto: contacto.tipoContacto,
+      valorContacto: contacto.valorContacto
+    });
+
+    // Mostrar el formulario de edición
+    this.showForm = true;
+}
+
 
   /**
    * Método para mostrar una alerta utilizando MatSnackBar.

@@ -51,5 +51,12 @@ export class ContactoService {
     return of(contactosActualizados);
   }
 
+  EditarContacto(idCliente: number, idContacto: number, nuevoContacto: Contacto): Observable<Contacto[]> {
+    console.log("idCliente:", idCliente);
+    console.log("Contacto Editado:", nuevoContacto);
+
+    const contactosActualizados = [nuevoContacto];
+    return of(contactosActualizados);
+  }
 
 }
