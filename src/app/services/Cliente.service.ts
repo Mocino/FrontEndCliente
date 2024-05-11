@@ -105,8 +105,8 @@ export class ClienteService {
     return of(true);
   }
 
-  updateCliente(idEmpleado: number, modelo: Cliente): Observable<Cliente> {
-    console.log(`Solicitud de actualización del empleado con ID ${idEmpleado} recibida.`);
+  updateCliente(idCliente: number, modelo: Cliente): Observable<Cliente> {
+    console.log(`Solicitud de actualización del cliente con ID ${idCliente} recibida.`);
     return of(modelo);
   }
 

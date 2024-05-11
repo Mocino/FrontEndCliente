@@ -159,7 +159,7 @@ export class ContantoListaComponent {
       if(resultado === "Eliminar"){
         this._contactoService.deleteContacto(dataCliente.idCliente, dataCliente.idContacto).subscribe({
           next:()=>{
-            this.mostrarAlerta("Empleado eliminado", "Listo");
+            this.mostrarAlerta("Contacto eliminado", "Listo");
           }
         })
       }

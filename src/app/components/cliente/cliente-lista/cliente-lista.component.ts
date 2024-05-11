@@ -106,7 +106,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       if(resultado === "Eliminar"){
         this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
           next:(data)=>{
-            this.mostrarAlerta("Empleado eliminado", "Listo");
+            this.mostrarAlerta("Cliente eliminado", "Listo");
             this.mostrarCliente();
           }
         })
