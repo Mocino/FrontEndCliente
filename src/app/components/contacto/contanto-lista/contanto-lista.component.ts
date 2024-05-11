@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,7 +12,7 @@ import { ContantoEliminarComponent } from '../contanto-eliminar/contanto-elimina
   templateUrl: './contanto-lista.component.html',
   styleUrls: ['./contanto-lista.component.css']
 })
-export class ContantoListaComponent {
+export class ContantoListaComponent implements OnInit{
 
   formContacto!:  FormGroup;
   displayedColumns: string[] = ['tipoContacto', 'valorContacto', 'acciones'];
@@ -60,7 +60,7 @@ export class ContantoListaComponent {
    */
   addEditContacto(){
     const modelo: Contacto = {
-      idContacto: this.formContacto.value.idContacto || 0, // Si es edición, utiliza el valor existente, de lo contrario, 0 para agregar.
+      idContacto:  0, // Si es edición, utiliza el valor existente, de lo contrario, 0 para agregar.
       idCliente: this.dataCliente.idCliente,
       tipoContacto: this.formContacto.value.tipoContacto,
       valorContacto: this.formContacto.value.valorContacto,
@@ -80,7 +80,7 @@ export class ContantoListaComponent {
         });
       } else {
         // Editar contacto existente
-        this._contactoService.EditarContacto(this.dataCliente.idCliente, modelo.idContacto, modelo).subscribe({
+        this._contactoService.EditarContacto(this.dataCliente.idCliente, this.contactoSeleccionado.idContacto, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Contacto Editado", "Listo");
             this.dialogReferencia.close("Editado")

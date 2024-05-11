@@ -22,7 +22,6 @@ export class ClienteService {
         empresa: 'Empresa A',
         contactos: [],
         metodosDePago: [
-          { tipo: 'AAA', numero: '1234 5678 9012 3456', fechaVencimiento: new Date('2026-12-01'), nombreTitular: 'Juan Pérez' }
         ]
       },
       {
@@ -36,7 +35,6 @@ export class ClienteService {
         empresa: 'Empresa B',
         contactos: [],
         metodosDePago: [
-          { tipo: 'TipoPago.PayPal', numero: 'maria@example.com', fechaVencimiento: new Date('2027-01-01'), nombreTitular: 'María López' }
         ]
       },
       {
@@ -50,7 +48,6 @@ export class ClienteService {
         empresa: 'Empresa C',
         contactos: [],
         metodosDePago: [
-          { tipo: 'TipoPago.TarjetaDeCredito', numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
         ]
       },
       {
@@ -64,7 +61,6 @@ export class ClienteService {
         empresa: 'Empresa D',
         contactos: [],
         metodosDePago: [
-          { tipo: 'TipoPago.TarjetaDeCredito', numero: '5678 9012 3456 7890', fechaVencimiento: new Date('2024-10-01'), nombreTitular: 'Luisa Martínez' }
         ]
       },
       {
@@ -78,7 +74,6 @@ export class ClienteService {
         empresa: 'Empresa E',
         contactos: [],
         metodosDePago: [
-          { tipo: 'TipoPago.Otra', numero: '1234567890', fechaVencimiento: new Date('2023-06-01'), nombreTitular: 'Carlos Rodríguez' }
         ]
       },
       {
@@ -92,7 +87,6 @@ export class ClienteService {
         empresa: 'Empresa C',
         contactos: [],
         metodosDePago: [
-          { tipo: 'TipoPago.TarjetaDeCredito', numero: '9876 5432 1098 7654', fechaVencimiento: new Date('2025-11-01'), nombreTitular: 'Pedro García' }
         ]
       }
     ];
@@ -106,7 +100,8 @@ export class ClienteService {
   }
 
   updateCliente(idCliente: number, modelo: Cliente): Observable<Cliente> {
-    console.log(`Solicitud de actualización del cliente con ID ${idCliente} recibida.`);
+    console.log("idCliente y idContacto en servicio metodo-pago:", idCliente, modelo);
+
     return of(modelo);
   }
 

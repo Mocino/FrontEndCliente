@@ -101,6 +101,8 @@ export class ClienteAgregarComponent implements OnInit{
       empresa: this.formCliente.value.empresa,
     }
 
+    console.log("contenido de modelo cliente:"+modelo)
+
     if(this.dataCliente == null){
       this._clienteServicio.guardarCliente(modelo).subscribe({
         next:(data)=>{

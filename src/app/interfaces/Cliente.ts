@@ -20,6 +20,8 @@ export interface Contacto {
 }
 
 export interface MetodoDePago {
+  idMetodoPago: number,
+  idCliente: number,
   tipo: string;
   numero: string;
   fechaVencimiento: Date;

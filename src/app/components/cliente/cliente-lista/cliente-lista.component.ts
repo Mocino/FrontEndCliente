@@ -144,23 +144,40 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * Método para abrir el diálogo de ver cliente.
+   * Abre un diálogo para ver los métodos de pago de un cliente.
+   * @param dataCliente Datos del cliente.
    */
-  dialogoVerMetodosPago(dataCliente: Cliente){
-    this._dialog.open(MetodoPagoListaComponent,{
-      disableClose: true,
-      data:dataCliente
-    }).afterClosed().subscribe(resultado=>{
-      if(resultado === "metodoPago"){
-        this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
-          next:(data)=>{
-            this.mostrarAlerta("Vista Contacto", "Listo");
-            this.mostrarCliente();
-          }
-        })
-      }
-    })
+  dialogoVerMetodosPago(dataCliente: Cliente): void {
+    // Configuración del diálogo
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = dataCliente;
+
+    // Posición del diálogo
+    dialogConfig.position = {
+      right: '0', // Ajusta la posición del modal a la derecha
+      top: '0'   // Puedes ajustar la posición vertical si es necesario
+    };
+
+    // Tamaño del diálogo
+    dialogConfig.width = '70%'; // Establece el ancho del modal al 70% de la pantalla
+    dialogConfig.height = '100%'; // Establece la altura del modal al 80% de la pantalla
+
+    // Abrir el diálogo
+    this._dialog.open(MetodoPagoListaComponent, dialogConfig)
+      .afterClosed()
+      .subscribe(resultado => {
+        if (resultado === "metodoPago") {
+          this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
+            next: (data) => {
+              this.mostrarAlerta("Vista Métodos de Pago", "Listo");
+              this.mostrarCliente();
+            }
+          })
+        }
+      });
   }
+
 
   /**
    * Método para mostrar una alerta utilizando MatSnackBar.
