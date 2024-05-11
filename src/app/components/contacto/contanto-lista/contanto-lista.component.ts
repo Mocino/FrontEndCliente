@@ -41,13 +41,19 @@ export class ContantoListaComponent implements OnInit{
     this.obtenerTiposContacto();
   }
 
-
+  /**
+   * Método para obtener la tipos de contactos para select.
+   */
   obtenerTiposContacto(): void {
     this._contactoService.getTiposContacto().subscribe(tiposContacto => {
       this.tiposContacto = tiposContacto;
     });
   }
 
+  /**
+   * Método para obtener la lista de contactos.
+   * @param idCliente Datos del cliente.
+   */
   obtenerContactosPorCliente(idCliente: number): void {
     this._contactoService.getContactosPorCliente(idCliente)
       .subscribe(contactos => {
@@ -60,7 +66,7 @@ export class ContantoListaComponent implements OnInit{
    */
   addEditContacto(){
     const modelo: Contacto = {
-      idContacto:  0, // Si es edición, utiliza el valor existente, de lo contrario, 0 para agregar.
+      idContacto:  0,
       idCliente: this.dataCliente.idCliente,
       tipoContacto: this.formContacto.value.tipoContacto,
       valorContacto: this.formContacto.value.valorContacto,
@@ -68,7 +74,6 @@ export class ContantoListaComponent implements OnInit{
 
 
       if (!this.contactoSeleccionado) {
-        // Agregar nuevo contacto
         this._contactoService.AgregarContacto(this.dataCliente.idCliente, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Cliente Creado", "Listo");
@@ -79,7 +84,6 @@ export class ContantoListaComponent implements OnInit{
           }
         });
       } else {
-        // Editar contacto existente
         this._contactoService.EditarContacto(this.dataCliente.idCliente, this.contactoSeleccionado.idContacto, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Contacto Editado", "Listo");
@@ -92,18 +96,19 @@ export class ContantoListaComponent implements OnInit{
       }
   }
 
+ /**
+  * Abre un diálogo para ver los contactos de un cliente.
+  * @param contacto datos de contacto.
+  */
   openEditForm(contacto: Contacto) {
-    // Asignar el contacto seleccionado a la variable de contactoSeleccionado
     this.contactoSeleccionado = contacto;
 
-    // Rellenar los campos del formulario con los detalles del contacto seleccionado
     console.log("openEditForm",contacto)
     this.formContacto.patchValue({
       tipoContacto: contacto.tipoContacto,
       valorContacto: contacto.valorContacto
     });
 
-    // Mostrar el formulario de edición
     this.showForm = true;
   }
 
@@ -121,6 +126,10 @@ export class ContantoListaComponent implements OnInit{
     });
   }
 
+  /**
+   * Validacion dependiendo el tipo de Contacto.
+   * @param control tipo de dato seleccionado.
+   */
   validarValorContacto(control: AbstractControl): { [key: string]: boolean } | null {
     const tipoContacto = this.formContacto.get('tipoContacto')?.value;
     const valorContacto = control.value;
@@ -140,17 +149,27 @@ export class ContantoListaComponent implements OnInit{
     return null;
   }
 
+  /**
+   * Agrega el validador dinámico al campo de valor del contacto.
+   */
   agregarValidadorValorContacto() {
     const validadorValorContacto = this.validarValorContacto.bind(this);
     this.formContacto.get('valorContacto')?.setValidators([Validators.required, validadorValorContacto]);
     this.formContacto.get('valorContacto')?.updateValueAndValidity();
   }
 
+  /**
+   * Alterna la visibilidad del formulario para agregar/editar un contacto.
+   */
   toggleForm() {
     this.showForm = !this.showForm;
         this.formContacto.reset();
   }
 
+  /**
+   * Abre un diálogo para eliminar un contacto.
+   * @param contacto Datos del contacto a eliminar.
+   */
   dialogoEliminarCuenta(dataCliente: Contacto){
     this._dialog.open(ContantoEliminarComponent,{
       disableClose: true,

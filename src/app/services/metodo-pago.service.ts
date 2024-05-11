@@ -9,6 +9,11 @@ export class MetodoPagoService {
 
   constructor() { }
 
+  /**
+   * Obtiene los métodos de pago asociados a un cliente.
+   * @param idCliente ID del cliente.
+   * @returns Un Observable que emite un array de objetos de tipo MetodoDePago.
+   */
   getMetodosDePagoPorCliente(idCliente: number): Observable<MetodoDePago[]> {
     const metodosPagoMockPorCliente: { [idCliente: number]: MetodoDePago[] } = {
       1: [
@@ -28,7 +33,12 @@ export class MetodoPagoService {
     return of(metodosPagoCliente);
   }
 
-
+  /**
+   * Agrega un nuevo método de pago para un cliente.
+   * @param idMetodosDePago ID del cliente.
+   * @param nuevoMetodosDePago Objeto que representa el nuevo método de pago.
+   * @returns Un Observable que emite un array de objetos de tipo MetodoDePago actualizados.
+   */
   AgregarMetodosDePago(idMetodosDePago: number, nuevoMetodosDePago: MetodoDePago): Observable<MetodoDePago[]> {
     console.log("idCliente:", idMetodosDePago);
     console.log("Nuevo MetodosDePago:", nuevoMetodosDePago);
@@ -37,6 +47,13 @@ export class MetodoPagoService {
     return of(MetodosDePagosActualizados);
   }
 
+  /**
+   * Edita un método de pago existente para un cliente.
+   * @param idCliente ID del cliente.
+   * @param idMetodosDePago ID del método de pago a editar.
+   * @param nuevoMetodosDePago Objeto que representa el método de pago editado.
+   * @returns Un Observable que emite un array de objetos de tipo MetodoDePago actualizados.
+   */
   EditarMetodosDePago(idCliente: number, idMetodosDePago: number, nuevoMetodosDePago: MetodoDePago): Observable<MetodoDePago[]> {
     console.log("idCliente y idContacto en servicio metodo-pago:", idCliente, idMetodosDePago, nuevoMetodosDePago);
 
@@ -44,6 +61,12 @@ export class MetodoPagoService {
     return of(MetodosDePagosActualizados);
   }
 
+  /**
+   * Elimina un método de pago asociado a un cliente.
+   * @param idCliente ID del cliente.
+   * @param idMetodosDePago ID del método de pago a eliminar.
+   * @returns Un Observable que indica la realización de la operación de eliminación.
+   */
   deleteMetodosDePago(idCliente: number, idMetodosDePago: number): Observable<void> {
     console.log(`Solicitud de eliminación del cliente con ID ${idCliente} ${idMetodosDePago} recibida`);
     return of();

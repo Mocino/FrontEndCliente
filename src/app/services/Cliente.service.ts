@@ -9,6 +9,10 @@ export class ClienteService {
 
   constructor() { }
 
+  /**
+   * Obtiene la lista de clientes.
+   * @returns Un Observable que emite un array de objetos de tipo Cliente.
+   */
   getClientes(): Observable<Cliente[]> {
     const clientesMock: Cliente[] = [
       {
@@ -93,18 +97,33 @@ export class ClienteService {
     return of(clientesMock);
   }
 
-
+  /**
+   * Guarda un nuevo cliente.
+   * @param nuevoCliente Objeto que representa el nuevo cliente a guardar.
+   * @returns Un Observable que indica si el cliente se guardó correctamente.
+   */
   guardarCliente(nuevoCliente: Cliente): Observable<boolean> {
     console.log('Nuevo cliente guardado:', nuevoCliente);
     return of(true);
   }
 
+  /**
+   * Actualiza un cliente existente.
+   * @param idCliente ID del cliente a actualizar.
+   * @param modelo Objeto que representa los datos actualizados del cliente.
+   * @returns Un Observable que emite el objeto Cliente actualizado.
+   */
   updateCliente(idCliente: number, modelo: Cliente): Observable<Cliente> {
     console.log("idCliente y idContacto en servicio metodo-pago:", idCliente, modelo);
 
     return of(modelo);
   }
 
+  /**
+   * Elimina un cliente.
+   * @param idCliente ID del cliente a eliminar.
+   * @returns Un Observable que indica si la eliminación del cliente fue exitosa.
+   */
   deleteCliente(idCliente: number): Observable<void> {
     console.log(`Solicitud de eliminación del cliente con ID ${idCliente} recibida`);
     return of();

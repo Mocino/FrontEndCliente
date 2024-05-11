@@ -15,6 +15,10 @@ export class ClienteEliminarComponent {
     @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente
   ){}
 
+
+  /**
+   * dialog para confirmar la eliminacion Cliente.
+   */
   confirmarEliminar(){
     if(this.dataCliente){
       this.dialogReferencia.close("Eliminar")

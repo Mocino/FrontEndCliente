@@ -14,6 +14,9 @@ export class MetodoPagoEliminarComponent {
     @Inject(MAT_DIALOG_DATA) public dataCliente: MetodoDePago
   ){}
 
+  /**
+   * dialog para confirmar la eliminacion Cliente.
+   */
   confirmarEliminar(){
     if(this.dataCliente){
       this.dialogReferencia.close("Eliminar")

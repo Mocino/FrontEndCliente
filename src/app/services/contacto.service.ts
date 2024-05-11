@@ -13,6 +13,10 @@ export class ContactoService {
 
   constructor() { }
 
+  /**
+   * Obtiene los tipos de contacto disponibles.
+   * @returns Un Observable que emite un array de objetos de tipo TipoContacto.
+   */
   getTiposContacto(): Observable<TipoContacto[]> {
     const tiposContactoMock: TipoContacto[] = [
       { valor: 'email', nombre: 'Correo electrónico' },
@@ -22,6 +26,11 @@ export class ContactoService {
     return of(tiposContactoMock);
   }
 
+  /**
+   * Obtiene los contactos asociados a un cliente.
+   * @param idContacto ID del cliente.
+   * @returns Un Observable que emite un array de objetos de tipo Contacto.
+   */
   getContactosPorCliente(idContacto: number): Observable<Contacto[]> {
     const contactosMockPorCliente: { [idCliente: number]: Contacto[] } = {
       1: [
@@ -43,6 +52,13 @@ export class ContactoService {
     return of(contactosCliente);
   }
 
+  /**
+   * Agrega un nuevo contacto para un cliente.
+   * @param idContacto ID del cliente.
+   * @param nuevoContacto Objeto que representa el nuevo contacto.
+   * @returns Un Observable que emite un array de objetos de tipo Contacto actualizados.
+   */
+
   AgregarContacto(idContacto: number, nuevoContacto: Contacto): Observable<Contacto[]> {
     console.log("idCliente:", idContacto);
     console.log("Nuevo Contacto:", nuevoContacto);
@@ -51,6 +67,13 @@ export class ContactoService {
     return of(contactosActualizados);
   }
 
+  /**
+   * Edita un contacto existente para un cliente.
+   * @param idCliente ID del cliente.
+   * @param idContacto ID del contacto a editar.
+   * @param nuevoContacto Objeto que representa el contacto editado.
+   * @returns Un Observable que emite un array de objetos de tipo Contacto actualizados.
+   */
   EditarContacto(idCliente: number, idContacto: number, nuevoContacto: Contacto): Observable<Contacto[]> {
     console.log("idCliente y idContacto en servicio contacto:", idCliente, idContacto, nuevoContacto);
 
@@ -58,6 +81,12 @@ export class ContactoService {
     return of(contactosActualizados);
   }
 
+  /**
+   * Elimina un contacto asociado a un cliente.
+   * @param idCliente ID del cliente.
+   * @param idContacto ID del contacto a eliminar.
+   * @returns Un Observable que indica la realización de la operación de eliminación.
+   */
   deleteContacto(idCliente: number, idContacto: number): Observable<void> {
     console.log(`Solicitud de eliminación del cliente con ID ${idCliente} ${idContacto} recibida`);
     return of();

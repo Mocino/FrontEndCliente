@@ -44,6 +44,10 @@ export class MetodoPagoListaComponent implements OnInit{
     this.obtenerTipoMetodo(this.dataCliente.idCliente);
   }
 
+  /**
+   * Método para obtener los tipos de método de pago del cliente.
+   * @param idCliente ID del cliente.
+   */
   obtenerTipoMetodo(idCliente: number): void {
     this._metodoPagoService.getMetodosDePagoPorCliente(idCliente)
       .subscribe(tipoMetodo => {
@@ -51,6 +55,9 @@ export class MetodoPagoListaComponent implements OnInit{
       });
   }
 
+  /**
+   * Método para agregar o editar un método de pago.
+   */
   addEditMetodoDePago(){
 
     const modelo: MetodoDePago = {
@@ -88,6 +95,11 @@ export class MetodoPagoListaComponent implements OnInit{
       }
   }
 
+  /**
+   * Abre un formulario para editar un método de pago.
+   * @param metodoDePago Datos del método de pago a editar.
+   */
+
   openEditForm(metodoDePago: MetodoDePago) {
     this.metododePagoSeleccionado = metodoDePago;
 
@@ -105,7 +117,11 @@ export class MetodoPagoListaComponent implements OnInit{
     this.showForm = true;
   }
 
-
+  /**
+   * Método para mostrar una alerta utilizando MatSnackBar.
+   * @param msg Mensaje a mostrar en la alerta.
+   * @param accion Acción de la alerta.
+   */
     mostrarAlerta(msg:string, accion: string){
       this._snackBar.open(msg, accion,{
         horizontalPosition: "end",
@@ -114,12 +130,18 @@ export class MetodoPagoListaComponent implements OnInit{
       });
     }
 
-
+  /**
+   * Alterna la visibilidad del formulario para agregar/editar un método de pago.
+   */
     toggleForm() {
       this.showForm = !this.showForm;
           this.formMetodoPago.reset();
     }
 
+  /**
+   * Abre un diálogo para eliminar un método de pago.
+   * @param dataCliente Datos del método de pago a eliminar.
+   */
     dialogoEliminarMetodoPago(dataCliente: MetodoDePago){
       this._dialog.open(MetodoPagoEliminarComponent,{
         disableClose: true,

@@ -19,12 +19,9 @@ import { MetodoPagoListaComponent } from '../../metodoPago/metodo-pago-lista/met
 })
 export class ClienteListaComponent implements AfterViewInit, OnInit {
 
-  /** Referencia al paginador de la tabla. */
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  /** Columnas que se mostrarán en la tabla. */
   displayedColumns: string[] = ['numero', 'nombres', 'apellidos', 'direccion', 'empresa', 'acciones'];
-  /** Fuente de datos para la tabla. */
   dataSource = new MatTableDataSource<Cliente>();
 
   constructor(
@@ -123,11 +120,11 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
     dialogConfig.data = dataCliente;
 
     dialogConfig.position = {
-      right: '0', // Ajusta la posición del modal a la derecha
-      top: '0'   // Puedes ajustar la posición vertical si es necesario
+      right: '0',
+      top: '0'
     };
-    dialogConfig.width = '70%'; // Establece el ancho del modal al 70% de la pantalla
-    dialogConfig.height = '100%'; // Establece la altura del modal al 80% de la pantalla
+    dialogConfig.width = '70%';
+    dialogConfig.height = '100%';
 
     this._dialog.open(ContantoListaComponent, dialogConfig)
       .afterClosed()
@@ -148,22 +145,18 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
    * @param dataCliente Datos del cliente.
    */
   dialogoVerMetodosPago(dataCliente: Cliente): void {
-    // Configuración del diálogo
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.data = dataCliente;
 
-    // Posición del diálogo
     dialogConfig.position = {
-      right: '0', // Ajusta la posición del modal a la derecha
-      top: '0'   // Puedes ajustar la posición vertical si es necesario
+      right: '0',
+      top: '0'
     };
 
-    // Tamaño del diálogo
-    dialogConfig.width = '70%'; // Establece el ancho del modal al 70% de la pantalla
-    dialogConfig.height = '100%'; // Establece la altura del modal al 80% de la pantalla
+    dialogConfig.width = '70%';
+    dialogConfig.height = '100%';
 
-    // Abrir el diálogo
     this._dialog.open(MetodoPagoListaComponent, dialogConfig)
       .afterClosed()
       .subscribe(resultado => {
