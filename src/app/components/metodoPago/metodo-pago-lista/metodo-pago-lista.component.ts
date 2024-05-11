@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MetodoDePago } from 'src/app/interfaces/Cliente';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
+import { MetodoPagoEliminarComponent } from '../metodo-pago-eliminar/metodo-pago-eliminar.component';
 
 @Component({
   selector: 'app-metodo-pago-lista',
@@ -117,5 +118,20 @@ export class MetodoPagoListaComponent implements OnInit{
     toggleForm() {
       this.showForm = !this.showForm;
           this.formMetodoPago.reset();
+    }
+
+    dialogoEliminarMetodoPago(dataCliente: MetodoDePago){
+      this._dialog.open(MetodoPagoEliminarComponent,{
+        disableClose: true,
+        data:dataCliente
+      }).afterClosed().subscribe(resultado=>{
+        if(resultado === "Eliminar"){
+          this._metodoPagoService.deleteMetodosDePago(dataCliente.idCliente, dataCliente.idMetodoPago).subscribe({
+            next:()=>{
+              this.mostrarAlerta("Metodo De Pago eliminado", "Listo");
+            }
+          })
+        }
+      })
     }
 }
