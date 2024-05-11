@@ -25,6 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ClienteEliminarComponent } from './cliente/cliente-eliminar/cliente-eliminar.component';
 import { ContantoListaComponent } from './contacto/contanto-lista/contanto-lista.component';
 import { MetodoPagoListaComponent } from './metodoPago/metodo-pago-lista/metodo-pago-lista.component';
+import { ContantoEliminarComponent } from './contacto/contanto-eliminar/contanto-eliminar.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { MetodoPagoListaComponent } from './metodoPago/metodo-pago-lista/metodo-
     ClienteListaComponent,
     ClienteEliminarComponent,
     ContantoListaComponent,
-    MetodoPagoListaComponent
+    MetodoPagoListaComponent,
+    ContantoEliminarComponent
   ],
   imports: [
     CommonModule,

@@ -22,7 +22,7 @@ export class ContactoService {
     return of(tiposContactoMock);
   }
 
-  getContactosPorCliente(idCliente: number): Observable<Contacto[]> {
+  getContactosPorCliente(idContacto: number): Observable<Contacto[]> {
     const contactosMockPorCliente: { [idCliente: number]: Contacto[] } = {
       1: [
         { idContacto: 1, idCliente: 1, tipoContacto: 'Email', valorContacto: 'juan@example.com' },
@@ -39,12 +39,12 @@ export class ContactoService {
       ]
     };
 
-    const contactosCliente = contactosMockPorCliente[idCliente] || [];
+    const contactosCliente = contactosMockPorCliente[idContacto] || [];
     return of(contactosCliente);
   }
 
-  AgregarContacto(idCliente: number, nuevoContacto: Contacto): Observable<Contacto[]> {
-    console.log("idCliente:", idCliente);
+  AgregarContacto(idContacto: number, nuevoContacto: Contacto): Observable<Contacto[]> {
+    console.log("idCliente:", idContacto);
     console.log("Nuevo Contacto:", nuevoContacto);
 
     const contactosActualizados = [nuevoContacto];
@@ -57,6 +57,11 @@ export class ContactoService {
 
     const contactosActualizados = [nuevoContacto];
     return of(contactosActualizados);
+  }
+
+  deleteContacto(idCliente: number, idContacto: number): Observable<void> {
+    console.log(`Solicitud de eliminación del cliente con ID ${idCliente} ${idContacto} recibida`);
+    return of();
   }
 
 }

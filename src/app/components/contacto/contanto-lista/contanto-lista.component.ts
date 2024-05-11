@@ -1,10 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Cliente, Contacto, TipoContacto } from 'src/app/interfaces/Cliente';
 import { ContactoService } from 'src/app/services/contacto.service';
+import { ContantoEliminarComponent } from '../contanto-eliminar/contanto-eliminar.component';
 
 @Component({
   selector: 'app-contanto-lista',
@@ -25,6 +26,7 @@ export class ContantoListaComponent {
     @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente,
     private _contactoService: ContactoService,
     private fb: FormBuilder,
+    public _dialog: MatDialog,
     private _snackBar: MatSnackBar,
   ) {
     this.formContacto = this.fb.group({
@@ -45,7 +47,6 @@ export class ContantoListaComponent {
       this.tiposContacto = tiposContacto;
     });
   }
-
 
   obtenerContactosPorCliente(idCliente: number): void {
     this._contactoService.getContactosPorCliente(idCliente)
@@ -104,7 +105,7 @@ export class ContantoListaComponent {
 
     // Mostrar el formulario de edición
     this.showForm = true;
-}
+  }
 
 
   /**
@@ -146,6 +147,22 @@ export class ContantoListaComponent {
   }
 
   toggleForm() {
-    this.showForm = !this.showForm; // Cambiar el valor de la variable para mostrar u ocultar el formulario
+    this.showForm = !this.showForm;
+        this.formContacto.reset();
+  }
+
+  dialogoEliminarCuenta(dataCliente: Contacto){
+    this._dialog.open(ContantoEliminarComponent,{
+      disableClose: true,
+      data:dataCliente
+    }).afterClosed().subscribe(resultado=>{
+      if(resultado === "Eliminar"){
+        this._contactoService.deleteContacto(dataCliente.idCliente, dataCliente.idContacto).subscribe({
+          next:()=>{
+            this.mostrarAlerta("Empleado eliminado", "Listo");
+          }
+        })
+      }
+    })
   }
 }
