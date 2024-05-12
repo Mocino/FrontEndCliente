@@ -90,7 +90,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
    */
   addEditContacto(){
     const modelo: Contacto = {
-      idContacto:  this.formContacto.value.idContacto,
+      idContacto:  this.formContacto.value.idContacto || 0,
       idCliente: this.dataCliente.idCliente!,
       tipoContacto: this.formContacto.value.tipoContacto,
       valorContacto: this.formContacto.value.valorContacto,

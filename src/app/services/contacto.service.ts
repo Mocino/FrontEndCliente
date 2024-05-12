@@ -97,11 +97,7 @@ export class ContactoService {
    */
 
   AgregarContacto(idContacto: number, nuevoContacto: Contacto): Observable<Contacto[]> {
-    console.log("idCliente:", idContacto);
-    console.log("Nuevo Contacto:", nuevoContacto);
-
-    const contactosActualizados = [nuevoContacto];
-    return of(contactosActualizados);
+    return this.http.post<Contacto[]>(`${this.myAppUrl}${this.myApiUrl}${idContacto}/contactos`, nuevoContacto)
   }
 
   /**
