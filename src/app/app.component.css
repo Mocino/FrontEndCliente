@@ -1,0 +1,5 @@
+.outer {
+  display: flex;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #042A64 0%, #040D21 50%, #291738 100%);
+}
