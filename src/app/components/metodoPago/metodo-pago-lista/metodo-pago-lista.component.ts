@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { MetodoDePago } from 'src/app/interfaces/Cliente';
+import { MetodoDePago, Option } from 'src/app/interfaces/Cliente';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { MetodoPagoEliminarComponent } from '../metodo-pago-eliminar/metodo-pago-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,13 +18,11 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   formMetodoPago!:  FormGroup;
+  tiposMetodo: Option[] = [];
   displayedColumns: string[] = ['tipo', 'numero', 'fechaVencimiento', 'nombreTitular', 'acciones'];
-
-
-
-
   dataSource = new MatTableDataSource<MetodoDePago>();
   showForm: boolean = false;
+  showEdit: boolean = false;
   metododePagoSeleccionado!: MetodoDePago;
 
   constructor(
@@ -45,6 +43,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
 
   ngOnInit(): void {
     this.obtenerTipoMetodo(this.dataCliente.idCliente);
+    this.obtenerMetodosPagoSelect();
   }
 
   /**
@@ -67,8 +66,25 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.dataSource.filterPredicate = (data: MetodoDePago, filter: string) => {
+      const tipo = data.tipo.nombre.toLowerCase(); // Filtrar por tipo de método de pago
+      const numero = data.numero.toLowerCase();
+      const fechaVencimiento = data.fechaVencimiento.toLocaleDateString().toLowerCase(); // Convertir la fecha de vencimiento a una cadena
+      const nombreTitular = data.nombreTitular.toLowerCase();
+      return tipo.includes(filterValue) || numero.includes(filterValue) || fechaVencimiento.includes(filterValue) || nombreTitular.includes(filterValue);
+    };
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
+  /**
+   * Método para obtener la tipos de metodos para select.
+   */
+  obtenerMetodosPagoSelect(): void {
+    this._metodoPagoService.obtenerMetodosPagoSelect().subscribe(tiposMetodo => {
+      this.tiposMetodo = tiposMetodo;
+    });
   }
 
   /**
@@ -121,7 +137,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
 
     console.log("openEditForm",metodoDePago)
     this.formMetodoPago.patchValue({
-      tipo: metodoDePago.tipo,
+      tipo: metodoDePago.tipo.valor,
       numero: metodoDePago.numero,
       fechaVencimiento: metodoDePago.fechaVencimiento,
       nombreTitular: metodoDePago.nombreTitular
@@ -131,6 +147,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
 
 
     this.showForm = true;
+    this.showEdit = true;
   }
 
   /**
@@ -151,7 +168,8 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
    */
     toggleForm() {
       this.showForm = !this.showForm;
-          this.formMetodoPago.reset();
+      this.showEdit = false;
+      this.formMetodoPago.reset();
     }
 
   /**

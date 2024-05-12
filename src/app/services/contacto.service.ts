@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Contacto, TipoContacto } from '../interfaces/Cliente';
+import { Contacto, Option } from '../interfaces/Cliente';
 import { Observable, of } from 'rxjs';
 
 
@@ -17,8 +17,8 @@ export class ContactoService {
    * Obtiene los tipos de contacto disponibles.
    * @returns Un Observable que emite un array de objetos de tipo TipoContacto.
    */
-  getTiposContacto(): Observable<TipoContacto[]> {
-    const tiposContactoMock: TipoContacto[] = [
+  getTiposContacto(): Observable<Option[]> {
+    const tiposContactoMock: Option[] = [
       { valor: 'email', nombre: 'Correo electrónico' },
       { valor: 'telefono', nombre: 'Teléfono' },
       { valor: 'direccion', nombre: 'Dirección' }

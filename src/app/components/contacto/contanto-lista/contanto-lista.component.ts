@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { Cliente, Contacto, TipoContacto } from 'src/app/interfaces/Cliente';
+import { Cliente, Contacto, Option } from 'src/app/interfaces/Cliente';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { ContantoEliminarComponent } from '../contanto-eliminar/contanto-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
@@ -19,9 +19,10 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
 
   formContacto!: FormGroup;
   displayedColumns: string[] = ['tipoContacto', 'valorContacto', 'acciones'];
-  tiposContacto: TipoContacto[] = [];
+  tiposContacto: Option[] = [];
   dataSource = new MatTableDataSource<Contacto>();
   showForm: boolean = false;
+  showEdit: boolean = false;
   contactoSeleccionado!: Contacto;
 
   constructor(
@@ -131,6 +132,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
   });
 
   this.showForm = true;
+  this.showEdit = true;
 }
 
   /**
@@ -183,8 +185,10 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
    */
   toggleForm() {
     this.showForm = !this.showForm;
-        this.formContacto.reset();
+    this.showEdit = false;
+    this.formContacto.reset();
   }
+
 
   /**
    * Abre un diálogo para eliminar un contacto.

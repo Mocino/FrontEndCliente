@@ -15,21 +15,21 @@ export interface Cliente {
 export interface Contacto {
   idContacto: number,
   idCliente: number,
-  tipoContacto: TipoContacto;
+  tipoContacto: Option;
   valorContacto: string;
 }
 
 export interface MetodoDePago {
   idMetodoPago: number,
   idCliente: number,
-  tipo: string;
+  tipo: Option;
   numero: string;
   fechaVencimiento: Date;
   nombreTitular: string;
 }
 
 
-export interface TipoContacto {
+export interface Option {
   valor: string;
   nombre: string;
 }
