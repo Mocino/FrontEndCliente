@@ -18,14 +18,17 @@ export class MetodoPagoService {
     const metodosPagoMockPorCliente: { [idCliente: number]: MetodoDePago[] } = {
       1: [
         { idMetodoPago: 1, idCliente: 1, tipo: 'Tarjeta de Crédito', numero: '1234567890123456', fechaVencimiento: new Date('2024-12-31'), nombreTitular: 'Juan Pérez' },
-        { idMetodoPago: 2, idCliente: 1, tipo: 'Cuenta Bancaria', numero: '987654321', fechaVencimiento: new Date('2025-01-01'), nombreTitular: 'Juan Pérez' }
+        { idMetodoPago: 2, idCliente: 1, tipo: 'Cuenta Bancaria', numero: '987654321', fechaVencimiento: new Date('2025-01-01'), nombreTitular: 'Juan Pérez' },
+        { idMetodoPago: 3, idCliente: 1, tipo: 'Tarjeta de Débito', numero: '9876543210987654', fechaVencimiento: new Date('2023-06-30'), nombreTitular: 'María García' },
+        { idMetodoPago: 4, idCliente: 1, tipo: 'PayPal', numero: 'juan@example.com', fechaVencimiento: new Date('2023-12-31'), nombreTitular: 'Pedro Martínez' },
+        { idMetodoPago: 5, idCliente: 1, tipo: 'Transferencia Bancaria', numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'A' },
+        { idMetodoPago: 6, idCliente: 1, tipo: 'Transferencia Bancaria', numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'B' },
+        { idMetodoPago: 7, idCliente: 1, tipo: 'Transferencia Bancaria', numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'C' },
+        { idMetodoPago: 8, idCliente: 1, tipo: 'Transferencia Bancaria', numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'D' }
       ],
       2: [
-        { idMetodoPago: 3, idCliente: 2, tipo: 'Tarjeta de Débito', numero: '9876543210987654', fechaVencimiento: new Date('2023-06-30'), nombreTitular: 'María García' }
       ],
       3: [
-        { idMetodoPago: 4, idCliente: 3, tipo: 'PayPal', numero: 'juan@example.com', fechaVencimiento: new Date('2023-12-31'), nombreTitular: 'Pedro Martínez' },
-        { idMetodoPago: 5, idCliente: 3, tipo: 'Transferencia Bancaria', numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'Pedro Martínez' }
       ]
     };
 

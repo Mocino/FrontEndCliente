@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -6,13 +6,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MetodoDePago } from 'src/app/interfaces/Cliente';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { MetodoPagoEliminarComponent } from '../metodo-pago-eliminar/metodo-pago-eliminar.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-metodo-pago-lista',
   templateUrl: './metodo-pago-lista.component.html',
   styleUrls: ['./metodo-pago-lista.component.css']
 })
-export class MetodoPagoListaComponent implements OnInit{
+export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   formMetodoPago!:  FormGroup;
   displayedColumns: string[] = ['tipo', 'numero', 'fechaVencimiento', 'nombreTitular', 'acciones'];
@@ -45,6 +48,14 @@ export class MetodoPagoListaComponent implements OnInit{
   }
 
   /**
+   * Método del ciclo de vida AfterViewInit.
+   * Se ejecuta después de que la vista y las vistas secundarias (como el paginador) se hayan inicializado.
+   */
+    ngAfterViewInit(): void {
+      this.dataSource.paginator = this.paginator;
+    }
+
+  /**
    * Método para obtener los tipos de método de pago del cliente.
    * @param idCliente ID del cliente.
    */
@@ -53,6 +64,11 @@ export class MetodoPagoListaComponent implements OnInit{
       .subscribe(tipoMetodo => {
         this.dataSource.data = tipoMetodo;
       });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   /**

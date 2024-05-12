@@ -36,7 +36,13 @@ export class ContactoService {
       1: [
         { idContacto: 1, idCliente: 1, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'juan@example.com' },
         { idContacto: 2, idCliente: 1, tipoContacto: { valor: 'telefono', nombre: 'Teléfono' }, valorContacto: '123456789' },
-        { idContacto: 3, idCliente: 1, tipoContacto: { valor: 'direccion', nombre: 'Direccion' }, valorContacto: '987654321' }
+        { idContacto: 3, idCliente: 1, tipoContacto: { valor: 'direccion', nombre: 'Direccion' }, valorContacto: '987654321' },
+        { idContacto: 4, idCliente: 1, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'juan@example.com' },
+        { idContacto: 5, idCliente: 1, tipoContacto: { valor: 'telefono', nombre: 'Teléfono' }, valorContacto: '123456789' },
+        { idContacto: 6, idCliente: 1, tipoContacto: { valor: 'direccion', nombre: 'Direccion' }, valorContacto: '987654321' },
+        { idContacto: 7, idCliente: 1, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'juan@example.com' },
+        { idContacto: 8, idCliente: 1, tipoContacto: { valor: 'telefono', nombre: 'Teléfono' }, valorContacto: '123456789' },
+        { idContacto: 9, idCliente: 1, tipoContacto: { valor: 'direccion', nombre: 'Direccion' }, valorContacto: '987654321' }
       ],
       3: [
         { idContacto: 4, idCliente: 3, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'pedro@example.com' },

@@ -123,7 +123,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       right: '0',
       top: '0'
     };
-    dialogConfig.width = '70%';
+    dialogConfig.width = '40%';
     dialogConfig.height = '100%';
 
     this._dialog.open(ContantoListaComponent, dialogConfig)
@@ -154,7 +154,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       top: '0'
     };
 
-    dialogConfig.width = '70%';
+    dialogConfig.width = '80%';
     dialogConfig.height = '100%';
 
     this._dialog.open(MetodoPagoListaComponent, dialogConfig)

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -6,15 +6,18 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Cliente, Contacto, TipoContacto } from 'src/app/interfaces/Cliente';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { ContantoEliminarComponent } from '../contanto-eliminar/contanto-eliminar.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-contanto-lista',
   templateUrl: './contanto-lista.component.html',
   styleUrls: ['./contanto-lista.component.css']
 })
-export class ContantoListaComponent implements OnInit{
+export class ContantoListaComponent implements AfterViewInit, OnInit{
 
-  formContacto!:  FormGroup;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  formContacto!: FormGroup;
   displayedColumns: string[] = ['tipoContacto', 'valorContacto', 'acciones'];
   tiposContacto: TipoContacto[] = [];
   dataSource = new MatTableDataSource<Contacto>();
@@ -35,10 +38,28 @@ export class ContantoListaComponent implements OnInit{
     })
    }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.obtenerContactosPorCliente(this.dataCliente.idCliente);
     this.agregarValidadorValorContacto();
     this.obtenerTiposContacto();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  /**
+   * Método para aplicar un filtro a la tabla basado en el valor del campo de búsqueda.
+   * @param event Evento de cambio en el campo de búsqueda.
+   */
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.dataSource.filterPredicate = (data: Contacto, filter: string) => {
+      const valorContacto = data.valorContacto.toLowerCase();
+      const tipoContacto = data.tipoContacto.nombre.toLowerCase();
+      return valorContacto.includes(filter) || tipoContacto.includes(filter);
+    };
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   /**
