@@ -15,7 +15,7 @@ export interface Cliente {
 export interface Contacto {
   idContacto: number,
   idCliente: number,
-  tipoContacto: string;
+  tipoContacto: TipoContacto;
   valorContacto: string;
 }
 

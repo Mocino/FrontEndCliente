@@ -100,18 +100,17 @@ export class ContantoListaComponent implements OnInit{
   * Abre un diálogo para ver los contactos de un cliente.
   * @param contacto datos de contacto.
   */
-  openEditForm(contacto: Contacto) {
-    this.contactoSeleccionado = contacto;
+ openEditForm(contacto: Contacto) {
+  console.log("openEdit de Contacto: ", contacto)
+  this.contactoSeleccionado = contacto;
 
-    console.log("openEditForm",contacto)
-    this.formContacto.patchValue({
-      tipoContacto: contacto.tipoContacto,
-      valorContacto: contacto.valorContacto
-    });
+  this.formContacto.patchValue({
+    tipoContacto: contacto.tipoContacto.valor,
+    valorContacto: contacto.valorContacto
+  });
 
-    this.showForm = true;
-  }
-
+  this.showForm = true;
+}
 
   /**
    * Método para mostrar una alerta utilizando MatSnackBar.
