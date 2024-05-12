@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Cliente} from '../interfaces/Cliente';
+import { Cliente, Contacto} from '../interfaces/Cliente';
 import { Observable, of } from 'rxjs';
 import { enviroment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -38,8 +38,8 @@ export class ClienteService {
    * @param modelo Objeto que representa los datos actualizados del cliente.
    * @returns Un Observable que emite el objeto Cliente actualizado.
    */
-  updateCliente(idCliente: number, modelo: Cliente): Observable<void>{
-    return this.http.put<void >(`${this.myAppUrl}${this.myApiUrl}editarCliente/${idCliente}`, modelo)
+  updateCliente(idCliente: number, modelo: Cliente): Observable<Contacto>{
+    return this.http.put<Contacto>(`${this.myAppUrl}${this.myApiUrl}editarCliente/${idCliente}`, modelo)
   }
 
   /**
