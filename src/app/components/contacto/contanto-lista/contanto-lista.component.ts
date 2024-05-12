@@ -34,6 +34,8 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     private _snackBar: MatSnackBar,
   ) {
     this.formContacto = this.fb.group({
+      idContacto: 0,
+      idCliente: 0,
       tipoContacto:["", Validators.required],
       valorContacto: this.fb.control('', Validators.required)
     })
@@ -88,7 +90,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
    */
   addEditContacto(){
     const modelo: Contacto = {
-      idContacto:  0,
+      idContacto:  this.formContacto.value.idContacto,
       idCliente: this.dataCliente.idCliente!,
       tipoContacto: this.formContacto.value.tipoContacto,
       valorContacto: this.formContacto.value.valorContacto,
@@ -127,6 +129,8 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
   this.contactoSeleccionado = contacto;
 
   this.formContacto.patchValue({
+    idContacto: contacto.idContacto,
+    idCliente: contacto.idCliente,
     tipoContacto: contacto.tipoContacto.valor,
     valorContacto: contacto.valorContacto
   });

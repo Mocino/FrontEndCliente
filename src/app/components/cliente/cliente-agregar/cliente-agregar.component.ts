@@ -110,19 +110,19 @@ export class ClienteAgregarComponent implements OnInit{
 
     if(this.dataCliente == null){
       this._clienteServicio.guardarCliente(modelo).subscribe({
-        next:(data)=>{
+        next:()=>{
           this.mostrarAlerta("Cliente Creado", "Listo");
           this.dialogReferencia.close("Creado")
-        }, error:(e)=>{
+        }, error:()=>{
           this.mostrarAlerta("No se pudo crear", "Error")
         }
       })
     } else {
       this._clienteServicio.updateCliente(this.dataCliente.idCliente!, modelo).subscribe({
-        next:(data)=>{
+        next:()=>{
           this.mostrarAlerta("Cliente Editado", "Listo");
           this.dialogReferencia.close("Editado")
-        }, error:(e)=>{
+        }, error:()=>{
           this.mostrarAlerta("No se pudo Editado", "Error")
         }
       })

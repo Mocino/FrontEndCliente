@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Contacto, Option } from '../interfaces/Cliente';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { enviroment } from 'src/environments/environment';
 
 
 
@@ -9,9 +11,10 @@ import { Observable, of } from 'rxjs';
 })
 export class ContactoService {
 
+  private myAppUrl: string = enviroment.endpoint;
+  private myApiUrl: string = 'api/Contacto/'
 
-
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   /**
    * Obtiene los tipos de contacto disponibles.
@@ -31,7 +34,35 @@ export class ContactoService {
    * @param idContacto ID del cliente.
    * @returns Un Observable que emite un array de objetos de tipo Contacto.
    */
+  // getContactosPorCliente(idCliente: number): Observable<Contacto[]> {
+  //   const contactosMockPorCliente: { [idCliente: number]: Contacto[] } = {
+  //     1: [
+  //       { idContacto: 1, idCliente: 1, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'juan@example.com' },
+  //       { idContacto: 2, idCliente: 1, tipoContacto: { valor: 'telefono', nombre: 'Teléfono' }, valorContacto: '123456789' },
+  //       { idContacto: 3, idCliente: 1, tipoContacto: { valor: 'direccion', nombre: 'Direccion' }, valorContacto: '987654321' },
+  //       { idContacto: 4, idCliente: 1, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'juan@example.com' },
+  //       { idContacto: 5, idCliente: 1, tipoContacto: { valor: 'telefono', nombre: 'Teléfono' }, valorContacto: '123456789' },
+  //       { idContacto: 6, idCliente: 1, tipoContacto: { valor: 'direccion', nombre: 'Direccion' }, valorContacto: '987654321' },
+  //       { idContacto: 7, idCliente: 1, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'juan@example.com' },
+  //       { idContacto: 8, idCliente: 1, tipoContacto: { valor: 'telefono', nombre: 'Teléfono' }, valorContacto: '123456789' },
+  //       { idContacto: 9, idCliente: 1, tipoContacto: { valor: 'direccion', nombre: 'Direccion' }, valorContacto: '987654321' }
+  //     ],
+  //     3: [
+  //       { idContacto: 4, idCliente: 3, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'pedro@example.com' },
+  //       { idContacto: 5, idCliente: 3, tipoContacto: { valor: 'telefono', nombre: 'Teléfono' }, valorContacto: '987654321' }
+  //     ],
+  //     6: [
+  //       { idContacto: 6, idCliente: 6, tipoContacto: { valor: 'direccion', nombre: 'direccion' }, valorContacto: 'Funciona' },
+  //       { idContacto: 7, idCliente: 6, tipoContacto: { valor: 'direccion', nombre: 'direccion' }, valorContacto: 'ID' }
+  //     ]
+  //   };
+
+  //   const contactosCliente = contactosMockPorCliente[idCliente] || [];
+  //   return of(contactosCliente);
+  // }
   getContactosPorCliente(idCliente: number): Observable<Contacto[]> {
+    return this.http.get<Contacto[]>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/contactos`)
+
     const contactosMockPorCliente: { [idCliente: number]: Contacto[] } = {
       1: [
         { idContacto: 1, idCliente: 1, tipoContacto: { valor: 'email', nombre: 'Correo electrónico' }, valorContacto: 'juan@example.com' },

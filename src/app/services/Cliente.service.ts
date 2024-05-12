@@ -38,11 +38,6 @@ export class ClienteService {
    * @param modelo Objeto que representa los datos actualizados del cliente.
    * @returns Un Observable que emite el objeto Cliente actualizado.
    */
-  // updateCliente(idCliente: number, modelo: Cliente): Observable<Cliente> {
-  //   console.log("idCliente y idContacto en servicio metodo-pago:", idCliente, modelo);
-
-  //   return of(modelo);
-  // }
   updateCliente(idCliente: number, modelo: Cliente): Observable<void>{
     console.log("idCliente:",idCliente," modelo:",modelo)
     return this.http.put<void >(`${this.myAppUrl}${this.myApiUrl}editarCliente/${idCliente}`, modelo)
