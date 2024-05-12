@@ -40,7 +40,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
    }
 
    ngOnInit(): void {
-    this.obtenerContactosPorCliente(this.dataCliente.idCliente);
+    this.obtenerContactosPorCliente(this.dataCliente.idCliente!);
     this.agregarValidadorValorContacto();
     this.obtenerTiposContacto();
   }
@@ -89,14 +89,14 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
   addEditContacto(){
     const modelo: Contacto = {
       idContacto:  0,
-      idCliente: this.dataCliente.idCliente,
+      idCliente: this.dataCliente.idCliente!,
       tipoContacto: this.formContacto.value.tipoContacto,
       valorContacto: this.formContacto.value.valorContacto,
     }
 
 
       if (!this.contactoSeleccionado) {
-        this._contactoService.AgregarContacto(this.dataCliente.idCliente, modelo).subscribe({
+        this._contactoService.AgregarContacto(this.dataCliente.idCliente!, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Cliente Creado", "Listo");
             this.dialogReferencia.close("Creado")
@@ -106,7 +106,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
           }
         });
       } else {
-        this._contactoService.EditarContacto(this.dataCliente.idCliente, this.contactoSeleccionado.idContacto, modelo).subscribe({
+        this._contactoService.EditarContacto(this.dataCliente.idCliente!, this.contactoSeleccionado.idContacto, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Contacto Editado", "Listo");
             this.dialogReferencia.close("Editado")

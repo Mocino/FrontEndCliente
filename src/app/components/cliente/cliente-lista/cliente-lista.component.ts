@@ -101,7 +101,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       data:dataCliente
     }).afterClosed().subscribe(resultado=>{
       if(resultado === "Eliminar"){
-        this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
+        this._clienteService.deleteCliente(dataCliente.idCliente!).subscribe({
           next:(data)=>{
             this.mostrarAlerta("Cliente eliminado", "Listo");
             this.mostrarCliente();
@@ -130,7 +130,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       .afterClosed()
       .subscribe(resultado => {
         if(resultado === "Contacto"){
-          this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
+          this._clienteService.deleteCliente(dataCliente.idCliente!).subscribe({
             next:(data)=>{
               this.mostrarAlerta("Vista Contacto", "Listo");
               this.mostrarCliente();
@@ -161,7 +161,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       .afterClosed()
       .subscribe(resultado => {
         if (resultado === "metodoPago") {
-          this._clienteService.deleteCliente(dataCliente.idCliente).subscribe({
+          this._clienteService.deleteCliente(dataCliente.idCliente!).subscribe({
             next: (data) => {
               this.mostrarAlerta("Vista Métodos de Pago", "Listo");
               this.mostrarCliente();

@@ -40,6 +40,7 @@ export class ClienteAgregarComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente
   ) {
     this.formCliente = this.fb.group({
+      idCliente: 0,
       nombres:["", Validators.required],
       apellidos:["", Validators.required],
       direccion:["", Validators.required],
@@ -48,6 +49,8 @@ export class ClienteAgregarComponent implements OnInit{
       nit:["", Validators.required],
       empresa:["", Validators.required],
     })
+
+    // this.idCliente = Number(this.aRouter.snapshot.paramMap.get('id'))
 
     this._clienteServicio.getClientes().subscribe({
       next:(data)=>{
@@ -59,6 +62,7 @@ export class ClienteAgregarComponent implements OnInit{
   ngOnInit(): void {
     if(this.dataCliente){
       this.formCliente.patchValue({
+        idCliente: this.dataCliente.idCliente,
         nombres: this.dataCliente.nombres,
         apellidos: this.dataCliente.apellidos,
         direccion: this.dataCliente.direccion,
@@ -91,7 +95,7 @@ export class ClienteAgregarComponent implements OnInit{
   addEditCliente(){
     console.log(this.botonAccion, this.formCliente.value)
     const modelo: Cliente = {
-      idCliente: 0,
+      idCliente: this.formCliente.value.idCliente!,
       nombres: this.formCliente.value.nombres,
       apellidos: this.formCliente.value.apellidos,
       direccion: this.formCliente.value.direccion,
@@ -101,7 +105,8 @@ export class ClienteAgregarComponent implements OnInit{
       empresa: this.formCliente.value.empresa,
     }
 
-    console.log("contenido de modelo cliente:"+modelo)
+    console.log("contenido de idCliente", this.dataCliente?.idCliente)
+    console.log("contenido de modelo cliente:", modelo)
 
     if(this.dataCliente == null){
       this._clienteServicio.guardarCliente(modelo).subscribe({
@@ -113,7 +118,7 @@ export class ClienteAgregarComponent implements OnInit{
         }
       })
     } else {
-      this._clienteServicio.updateCliente(this.dataCliente.idCliente, modelo).subscribe({
+      this._clienteServicio.updateCliente(this.dataCliente.idCliente!, modelo).subscribe({
         next:(data)=>{
           this.mostrarAlerta("Cliente Editado", "Listo");
           this.dialogReferencia.close("Editado")

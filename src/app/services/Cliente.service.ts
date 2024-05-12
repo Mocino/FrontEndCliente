@@ -28,11 +28,6 @@ export class ClienteService {
    * @param nuevoCliente Objeto que representa el nuevo cliente a guardar.
    * @returns Un Observable que indica si el cliente se guardó correctamente.
    */
-  // guardarCliente(nuevoCliente: Cliente): Observable<boolean> {
-  //   console.log('Nuevo cliente guardado:', nuevoCliente);
-  //   return of(true);
-  // }
-
   guardarCliente(nuevoCliente: Cliente): Observable<Cliente> {
     return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}guardarClientes`, nuevoCliente)
   }
@@ -43,10 +38,14 @@ export class ClienteService {
    * @param modelo Objeto que representa los datos actualizados del cliente.
    * @returns Un Observable que emite el objeto Cliente actualizado.
    */
-  updateCliente(idCliente: number, modelo: Cliente): Observable<Cliente> {
-    console.log("idCliente y idContacto en servicio metodo-pago:", idCliente, modelo);
+  // updateCliente(idCliente: number, modelo: Cliente): Observable<Cliente> {
+  //   console.log("idCliente y idContacto en servicio metodo-pago:", idCliente, modelo);
 
-    return of(modelo);
+  //   return of(modelo);
+  // }
+  updateCliente(idCliente: number, modelo: Cliente): Observable<void>{
+    console.log("idCliente:",idCliente," modelo:",modelo)
+    return this.http.put<void >(`${this.myAppUrl}${this.myApiUrl}editarCliente/${idCliente}`, modelo)
   }
 
   /**
