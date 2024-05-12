@@ -19,7 +19,7 @@ export class ClienteService {
    * @returns Un Observable que emite un array de objetos de tipo Cliente.
    */
   getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(`${this.myAppUrl}${this.myApiUrl}`)
+    return this.http.get<Cliente[]>(`${this.myAppUrl}${this.myApiUrl}obtenerClientes`)
 
   }
 
@@ -28,9 +28,13 @@ export class ClienteService {
    * @param nuevoCliente Objeto que representa el nuevo cliente a guardar.
    * @returns Un Observable que indica si el cliente se guardó correctamente.
    */
-  guardarCliente(nuevoCliente: Cliente): Observable<boolean> {
-    console.log('Nuevo cliente guardado:', nuevoCliente);
-    return of(true);
+  // guardarCliente(nuevoCliente: Cliente): Observable<boolean> {
+  //   console.log('Nuevo cliente guardado:', nuevoCliente);
+  //   return of(true);
+  // }
+
+  guardarCliente(nuevoCliente: Cliente): Observable<Cliente> {
+    return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}guardarClientes`, nuevoCliente)
   }
 
   /**
