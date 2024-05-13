@@ -173,7 +173,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
       if (!emailRegex.test(valorContacto)) {
         return { emailInvalido: true };
       }
-    } else if (tipoContacto === 'telefonos') {
+    } else if (tipoContacto === 'telefono') {
       const telefonoRegex = /^\d{8}$/;
       if (!telefonoRegex.test(valorContacto)) {
         return { telefonoInvalido: true };
