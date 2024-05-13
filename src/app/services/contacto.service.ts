@@ -63,8 +63,7 @@ export class ContactoService {
    * @returns Un Observable que indica la realización de la operación de eliminación.
    */
   deleteContacto(idCliente: number, idContacto: number): Observable<void> {
-    console.log(`Solicitud de eliminación del cliente con ID ${idCliente} ${idContacto} recibida`);
-    return of();
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/contactos/${idContacto}`)
   }
 
 }
