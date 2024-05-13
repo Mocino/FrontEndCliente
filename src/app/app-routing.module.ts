@@ -5,6 +5,7 @@ import { ClienteListaComponent } from './components/cliente/cliente-lista/client
 const routes: Routes = [
   { path: '', redirectTo: 'listaClientes', pathMatch: 'full'},
   { path: 'listaClientes', component: ClienteListaComponent},
+  { path: '**', redirectTo: 'listaClientes' },
 ];
 
 @NgModule({
