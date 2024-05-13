@@ -35,7 +35,7 @@
 
             <mat-form-field>
               <mat-label>Número</mat-label>
-              <input matInput formControlName="numero" placeholder="Ingrese el número">
+              <input matInput formControlName="numero" placeholder="Ingrese el número" pattern="[0-9]*">
               <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('required') && formMetodoPago.get('numero')?.touched">
                 Campo requerido.
               </mat-error>

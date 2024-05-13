@@ -29,15 +29,17 @@
       <mat-grid-tile>
         <mat-form-field appearance="outline">
           <mat-label>DPI</mat-label>
-          <input matInput placeholder="DPI" formControlName="dpi" autocomplete="off">
+          <input matInput placeholder="DPI" formControlName="dpi" autocomplete="off" pattern="[0-9]*">
           <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">DPI requerido</mat-error>
+          <mat-error *ngIf="formCliente.get('dpi')?.hasError('required')">DPI requerido</mat-error>
+          <mat-error *ngIf="formCliente.get('dpi')?.hasError('maxlength')">DPI debe tener máximo 13 caracteres</mat-error>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field appearance="outline">
           <mat-label>NIT</mat-label>
-          <input matInput placeholder="NIT" formControlName="nit" autocomplete="off">
+          <input matInput placeholder="NIT" formControlName="nit" autocomplete="off" pattern="[0-9]*">
           <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">NIT requerido</mat-error>
         </mat-form-field>
       </mat-grid-tile>

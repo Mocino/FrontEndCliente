@@ -6,24 +6,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Cliente } from 'src/app/interfaces/Cliente';
 import { ClienteService } from 'src/app/services/Cliente.service';
 
-export const MY_DATE_FORMS = {
-  parse: {
-    dateInput: 'DD/MM/YYY',
-  },
-  display:{
-    dateInput: 'DD/MMM/YYYY',
-    dateA11yLabel: 'LL',
-    mounthYearA11yLabel: 'MMMM YYYY'
-  }
-}
 
 @Component({
   selector: 'app-cliente-agregar',
   templateUrl: './cliente-agregar.component.html',
   styleUrls: ['./cliente-agregar.component.css'],
-  providers: [
-    {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMS}
-  ]
+
 })
 export class ClienteAgregarComponent implements OnInit{
 
@@ -45,7 +33,7 @@ export class ClienteAgregarComponent implements OnInit{
       apellidos:["", Validators.required],
       direccion:["", Validators.required],
       fechaNacimiento:["", Validators.required],
-      dpi:["", Validators.required],
+      dpi: ["", [Validators.required, Validators.maxLength(13)]],
       nit:["", Validators.required],
       empresa:["", Validators.required],
     })
