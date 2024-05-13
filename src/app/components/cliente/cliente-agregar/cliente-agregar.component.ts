@@ -33,7 +33,7 @@ export class ClienteAgregarComponent implements OnInit{
       apellidos:["", Validators.required],
       direccion:["", Validators.required],
       fechaNacimiento:["", Validators.required],
-      dpi: ["", [Validators.required, Validators.maxLength(13)]],
+      dpi: ["", [Validators.required, Validators.maxLength(11)]],
       nit:["", Validators.required],
       empresa:["", Validators.required],
     })
