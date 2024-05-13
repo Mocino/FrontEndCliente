@@ -69,7 +69,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   openDialogCrearCliente(){
     this._dialog.open(ClienteAgregarComponent,{
       disableClose: true,
-      width:"330px"
+      width:"370px"
     }).afterClosed().subscribe(resultado=>{
       if(resultado=="Creado"){
         this.mostrarCliente();

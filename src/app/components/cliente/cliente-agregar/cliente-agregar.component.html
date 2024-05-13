@@ -30,7 +30,7 @@
         <mat-form-field appearance="outline">
           <mat-label>DPI</mat-label>
           <input matInput placeholder="DPI" formControlName="dpi" autocomplete="off" pattern="[0-9]*">
-          <mat-error *ngIf="formCliente.get('dpi')?.hasError('pattern')">DPI debe tener exactamente 13 caracteres</mat-error>
+          <mat-error *ngIf="formCliente.get('dpi')?.hasError('pattern')">Ingresar numeros y 13 digitos</mat-error>
           <mat-error *ngIf="formCliente.get('dpi')?.hasError('required')">DPI requerido</mat-error>
 
         </mat-form-field>
@@ -40,7 +40,7 @@
         <mat-form-field appearance="outline">
           <mat-label>NIT</mat-label>
           <input matInput placeholder="NIT" formControlName="nit" autocomplete="off" pattern="[0-9]*">
-          <mat-error *ngIf="formCliente.get('nit')?.hasError('pattern')">NIT debe tener exactamente 9 caracteres</mat-error>
+          <mat-error *ngIf="formCliente.get('nit')?.hasError('pattern')">Ingresar numeros y 9 digitos</mat-error>
           <mat-error *ngIf="formCliente.get('nit')?.hasError('required')">NIT requerido</mat-error>
         </mat-form-field>
       </mat-grid-tile>
