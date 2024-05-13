@@ -17,7 +17,6 @@ import { Subject } from 'rxjs';
 export class ContantoListaComponent implements AfterViewInit, OnInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  private actualizarTabla = new Subject<void>();
 
   formContacto!: FormGroup;
   displayedColumns: string[] = ['tipoContacto', 'valorContacto', 'acciones'];
@@ -47,10 +46,6 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     this.obtenerContactosPorCliente(this.dataCliente.idCliente!);
     this.agregarValidadorValorContacto();
     this.obtenerTiposContacto();
-
-    this.actualizarTabla.subscribe(() => {
-      this.obtenerContactosPorCliente(this.dataCliente.idCliente!);
-    });
   }
 
   ngAfterViewInit(): void {
@@ -102,14 +97,11 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
       valorContacto: this.formContacto.value.valorContacto,
     }
 
-    console.log("afuera:", modelo.idContacto)
-
       if (modelo.idContacto === 0) {
-        console.log("adentro:", modelo)
         this._contactoService.AgregarContacto(this.dataCliente.idCliente!, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Cliente Creado", "Listo");
-            this.actualizarTabla.next();
+            this.obtenerContactosPorCliente(this.dataCliente.idCliente!)
           },
           error: () => {
             this.mostrarAlerta("No se pudo crear", "Error")
@@ -119,7 +111,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
         this._contactoService.EditarContacto(this.dataCliente.idCliente!, this.contactoSeleccionado.idContacto, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Contacto Editado", "Listo");
-            this.actualizarTabla.next();
+            this.obtenerContactosPorCliente(this.dataCliente.idCliente!)
           },
           error: () => {
             this.mostrarAlerta("No se pudo editar", "Error")
@@ -173,7 +165,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
       if (!emailRegex.test(valorContacto)) {
         return { emailInvalido: true };
       }
-    } else if (tipoContacto === 'teléfono') {
+    } else if (tipoContacto === 'teléfono' || tipoContacto === 'celular') {
       const telefonoRegex = /^\d{8}$/;
       if (!telefonoRegex.test(valorContacto)) {
         return { telefonoInvalido: true };
@@ -215,7 +207,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
         this._contactoService.deleteContacto(dataCliente.idCliente, dataCliente.idContacto).subscribe({
           next:()=>{
             this.mostrarAlerta("Contacto eliminado", "Listo");
-            this.actualizarTabla.next();
+            this.obtenerContactosPorCliente(this.dataCliente.idCliente!)
           }
         })
       }

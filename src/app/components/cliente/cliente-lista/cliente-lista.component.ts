@@ -50,7 +50,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       next:(dataResponse)=>{
         console.log(dataResponse)
         this.dataSource.data = dataResponse;
-      }, error:(e) => {}
+      }, error:() => {}
     })
   }
 
@@ -102,7 +102,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
     }).afterClosed().subscribe(resultado=>{
       if(resultado === "Eliminar"){
         this._clienteService.deleteCliente(dataCliente.idCliente!).subscribe({
-          next:(data)=>{
+          next:()=>{
             this.mostrarAlerta("Cliente eliminado", "Listo");
             this.mostrarCliente();
           }
@@ -131,7 +131,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
       .subscribe(resultado => {
         if(resultado === "Contacto"){
           this._clienteService.deleteCliente(dataCliente.idCliente!).subscribe({
-            next:(data)=>{
+            next:()=>{
               this.mostrarAlerta("Vista Contacto", "Listo");
               this.mostrarCliente();
             }

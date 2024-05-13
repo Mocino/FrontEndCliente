@@ -19,7 +19,6 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 
-  private actualizarTabla = new Subject<void>();
   formMetodoPago!:  FormGroup;
   tiposMetodo: Option[] = [];
   displayedColumns: string[] = ['tipo', 'numero', 'fechaVencimiento', 'nombreTitular', 'acciones'];
@@ -49,10 +48,6 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   ngOnInit(): void {
     this.obtenerTipoMetodo(this.dataCliente.idCliente);
     this.obtenerMetodosPagoSelect();
-
-    this.actualizarTabla.subscribe(() => {
-      this.obtenerTipoMetodo(this.dataCliente.idCliente);
-    });
   }
 
   /**
@@ -116,7 +111,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           next: () => {
             console.log("En crear")
             this.mostrarAlerta("Metodo Pago Creado", "Listo");
-            this.actualizarTabla.next();
+            this.obtenerTipoMetodo(this.dataCliente.idCliente);
           },
           error: () => {
             this.mostrarAlerta("No se pudo crear", "Error")
@@ -127,7 +122,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           next: () => {
             console.log("En editar")
             this.mostrarAlerta("Metodo Pago Editado", "Listo");
-            this.actualizarTabla.next();
+            this.obtenerTipoMetodo(this.dataCliente.idCliente);
           },
           error: () => {
             this.mostrarAlerta("No se pudo editar", "Error")
@@ -195,25 +190,20 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           this._metodoPagoService.deleteMetodosDePago(dataCliente.idCliente, dataCliente.idMetodoPago!).subscribe({
             next:()=>{
               this.mostrarAlerta("Metodo De Pago eliminado", "Listo");
-              this.actualizarTabla.next();
+              this.obtenerTipoMetodo(this.dataCliente.idCliente);
             }
           })
         }
       })
     }
 
-/**
- * Función para ocultar los primeros cinco dígitos de un número.
- * @param numero El número que se va a modificar.
- * @returns El número con los primeros cinco dígitos ocultos por asteriscos (*) si tiene más de cuatro dígitos, de lo contrario devuelve el mismo número sin cambios.
- */
-ocultarDigitos(numero: string): string {
-  if (numero && numero.length > 4) {
+  /**
+   * Función para ocultar los primeros cinco dígitos de un número.
+   * @returns El número con los primeros cinco dígitos ocultos por asteriscos (*) si tiene más de cuatro dígitos, de lo contrario devuelve el mismo número sin cambios.
+   */
+  ocultarDigitos(numero: string): string {
     return '*****' + numero.substring(5);
-  } else {
-    return numero;
   }
-}
 
 
 }
