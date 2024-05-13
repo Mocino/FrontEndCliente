@@ -38,7 +38,6 @@ export class ClienteAgregarComponent implements OnInit{
       empresa:["", Validators.required],
     })
 
-    // this.idCliente = Number(this.aRouter.snapshot.paramMap.get('id'))
 
     this._clienteServicio.getClientes().subscribe({
       next:(data)=>{
