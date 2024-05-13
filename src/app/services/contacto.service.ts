@@ -21,12 +21,7 @@ export class ContactoService {
    * @returns Un Observable que emite un array de objetos de tipo TipoContacto.
    */
   getTiposContacto(): Observable<Option[]> {
-    const tiposContactoMock: Option[] = [
-      { valor: 'email', nombre: 'Correo electrónico' },
-      { valor: 'telefono', nombre: 'Teléfono' },
-      { valor: 'direccion', nombre: 'Dirección' }
-    ];
-    return of(tiposContactoMock);
+    return this.http.get<Option[]>(`${this.myAppUrl}api/TiposContacto/obtenerTiposContacto`)
   }
 
   /**

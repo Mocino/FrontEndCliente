@@ -59,7 +59,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
     this.dataSource.filterPredicate = (data: Contacto, filter: string) => {
       const valorContacto = data.valorContacto.toLowerCase();
-      const tipoContacto = data.tipoContacto.nombre.toLowerCase();
+      const tipoContacto = data.tipoContacto.toLowerCase();
       return valorContacto.includes(filter) || tipoContacto.includes(filter);
     };
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -96,8 +96,10 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
       valorContacto: this.formContacto.value.valorContacto,
     }
 
+    console.log("afuera:", modelo.idContacto)
 
-      if (!this.contactoSeleccionado) {
+      if (modelo.idContacto === 0) {
+        console.log("adentro:", modelo)
         this._contactoService.AgregarContacto(this.dataCliente.idCliente!, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Cliente Creado", "Listo");
@@ -131,7 +133,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
   this.formContacto.patchValue({
     idContacto: contacto.idContacto,
     idCliente: contacto.idCliente,
-    tipoContacto: contacto.tipoContacto.valor,
+    tipoContacto: contacto.tipoContacto,
     valorContacto: contacto.valorContacto
   });
 
