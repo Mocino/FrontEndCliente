@@ -201,4 +201,19 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
         }
       })
     }
+
+/**
+ * Función para ocultar los primeros cinco dígitos de un número.
+ * @param numero El número que se va a modificar.
+ * @returns El número con los primeros cinco dígitos ocultos por asteriscos (*) si tiene más de cuatro dígitos, de lo contrario devuelve el mismo número sin cambios.
+ */
+ocultarDigitos(numero: string): string {
+  if (numero && numero.length > 4) {
+    return '*****' + numero.substring(5);
+  } else {
+    return numero;
+  }
+}
+
+
 }
