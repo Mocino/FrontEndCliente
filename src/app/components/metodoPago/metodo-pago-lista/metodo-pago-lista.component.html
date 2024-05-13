@@ -34,7 +34,7 @@
             </mat-form-field>
 
             <mat-form-field>
-              <mat-label>Número</mat-label>
+              <mat-label>Número de la tarjeta</mat-label>
               <input matInput formControlName="numero" placeholder="Ingrese el número" pattern="[0-9]*">
               <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('required') && formMetodoPago.get('numero')?.touched">
                 Campo requerido.
@@ -83,7 +83,7 @@
           </ng-container>
 
           <ng-container matColumnDef="numero">
-            <th mat-header-cell *matHeaderCellDef style="text-align: right; min-width: 9rem"> Número </th>
+            <th mat-header-cell *matHeaderCellDef style="text-align: right; min-width: 9rem"> Número de la tarjeta </th>
             <td mat-cell *matCellDef="let element" style="text-align: right"> {{ ocultarDigitos(element.numero) }} </td>
           </ng-container>
 
