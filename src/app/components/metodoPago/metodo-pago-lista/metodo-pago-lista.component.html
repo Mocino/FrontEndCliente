@@ -34,8 +34,9 @@
             </mat-form-field>
 
             <mat-form-field>
-              <mat-label>Número de la tarjeta</mat-label>
+              <mat-label>Número de tarjeta</mat-label>
               <input matInput formControlName="numero" placeholder="Ingrese el número" pattern="[0-9]*">
+              <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('pattern')">Ingresar solo numeros y 18 digitos</mat-error>
               <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('required') && formMetodoPago.get('numero')?.touched">
                 Campo requerido.
               </mat-error>

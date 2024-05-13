@@ -40,7 +40,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       idMetodoPago: 0,
       idCliente: 0,
       tipo:["", Validators.required],
-      numero:["", Validators.required],
+      numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)]],
       fechaVencimiento:["", Validators.required],
       nombreTitular: ["", Validators.required]
     })
