@@ -34,6 +34,8 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
     private _snackBar: MatSnackBar,
   ) {
     this.formMetodoPago = this.fb.group({
+      idMetodoPago: 0,
+      idCliente: 0,
       tipo:["", Validators.required],
       numero:["", Validators.required],
       fechaVencimiento:["", Validators.required],
@@ -68,7 +70,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
     this.dataSource.filterPredicate = (data: MetodoDePago, filter: string) => {
-      const tipo = data.tipo.nombre.toLowerCase(); // Filtrar por tipo de método de pago
+      const tipo = data.tipo.toLowerCase(); // Filtrar por tipo de método de pago
       const numero = data.numero.toLowerCase();
       const fechaVencimiento = data.fechaVencimiento.toLocaleDateString().toLowerCase(); // Convertir la fecha de vencimiento a una cadena
       const nombreTitular = data.nombreTitular.toLowerCase();
@@ -93,7 +95,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   addEditMetodoDePago(){
 
     const modelo: MetodoDePago = {
-      idMetodoPago: 0,
+      idMetodoPago: this.formMetodoPago.value.idMetodoPago || 0,
       idCliente: this.dataCliente.idCliente,
       tipo: this.formMetodoPago.value.tipo,
       numero:           this.formMetodoPago.value.numero,
@@ -101,7 +103,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       nombreTitular:    this.formMetodoPago.value.nombreTitular,
     }
 
-      if (!this.metododePagoSeleccionado) {
+      if (modelo.idMetodoPago === 0) {
 
         this._metodoPagoService.AgregarMetodosDePago(this.dataCliente.idCliente, modelo).subscribe({
           next: () => {
@@ -114,7 +116,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           }
         });
       } else {
-        this._metodoPagoService.EditarMetodosDePago(this.dataCliente.idCliente, this.metododePagoSeleccionado.idMetodoPago, modelo).subscribe({
+        this._metodoPagoService.EditarMetodosDePago(this.dataCliente.idCliente, this.metododePagoSeleccionado.idMetodoPago!, modelo).subscribe({
           next: () => {
             console.log("En editar")
             this.mostrarAlerta("Metodo Pago Editado", "Listo");
@@ -137,7 +139,8 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
 
     console.log("openEditForm",metodoDePago)
     this.formMetodoPago.patchValue({
-      tipo: metodoDePago.tipo.valor,
+      idMetodoPago: metodoDePago.idMetodoPago,
+      tipo: metodoDePago.tipo,
       numero: metodoDePago.numero,
       fechaVencimiento: metodoDePago.fechaVencimiento,
       nombreTitular: metodoDePago.nombreTitular
@@ -182,7 +185,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
         data:dataCliente
       }).afterClosed().subscribe(resultado=>{
         if(resultado === "Eliminar"){
-          this._metodoPagoService.deleteMetodosDePago(dataCliente.idCliente, dataCliente.idMetodoPago).subscribe({
+          this._metodoPagoService.deleteMetodosDePago(dataCliente.idCliente, dataCliente.idMetodoPago!).subscribe({
             next:()=>{
               this.mostrarAlerta("Metodo De Pago eliminado", "Listo");
             }

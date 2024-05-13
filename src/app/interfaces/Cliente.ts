@@ -20,9 +20,9 @@ export interface Contacto {
 }
 
 export interface MetodoDePago {
-  idMetodoPago: number,
+  idMetodoPago?: number,
   idCliente: number,
-  tipo: Option;
+  tipo: string;
   numero: string;
   fechaVencimiento: Date;
   nombreTitular: string;

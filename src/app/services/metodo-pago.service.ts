@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MetodoDePago, Option } from '../interfaces/Cliente';
+import { HttpClient } from '@angular/common/http';
+import { enviroment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MetodoPagoService {
 
-  constructor() { }
+  private myAppUrl: string = enviroment.endpoint;
+  private myApiUrl: string = 'api/MetodosPagos/'
+
+  constructor(private http: HttpClient) { }
 
   /**
    * Obtiene los tipos de metodos disponibles.
@@ -17,7 +22,7 @@ export class MetodoPagoService {
     const tiposContactoMock: Option[] = [
       { valor: 'tarjetaCredito', nombre: 'Tarjeta de Crédito' },
       { valor: 'cuentaBancaria', nombre: 'Cuenta Bancaria' },
-      { valor: 'payPal', nombre: 'PayPal' },
+      { valor: 'PayPal', nombre: 'PayPal' },
       { valor: 'otro', nombre: 'Otro' }
     ];
     return of(tiposContactoMock);
@@ -29,25 +34,7 @@ export class MetodoPagoService {
    * @returns Un Observable que emite un array de objetos de tipo MetodoDePago.
    */
   getMetodosDePagoPorCliente(idCliente: number): Observable<MetodoDePago[]> {
-    const metodosPagoMockPorCliente: { [idCliente: number]: MetodoDePago[] } = {
-      1: [
-        { idMetodoPago: 1, idCliente: 1, tipo: { valor: 'tarjetaCredito', nombre: 'Tarjeta de Crédito' }, numero: '1234567890123456', fechaVencimiento: new Date('2024-12-31'), nombreTitular: 'Juan Pérez' },
-        { idMetodoPago: 2, idCliente: 1, tipo: { valor: 'payPal', nombre: 'PayPal' }, numero: '987654321', fechaVencimiento: new Date('2025-01-01'), nombreTitular: 'Juan Pérez' },
-        { idMetodoPago: 3, idCliente: 1, tipo: { valor: 'tarjetaCredito', nombre: 'Tarjeta de Crédito' }, numero: '9876543210987654', fechaVencimiento: new Date('2023-06-30'), nombreTitular: 'María García' },
-        { idMetodoPago: 4, idCliente: 1, tipo: { valor: 'payPal', nombre: 'PayPal' }, numero: 'juan@example.com', fechaVencimiento: new Date('2023-12-31'), nombreTitular: 'Pedro Martínez' },
-        { idMetodoPago: 5, idCliente: 1, tipo: { valor: 'tarjetaCredito', nombre: 'Tarjeta de Crédito' }, numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'A' },
-        { idMetodoPago: 6, idCliente: 1, tipo: { valor: 'cuentaBancaria', nombre: 'Cuenta Bancaria' }, numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'B' },
-        { idMetodoPago: 7, idCliente: 1, tipo: { valor: 'cuentaBancaria', nombre: 'Cuenta Bancaria' }, numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'C' },
-        { idMetodoPago: 8, idCliente: 1, tipo: { valor: 'tarjetaCredito', nombre: 'Tarjeta de Crédito' }, numero: '987654321', fechaVencimiento: new Date('2024-01-01'), nombreTitular: 'D' }
-      ],
-      2: [
-      ],
-      3: [
-      ]
-    };
-
-    const metodosPagoCliente = metodosPagoMockPorCliente[idCliente] || [];
-    return of(metodosPagoCliente);
+    return this.http.get<MetodoDePago[]>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/getMetodosPagos`)
   }
 
   /**
@@ -56,12 +43,8 @@ export class MetodoPagoService {
    * @param nuevoMetodosDePago Objeto que representa el nuevo método de pago.
    * @returns Un Observable que emite un array de objetos de tipo MetodoDePago actualizados.
    */
-  AgregarMetodosDePago(idMetodosDePago: number, nuevoMetodosDePago: MetodoDePago): Observable<MetodoDePago[]> {
-    console.log("idCliente:", idMetodosDePago);
-    console.log("Nuevo MetodosDePago:", nuevoMetodosDePago);
-
-    const MetodosDePagosActualizados = [nuevoMetodosDePago];
-    return of(MetodosDePagosActualizados);
+  AgregarMetodosDePago(idCliente: number, nuevoMetodosDePago: MetodoDePago): Observable<MetodoDePago[]> {
+    return this.http.post<MetodoDePago[]>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/MetodosPagos`, nuevoMetodosDePago)
   }
 
   /**
@@ -72,10 +55,8 @@ export class MetodoPagoService {
    * @returns Un Observable que emite un array de objetos de tipo MetodoDePago actualizados.
    */
   EditarMetodosDePago(idCliente: number, idMetodosDePago: number, nuevoMetodosDePago: MetodoDePago): Observable<MetodoDePago[]> {
-    console.log("idCliente y idContacto en servicio metodo-pago:", idCliente, idMetodosDePago, nuevoMetodosDePago);
+    return this.http.put<MetodoDePago[]>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/MetodosPagos/${idMetodosDePago}`, nuevoMetodosDePago)
 
-    const MetodosDePagosActualizados = [nuevoMetodosDePago];
-    return of(MetodosDePagosActualizados);
   }
 
   /**
