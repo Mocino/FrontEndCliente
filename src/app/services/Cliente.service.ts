@@ -48,7 +48,6 @@ export class ClienteService {
    * @returns Un Observable que indica si la eliminación del cliente fue exitosa.
    */
   deleteCliente(idCliente: number): Observable<void> {
-    console.log(`Solicitud de eliminación del cliente con ID ${idCliente} recibida`);
-    return of();
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}eliminarCliente/${idCliente}`)
   }
 }
