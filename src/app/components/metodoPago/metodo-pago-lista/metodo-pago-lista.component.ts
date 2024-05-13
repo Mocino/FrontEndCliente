@@ -7,6 +7,7 @@ import { MetodoDePago, Option } from 'src/app/interfaces/Cliente';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { MetodoPagoEliminarComponent } from '../metodo-pago-eliminar/metodo-pago-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-metodo-pago-lista',
@@ -17,6 +18,8 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+
+  private actualizarTabla = new Subject<void>();
   formMetodoPago!:  FormGroup;
   tiposMetodo: Option[] = [];
   displayedColumns: string[] = ['tipo', 'numero', 'fechaVencimiento', 'nombreTitular', 'acciones'];
@@ -46,6 +49,10 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   ngOnInit(): void {
     this.obtenerTipoMetodo(this.dataCliente.idCliente);
     this.obtenerMetodosPagoSelect();
+
+    this.actualizarTabla.subscribe(() => {
+      this.obtenerTipoMetodo(this.dataCliente.idCliente);
+    });
   }
 
   /**
@@ -109,7 +116,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           next: () => {
             console.log("En crear")
             this.mostrarAlerta("Metodo Pago Creado", "Listo");
-            this.dialogReferencia.close("Creado")
+            this.actualizarTabla.next();
           },
           error: () => {
             this.mostrarAlerta("No se pudo crear", "Error")
@@ -120,7 +127,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           next: () => {
             console.log("En editar")
             this.mostrarAlerta("Metodo Pago Editado", "Listo");
-            this.dialogReferencia.close("Editado")
+            this.actualizarTabla.next();
           },
           error: () => {
             this.mostrarAlerta("No se pudo editar", "Error")
@@ -188,6 +195,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           this._metodoPagoService.deleteMetodosDePago(dataCliente.idCliente, dataCliente.idMetodoPago!).subscribe({
             next:()=>{
               this.mostrarAlerta("Metodo De Pago eliminado", "Listo");
+              this.actualizarTabla.next();
             }
           })
         }

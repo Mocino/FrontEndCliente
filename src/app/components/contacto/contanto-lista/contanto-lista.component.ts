@@ -7,6 +7,7 @@ import { Cliente, Contacto, Option } from 'src/app/interfaces/Cliente';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { ContantoEliminarComponent } from '../contanto-eliminar/contanto-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-contanto-lista',
@@ -16,6 +17,7 @@ import { MatPaginator } from '@angular/material/paginator';
 export class ContantoListaComponent implements AfterViewInit, OnInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  private actualizarTabla = new Subject<void>();
 
   formContacto!: FormGroup;
   displayedColumns: string[] = ['tipoContacto', 'valorContacto', 'acciones'];
@@ -45,6 +47,10 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     this.obtenerContactosPorCliente(this.dataCliente.idCliente!);
     this.agregarValidadorValorContacto();
     this.obtenerTiposContacto();
+
+    this.actualizarTabla.subscribe(() => {
+      this.obtenerContactosPorCliente(this.dataCliente.idCliente!);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -103,7 +109,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
         this._contactoService.AgregarContacto(this.dataCliente.idCliente!, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Cliente Creado", "Listo");
-            this.dialogReferencia.close("Creado")
+            this.actualizarTabla.next();
           },
           error: () => {
             this.mostrarAlerta("No se pudo crear", "Error")
@@ -113,7 +119,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
         this._contactoService.EditarContacto(this.dataCliente.idCliente!, this.contactoSeleccionado.idContacto, modelo).subscribe({
           next: () => {
             this.mostrarAlerta("Contacto Editado", "Listo");
-            this.dialogReferencia.close("Editado")
+            this.actualizarTabla.next();
           },
           error: () => {
             this.mostrarAlerta("No se pudo editar", "Error")
@@ -209,6 +215,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
         this._contactoService.deleteContacto(dataCliente.idCliente, dataCliente.idContacto).subscribe({
           next:()=>{
             this.mostrarAlerta("Contacto eliminado", "Listo");
+            this.actualizarTabla.next();
           }
         })
       }

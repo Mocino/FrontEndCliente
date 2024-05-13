@@ -66,8 +66,7 @@ export class MetodoPagoService {
    * @returns Un Observable que indica la realización de la operación de eliminación.
    */
   deleteMetodosDePago(idCliente: number, idMetodosDePago: number): Observable<void> {
-    console.log(`Solicitud de eliminación del cliente con ID ${idCliente} ${idMetodosDePago} recibida`);
-    return of();
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/MetodosPagos/${idMetodosDePago}`)
   }
 
 }

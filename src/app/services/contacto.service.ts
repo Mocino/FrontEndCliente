@@ -53,7 +53,6 @@ export class ContactoService {
    */
   EditarContacto(idCliente: number, idContacto: number, nuevoContacto: Contacto): Observable<Contacto[]> {
     return this.http.put<Contacto[]>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/contactos/${idContacto}`, nuevoContacto)
-
   }
 
   /**
