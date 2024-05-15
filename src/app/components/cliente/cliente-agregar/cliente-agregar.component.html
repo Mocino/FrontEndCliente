@@ -32,7 +32,7 @@
           <input matInput placeholder="DPI" formControlName="dpi" autocomplete="off" pattern="[0-9]*">
           <mat-error *ngIf="formCliente.get('dpi')?.hasError('pattern')">Ingresar numeros y 13 digitos</mat-error>
           <mat-error *ngIf="formCliente.get('dpi')?.hasError('required')">DPI requerido</mat-error>
-
+          <mat-error *ngIf="formCliente.get('dpi')?.hasError('dpiExists')">DPI ya existe</mat-error>
         </mat-form-field>
       </mat-grid-tile>
 

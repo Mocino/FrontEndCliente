@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, map, of, switchMap, timer } from 'rxjs';
 import { Cliente } from 'src/app/interfaces/Cliente';
 import { ClienteService } from 'src/app/services/Cliente.service';
 
@@ -33,7 +34,7 @@ export class ClienteAgregarComponent implements OnInit{
       apellidos:["", Validators.required],
       direccion:["", Validators.required],
       fechaNacimiento:["", Validators.required],
-      dpi: ["", [Validators.required, Validators.pattern(/^\d{13}$/)]],
+      dpi: ["", [Validators.required, Validators.pattern(/^\d{13}$/)], [this.dpiValidator.bind(this)]],
       nit: ["", [Validators.required, Validators.pattern(/^.{9}$/)]],
       empresa:["", Validators.required],
     })
@@ -116,5 +117,20 @@ export class ClienteAgregarComponent implements OnInit{
     }
 
   }
+
+  dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    return timer(300).pipe(
+        switchMap(() => {
+            if (!control.value) {
+                return of(null);
+            }
+            return this._clienteServicio.getVerificarDPI(control.value).pipe(
+                map((res: any) => {
+                    return res.exists ? { dpiExists: true } : null;
+                })
+            );
+        })
+    );
+}
 
 }

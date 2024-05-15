@@ -20,7 +20,15 @@ export class ClienteService {
    */
   getClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(`${this.myAppUrl}${this.myApiUrl}obtenerClientes`)
+  }
 
+  /**
+   * verifica si un dpi esta repetido.
+   * @param dpi verifica el dpi del cliente antes de agregar.
+   * @returns Un Observable que indica si el dpi se encuentra registrado.
+   */
+  getVerificarDPI(dpi: number): Observable<Object>{
+    return this.http.get<Object>(`${this.myAppUrl}${this.myApiUrl}verificarDPI/${dpi}`)
   }
 
   /**
