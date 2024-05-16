@@ -202,7 +202,13 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
    * @returns El número con los primeros cinco dígitos ocultos por asteriscos (*) si tiene más de cuatro dígitos, de lo contrario devuelve el mismo número sin cambios.
    */
   ocultarDigitos(numero: string): string {
-    return '*****' + numero.substring(5);
+    if (numero.length <= 8) {
+      return numero; // No se ocultan dígitos si la longitud es menor o igual a 8
+    } else {
+      const primeraParte = numero.substring(0, 4); // Obtener los primeros cuatro dígitos
+      const segundaParte = '****'; // Reemplazar los restantes con asteriscos
+      return primeraParte + segundaParte;
+    }
   }
 
 
