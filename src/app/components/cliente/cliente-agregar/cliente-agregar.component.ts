@@ -33,9 +33,9 @@ export class ClienteAgregarComponent implements OnInit{
       nombres:["", Validators.required],
       apellidos:["", Validators.required],
       direccion:["", Validators.required],
-      fechaNacimiento:["", Validators.required],
+      fechaNacimiento: ["", [Validators.required, this.fechaNacimientoValidator]],
       dpi: ["", [Validators.required, Validators.pattern(/^\d{13}$/)], [this.dpiValidator.bind(this)]],
-      nit: ["", [Validators.required, Validators.pattern(/^.{9}$/)]],
+      nit: ["", [Validators.required, Validators.pattern(/^\d{6,12}K$/)]],
       empresa:["", Validators.required],
     })
 
@@ -139,5 +139,23 @@ export class ClienteAgregarComponent implements OnInit{
         })
     );
 }
+
+fechaNacimientoValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+
+  const fechaNacimiento = new Date(control.value);
+  const edadMinima = 18;
+  const fechaActual = new Date();
+  const diferenciaFechas = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+
+  if (diferenciaFechas < edadMinima) {
+    return { menorDeEdad: true };
+  }
+
+  return null;
+}
+
 
 }

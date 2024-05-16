@@ -39,11 +39,16 @@
       <mat-grid-tile>
         <mat-form-field appearance="outline">
           <mat-label>NIT</mat-label>
-          <input matInput placeholder="NIT" formControlName="nit" autocomplete="off" pattern="[0-9]*">
-          <mat-error *ngIf="formCliente.get('nit')?.hasError('pattern')">Ingresar numeros y 9 digitos</mat-error>
-          <mat-error *ngIf="formCliente.get('nit')?.hasError('required')">NIT requerido</mat-error>
+          <input matInput formControlName="nit" placeholder="Ingrese el NIT">
+          <mat-error *ngIf="formCliente.get('nit')?.hasError('required')">
+            El NIT es requerido
+          </mat-error>
+          <mat-error *ngIf="formCliente.get('nit')?.hasError('pattern')">
+            Ingrese un Nit Valido
+          </mat-error>
         </mat-form-field>
       </mat-grid-tile>
+
 
       <mat-grid-tile>
         <mat-form-field appearance="outline">
@@ -59,7 +64,8 @@
           <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaNacimiento" autocomplete="off">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">Fecha requerida</mat-error>
+          <mat-error *ngIf="formCliente.get('fechaNacimiento')?.hasError('required')">Fecha requerida</mat-error>
+          <mat-error *ngIf="formCliente.get('fechaNacimiento')?.hasError('menorDeEdad')">Debe ser mayor de 18 años</mat-error>
         </mat-form-field>
       </mat-grid-tile>
 
