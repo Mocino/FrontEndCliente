@@ -18,7 +18,7 @@ export class ClienteAgregarComponent implements OnInit{
 
   formCliente!: FormGroup;
   tituloaccion:string = "Nuevo";
-  botonAccion:string = "Guardar";
+  botonAccion:string = "Nuevo";
   listaCliente: Cliente[]=[];
 
   constructor(
