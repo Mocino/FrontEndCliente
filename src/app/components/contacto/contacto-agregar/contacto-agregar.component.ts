@@ -4,6 +4,7 @@ import { Cliente, Contacto, Option } from 'src/app/interfaces/Cliente';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { Observable, of, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-contacto-agregar',
@@ -18,12 +19,12 @@ export class ContactoAgregarComponent implements OnInit {
 
   formContacto!: FormGroup;
   tiposContacto: Option[] = [];
-  showEdit: boolean = false;
-  contactoSeleccionado!: Contacto;
+  esEditar: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private _contactoService: ContactoService
+    private _contactoService: ContactoService,
+    private _snackBar: MatSnackBar,
   ) {
     this.formContacto = this.fb.group({
       idContacto: 0,
@@ -38,7 +39,7 @@ export class ContactoAgregarComponent implements OnInit {
     this.agregarValidadorValorContacto();
 
     if (this.contactoEditar) {
-      this.showEdit = true;
+      this.esEditar = true;
       this.formContacto.patchValue({
         idContacto: this.contactoEditar.idContacto,
         tipoContacto: this.contactoEditar.tipoContacto,
@@ -63,6 +64,7 @@ export class ContactoAgregarComponent implements OnInit {
     if (modelo.idContacto === 0) {
       this._contactoService.AgregarContacto(this.dataCliente.idCliente!, modelo).subscribe({
         next: () => {
+          this.mostrarAlerta("Contacto creado", "Listo");
           this.contactSaved.emit();
           this.formClosed.emit();
           this.resetForm();
@@ -74,6 +76,7 @@ export class ContactoAgregarComponent implements OnInit {
     } else {
       this._contactoService.EditarContacto(this.dataCliente.idCliente!, this.formContacto.value.idContacto, modelo).subscribe({
         next: () => {
+          this.mostrarAlerta("Contacto editado", "Listo");
           this.contactSaved.emit();
           this.formClosed.emit();
           this.resetForm();
@@ -85,14 +88,13 @@ export class ContactoAgregarComponent implements OnInit {
     }
   }
 
-
   emailValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     return timer(300).pipe(
       switchMap(() => {
         if (!control.value) {
           return of(null);
         }
-        if (this.showEdit && control.value === this.contactoSeleccionado?.valorContacto) {
+        if (this.esEditar && control.value === this.contactoEditar.valorContacto) {
           return of(null);
         }
         return this._contactoService.getVerificarEmail(control.value, this.dataCliente.idCliente!).pipe(
@@ -130,21 +132,24 @@ export class ContactoAgregarComponent implements OnInit {
   }
 
   mostrarAlerta(msg: string, accion: string) {
-    // Implementar según tus necesidades, por ejemplo usando MatSnackBar
+    this._snackBar.open(msg, accion,{
+      horizontalPosition: "end",
+      verticalPosition: "top",
+      duration: 3000
+    });
   }
 
   resetForm() {
     this.formContacto.reset();
-    this.showEdit = false;
+    this.esEditar = false;
   }
 
   updateForm(contacto: Contacto) {
-    this.showEdit = true;
+    this.esEditar = true;
     this.formContacto.patchValue({
       idContacto: contacto.idContacto,
       tipoContacto: contacto.tipoContacto,
       valorContacto: contacto.valorContacto
     });
   }
-
 }
