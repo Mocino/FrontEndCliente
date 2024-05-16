@@ -40,7 +40,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       idCliente: 0,
       tipo:["", Validators.required],
       numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)], [this.numeroTarjetaValidator.bind(this)]],
-      fechaVencimiento:["", Validators.required],
+      fechaVencimiento: ["", [Validators.required, this.fechaTarjetaValidator]],
       nombreTitular: ["", Validators.required]
     })
    }
@@ -153,6 +153,9 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
 
     this.showForm = true;
     this.showEdit = true;
+
+    this.formMetodoPago.get('tipo')?.disable();
+
   }
 
   /**
@@ -175,6 +178,11 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       this.showForm = !this.showForm;
       this.showEdit = false;
       this.formMetodoPago.reset();
+
+      if (this.formMetodoPago.get('tipo')?.disabled) {
+        this.formMetodoPago.get('tipo')?.enable();
+      }
+
     }
 
   /**
@@ -231,6 +239,26 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
             );
         })
     );
+}
+
+fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+
+  const fechaTarjeta = new Date(control.value);
+  const fechaActual = new Date();
+
+  // Calcula la fecha de vencimiento de la tarjeta con 2 años de antelación
+  const fechaVencimientoMinima = new Date(fechaActual);
+  fechaVencimientoMinima.setFullYear(fechaVencimientoMinima.getFullYear() + 2);
+
+  // Verifica si la fecha de vencimiento de la tarjeta es menor que la fecha mínima
+  if (fechaTarjeta < fechaVencimientoMinima) {
+    return { menosDeDosAnios: true };
+  }
+
+  return null;
 }
 
 }

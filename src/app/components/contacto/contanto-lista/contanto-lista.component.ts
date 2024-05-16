@@ -137,6 +137,8 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
 
   this.showForm = true;
   this.showEdit = true;
+
+  this.formContacto.get('tipoContacto')?.disable();
 }
 
   /**
@@ -191,6 +193,10 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     this.showForm = !this.showForm;
     this.showEdit = false;
     this.formContacto.reset();
+
+    if (this.formContacto.get('tipoContacto')?.disabled) {
+      this.formContacto.get('tipoContacto')?.enable();
+    }
   }
 
 

@@ -40,8 +40,6 @@
               <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('required') && formMetodoPago.get('numero')?.touched">
                 Campo requerido.
               </mat-error>
-              <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('numExists')">Numero de tarjeta ya existe</mat-error>
-
             </mat-form-field>
 
             <mat-form-field>
@@ -52,6 +50,7 @@
               <mat-error *ngIf="formMetodoPago.get('fechaVencimiento')?.hasError('required') && formMetodoPago.get('fechaVencimiento')?.touched">
                 Campo requerido.
               </mat-error>
+              <mat-error *ngIf="formMetodoPago.get('fechaVencimiento')?.hasError('menosDeDosAnios')">Debe ser 2 de caducacion años</mat-error>
             </mat-form-field>
 
             <mat-form-field>
@@ -65,7 +64,7 @@
 
           <div style="margin-bottom: 1rem; display: flex; justify-content: flex-end;">
             <button mat-raised-button type="submit" color="primary" (click)="addEditMetodoDePago()" [disabled]="formMetodoPago.invalid">
-              {{ showEdit ? 'Editar Contacto' : 'Nuevo Contacto' }}
+              {{ showEdit ? 'Editar Contacto' : 'Guardar Contacto' }}
             </button>
           </div>
         </form>
