@@ -25,6 +25,15 @@ export class ContactoService {
   }
 
   /**
+   * verifica si un dpi esta repetido.
+   * @param dpi verifica el dpi del cliente antes de agregar.
+   * @returns Un Observable que indica si el dpi se encuentra registrado.
+   */
+  getVerificarEmail(email: string, idCliente: number): Observable<Object>{
+    return this.http.get<Object>(`${this.myAppUrl}${this.myApiUrl}verificarEmail/${email}/${idCliente}`)
+  }
+
+  /**
    * Obtiene los contactos asociados a un cliente.
    * @param idContacto ID del cliente.
    * @returns Un Observable que emite un array de objetos de tipo Contacto.

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,7 +7,7 @@ import { MetodoDePago, Option } from 'src/app/interfaces/Cliente';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { MetodoPagoEliminarComponent } from '../metodo-pago-eliminar/metodo-pago-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { Subject } from 'rxjs';
+import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-metodo-pago-lista',
@@ -39,7 +39,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       idMetodoPago: 0,
       idCliente: 0,
       tipo:["", Validators.required],
-      numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)]],
+      numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)], [this.numeroTarjetaValidator.bind(this)]],
       fechaVencimiento:["", Validators.required],
       nombreTitular: ["", Validators.required]
     })
@@ -205,5 +205,26 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
     return '*****' + numero.substring(5);
   }
 
+
+  /**
+   * Valida si dpi ya existe.
+   */
+  numeroTarjetaValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    return timer(300).pipe(
+        switchMap(() => {
+            if (!control.value) {
+                return of(null);
+            }
+            if (this.showEdit == true &&  control.value === this.metododePagoSeleccionado.numero) {
+              return of(null);
+            }
+            return this._metodoPagoService.getVerificarnumerotarjeta(control.value, this.dataCliente.idCliente).pipe(
+                map((res: any) => {
+                    return res.exists ? { numExists: true } : null;
+                })
+            );
+        })
+    );
+}
 
 }

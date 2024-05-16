@@ -38,15 +38,11 @@
             <mat-form-field>
               <mat-label>Valor de Contacto</mat-label>
               <input matInput formControlName="valorContacto" placeholder="Ingrese el valor de contacto">
-              <mat-error *ngIf="formContacto.get('valorContacto')?.hasError('required') && formContacto.get('valorContacto')?.touched">
-                Campo requerido.
-              </mat-error>
-              <mat-error *ngIf="formContacto.get('valorContacto')?.hasError('emailInvalido')">
-                Ingrese un correo electrónico válido
-              </mat-error>
-              <mat-error *ngIf="formContacto.get('valorContacto')?.hasError('telefonoInvalido')">
-                Ingrese un número de teléfono de 8 dígitos
-              </mat-error>
+              <mat-error *ngIf="formContacto.get('valorContacto')?.hasError('required') && formContacto.get('valorContacto')?.touched">Campo requerido.</mat-error>
+              <mat-error *ngIf="formContacto.get('valorContacto')?.hasError('telefonoInvalido')">Ingrese un número de teléfono de 8 dígitos</mat-error>
+              <mat-error *ngIf="formContacto.get('valorContacto')?.hasError('emailInvalido')">Ingrese un correo electrónico válido</mat-error>
+              <mat-error *ngIf="formContacto.get('valorContacto')?.hasError('emailValidar')">  Dato ya existe </mat-error>
+
             </mat-form-field>
           </div>
 

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,7 +7,7 @@ import { Cliente, Contacto, Option } from 'src/app/interfaces/Cliente';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { ContantoEliminarComponent } from '../contanto-eliminar/contanto-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { Subject } from 'rxjs';
+import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-contanto-lista',
@@ -38,7 +38,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
       idContacto: 0,
       idCliente: 0,
       tipoContacto:["", Validators.required],
-      valorContacto: this.fb.control('', Validators.required)
+      valorContacto: this.fb.control('', [Validators.required], [this.emailValidator.bind(this)])
     })
    }
 
@@ -213,4 +213,26 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
       }
     })
   }
+
+    /**
+   * Valida si dpi ya existe.
+   */
+    emailValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+      return timer(300).pipe(
+          switchMap(() => {
+              if (!control.value) {
+                  return of(null);
+              }
+              if (this.showEdit == true && control.value === this.contactoSeleccionado.valorContacto){
+                return of(null)
+              }
+              return this._contactoService.getVerificarEmail(control.value, this.dataCliente.idCliente!).pipe(
+                  map((res: any) => {
+                      return res.exists ? { emailValidar: true } : null;
+                  })
+              );
+          })
+      );
+  }
+
 }

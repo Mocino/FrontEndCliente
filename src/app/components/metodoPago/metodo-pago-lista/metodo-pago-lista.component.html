@@ -40,6 +40,8 @@
               <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('required') && formMetodoPago.get('numero')?.touched">
                 Campo requerido.
               </mat-error>
+              <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('numExists')">Numero de tarjeta ya existe</mat-error>
+
             </mat-form-field>
 
             <mat-form-field>

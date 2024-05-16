@@ -29,6 +29,16 @@ export class MetodoPagoService {
   }
 
   /**
+   * verifica si un numero tarjeta.
+   * @param dpi verifica el numero de tarjeta del cliente antes de agregar.
+   * @returns Un Observable que indica si el numero de tarjeta se encuentra registrado.
+   */
+    getVerificarnumerotarjeta(num: string, idCliente: number): Observable<Object>{
+      return this.http.get<Object>(`${this.myAppUrl}${this.myApiUrl}verificarNumero/${num}/${idCliente}`)
+    }
+
+
+  /**
    * Obtiene los métodos de pago asociados a un cliente.
    * @param idCliente ID del cliente.
    * @returns Un Observable que emite un array de objetos de tipo MetodoDePago.

@@ -118,11 +118,18 @@ export class ClienteAgregarComponent implements OnInit{
 
   }
 
+  /**
+   * Valida si dpi ya existe.
+   */
   dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     return timer(300).pipe(
         switchMap(() => {
             if (!control.value) {
                 return of(null);
+            }
+
+            if (this.tituloaccion == 'Editar' && control.value == this.dataCliente.dpi){
+              return of(null);
             }
             return this._clienteServicio.getVerificarDPI(control.value).pipe(
                 map((res: any) => {
