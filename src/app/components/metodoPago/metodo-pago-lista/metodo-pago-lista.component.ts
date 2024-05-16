@@ -249,7 +249,7 @@ fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
   const fechaTarjeta = new Date(control.value);
   const fechaActual = new Date();
 
-  if (fechaTarjeta < fechaActual) {
+  if (fechaTarjeta < fechaActual) { //comentario
     return { fechaAnterior: true };
   }
 
