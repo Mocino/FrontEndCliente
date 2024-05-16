@@ -50,7 +50,7 @@
               <mat-error *ngIf="formMetodoPago.get('fechaVencimiento')?.hasError('required') && formMetodoPago.get('fechaVencimiento')?.touched">
                 Campo requerido.
               </mat-error>
-              <mat-error *ngIf="formMetodoPago.get('fechaVencimiento')?.hasError('menosDeDosAnios')">Debe ser 2 de caducacion años</mat-error>
+              <mat-error *ngIf="formMetodoPago.get('fechaVencimiento')?.hasError('fechaAnterior')">No se puede ingresar fechas anteriores a la de hoy</mat-error>
             </mat-form-field>
 
             <mat-form-field>

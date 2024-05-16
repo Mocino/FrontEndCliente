@@ -249,13 +249,8 @@ fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
   const fechaTarjeta = new Date(control.value);
   const fechaActual = new Date();
 
-  // Calcula la fecha de vencimiento de la tarjeta con 2 años de antelación
-  const fechaVencimientoMinima = new Date(fechaActual);
-  fechaVencimientoMinima.setFullYear(fechaVencimientoMinima.getFullYear() + 2);
-
-  // Verifica si la fecha de vencimiento de la tarjeta es menor que la fecha mínima
-  if (fechaTarjeta < fechaVencimientoMinima) {
-    return { menosDeDosAnios: true };
+  if (fechaTarjeta < fechaActual) {
+    return { fechaAnterior: true };
   }
 
   return null;
