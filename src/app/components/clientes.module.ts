@@ -27,6 +27,9 @@ import { ContantoListaComponent } from './contacto/contanto-lista/contanto-lista
 import { MetodoPagoListaComponent } from './metodoPago/metodo-pago-lista/metodo-pago-lista.component';
 import { ContantoEliminarComponent } from './contacto/contanto-eliminar/contanto-eliminar.component';
 import { MetodoPagoEliminarComponent } from './metodoPago/metodo-pago-eliminar/metodo-pago-eliminar.component';
+import { ClienteAgregarAdminComponent } from './cliente/cliente-agregar-admin/cliente-agregar-admin.component';
+import { ContactoAgregarComponent } from './contacto/contacto-agregar/contacto-agregar.component';
+import { MetodoPagoAgregarComponent } from './metodoPago/metodo-pago-agregar/metodo-pago-agregar.component';
 
 
 @NgModule({
@@ -37,7 +40,10 @@ import { MetodoPagoEliminarComponent } from './metodoPago/metodo-pago-eliminar/m
     ContantoListaComponent,
     MetodoPagoListaComponent,
     ContantoEliminarComponent,
-    MetodoPagoEliminarComponent
+    MetodoPagoEliminarComponent,
+    ClienteAgregarAdminComponent,
+    ContactoAgregarComponent,
+    MetodoPagoAgregarComponent
   ],
   imports: [
     CommonModule,

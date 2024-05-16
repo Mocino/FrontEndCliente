@@ -61,6 +61,7 @@ export class ContactoService {
    * @returns Un Observable que emite un array de objetos de tipo Contacto actualizados.
    */
   EditarContacto(idCliente: number, idContacto: number, nuevoContacto: Contacto): Observable<Contacto[]> {
+    console.log('editarContacto',idCliente, idContacto, nuevoContacto)
     return this.http.put<Contacto[]>(`${this.myAppUrl}${this.myApiUrl}${idCliente}/contactos/${idContacto}`, nuevoContacto)
   }
 

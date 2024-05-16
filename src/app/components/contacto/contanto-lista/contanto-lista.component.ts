@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,6 +8,7 @@ import { ContactoService } from 'src/app/services/contacto.service';
 import { ContantoEliminarComponent } from '../contanto-eliminar/contanto-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
+import { ContactoAgregarComponent } from '../contacto-agregar/contacto-agregar.component';
 
 @Component({
   selector: 'app-contanto-lista',
@@ -17,35 +18,26 @@ import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
 export class ContantoListaComponent implements AfterViewInit, OnInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(ContactoAgregarComponent) contactoAgregarComponent!: ContactoAgregarComponent;
 
-  formContacto!: FormGroup;
+  contactoEditar!: Contacto;
   displayedColumns: string[] = ['tipoContacto', 'valorContacto', 'acciones'];
   tiposContacto: Option[] = [];
   dataSource = new MatTableDataSource<Contacto>();
   showForm: boolean = false;
   showEdit: boolean = false;
-  contactoSeleccionado!: Contacto;
+
 
   constructor(
     private dialogReferencia: MatDialogRef<ContantoListaComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente,
     private _contactoService: ContactoService,
-    private fb: FormBuilder,
     public _dialog: MatDialog,
     private _snackBar: MatSnackBar,
-  ) {
-    this.formContacto = this.fb.group({
-      idContacto: 0,
-      idCliente: 0,
-      tipoContacto:["", Validators.required],
-      valorContacto: this.fb.control('', [Validators.required], [this.emailValidator.bind(this)])
-    })
-   }
+    @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente,
+  ) {}
 
    ngOnInit(): void {
     this.obtenerContactosPorCliente(this.dataCliente.idCliente!);
-    this.agregarValidadorValorContacto();
-    this.obtenerTiposContacto();
   }
 
   ngAfterViewInit(): void {
@@ -66,14 +58,6 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  /**
-   * Método para obtener la tipos de contactos para select.
-   */
-  obtenerTiposContacto(): void {
-    this._contactoService.getTiposContacto().subscribe(tiposContacto => {
-      this.tiposContacto = tiposContacto;
-    });
-  }
 
   /**
    * Método para obtener la lista de contactos.
@@ -85,61 +69,6 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
         this.dataSource.data = contactos;
       });
   }
-
-  /**
-   * Método para agregar o editar un Contacto.
-   */
-  addEditContacto(){
-    const modelo: Contacto = {
-      idContacto:  this.formContacto.value.idContacto || 0,
-      idCliente: this.dataCliente.idCliente!,
-      tipoContacto: this.formContacto.value.tipoContacto,
-      valorContacto: this.formContacto.value.valorContacto,
-    }
-
-      if (modelo.idContacto === 0) {
-        this._contactoService.AgregarContacto(this.dataCliente.idCliente!, modelo).subscribe({
-          next: () => {
-            this.mostrarAlerta("Cliente Creado", "Listo");
-            this.obtenerContactosPorCliente(this.dataCliente.idCliente!)
-          },
-          error: () => {
-            this.mostrarAlerta("No se pudo crear", "Error")
-          }
-        });
-      } else {
-        this._contactoService.EditarContacto(this.dataCliente.idCliente!, this.contactoSeleccionado.idContacto, modelo).subscribe({
-          next: () => {
-            this.mostrarAlerta("Contacto Editado", "Listo");
-            this.obtenerContactosPorCliente(this.dataCliente.idCliente!)
-          },
-          error: () => {
-            this.mostrarAlerta("No se pudo editar", "Error")
-          }
-        });
-      }
-  }
-
- /**
-  * Abre un diálogo para ver los contactos de un cliente.
-  * @param contacto datos de contacto.
-  */
- openEditForm(contacto: Contacto) {
-  console.log("openEdit de Contacto: ", contacto)
-  this.contactoSeleccionado = contacto;
-
-  this.formContacto.patchValue({
-    idContacto: contacto.idContacto,
-    idCliente: contacto.idCliente,
-    tipoContacto: contacto.tipoContacto,
-    valorContacto: contacto.valorContacto
-  });
-
-  this.showForm = true;
-  this.showEdit = true;
-
-  this.formContacto.get('tipoContacto')?.disable();
-}
 
   /**
    * Método para mostrar una alerta utilizando MatSnackBar.
@@ -154,37 +83,6 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     });
   }
 
-  /**
-   * Validacion dependiendo el tipo de Contacto.
-   * @param control tipo de dato seleccionado.
-   */
-  validarValorContacto(control: AbstractControl): { [key: string]: boolean } | null {
-    const tipoContacto = this.formContacto.get('tipoContacto')?.value;
-    const valorContacto = control.value;
-
-    if (tipoContacto === 'email') {
-      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-      if (!emailRegex.test(valorContacto)) {
-        return { emailInvalido: true };
-      }
-    } else if (tipoContacto === 'teléfono' || tipoContacto === 'celular') {
-      const telefonoRegex = /^\d{8}$/;
-      if (!telefonoRegex.test(valorContacto)) {
-        return { telefonoInvalido: true };
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Agrega el validador dinámico al campo de valor del contacto.
-   */
-  agregarValidadorValorContacto() {
-    const validadorValorContacto = this.validarValorContacto.bind(this);
-    this.formContacto.get('valorContacto')?.setValidators([Validators.required, validadorValorContacto]);
-    this.formContacto.get('valorContacto')?.updateValueAndValidity();
-  }
 
   /**
    * Alterna la visibilidad del formulario para agregar/editar un contacto.
@@ -192,10 +90,9 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
   toggleForm() {
     this.showForm = !this.showForm;
     this.showEdit = false;
-    this.formContacto.reset();
-
-    if (this.formContacto.get('tipoContacto')?.disabled) {
-      this.formContacto.get('tipoContacto')?.enable();
+    if (!this.showForm) {
+      // Emitir el evento para cerrar el formulario y resetear
+      this.contactoEditar = {} as Contacto;
     }
   }
 
@@ -204,7 +101,7 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
    * Abre un diálogo para eliminar un contacto.
    * @param contacto Datos del contacto a eliminar.
    */
-  dialogoEliminarCuenta(dataCliente: Contacto){
+  dialogoEliminarContacto(dataCliente: Contacto){
     this._dialog.open(ContantoEliminarComponent,{
       disableClose: true,
       data:dataCliente
@@ -220,25 +117,21 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     })
   }
 
-    /**
-   * Valida si dpi ya existe.
-   */
-    emailValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-      return timer(300).pipe(
-          switchMap(() => {
-              if (!control.value) {
-                  return of(null);
-              }
-              if (this.showEdit == true && control.value === this.contactoSeleccionado.valorContacto){
-                return of(null)
-              }
-              return this._contactoService.getVerificarEmail(control.value, this.dataCliente.idCliente!).pipe(
-                  map((res: any) => {
-                      return res.exists ? { emailValidar: true } : null;
-                  })
-              );
-          })
-      );
+  editarContacto(contacto: Contacto) {
+    this.contactoEditar = contacto;
+    this.showForm = true;
+    this.showEdit = true;
+
+    if (this.contactoAgregarComponent) {
+      this.contactoAgregarComponent.updateForm(contacto);
+    }
   }
+
+  onContactSaved() {
+    this._contactoService.getContactosPorCliente(this.dataCliente.idCliente!).subscribe(contactos => {
+      this.dataSource.data = contactos;
+    });
+  }
+
 
 }

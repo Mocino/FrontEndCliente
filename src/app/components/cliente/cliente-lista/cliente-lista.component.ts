@@ -43,6 +43,15 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   }
 
   /**
+   * Método para aplicar un filtro a la tabla basado en el valor del campo de búsqueda.
+   * @param event Evento de cambio en el campo de búsqueda.
+   */
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  /**
    * Método para obtener y mostrar la lista de clientes.
    */
   mostrarCliente(){
@@ -54,14 +63,6 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
     })
   }
 
-  /**
-   * Método para aplicar un filtro a la tabla basado en el valor del campo de búsqueda.
-   * @param event Evento de cambio en el campo de búsqueda.
-   */
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
 
   /**
    * Método para abrir el diálogo de agregar cliente.
