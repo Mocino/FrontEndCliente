@@ -40,6 +40,15 @@ export class ClienteService {
     return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}guardarClientes`, nuevoCliente)
   }
 
+    /**
+   * Guarda un nuevo cliente.
+   * @param nuevoCliente Objeto que representa el nuevo cliente a guardar.
+   * @returns Un Observable que indica si el cliente se guardó correctamente.
+   */
+    guardarAllDataClientes(nuevoCliente: Cliente): Observable<Cliente> {
+      return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}clientesAlldata`, nuevoCliente)
+    }
+
   /**
    * Actualiza un cliente existente.
    * @param idCliente ID del cliente a actualizar.

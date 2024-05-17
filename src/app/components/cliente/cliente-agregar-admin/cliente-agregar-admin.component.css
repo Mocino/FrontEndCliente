@@ -1,7 +1,5 @@
-.scroll-container {
-  max-height: 500px; /* Ajusta este valor según sea necesario */
-  overflow-y: auto;
-  border: 1px solid #ccc; /* Opcional: añade un borde para mayor claridad */
-  padding: 10px; /* Opcional: añade padding para separación */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Opcional: añade una sombra para efecto visual */
+.formulario-container {
+  max-height: 400px; /* Altura máxima del contenedor */
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical cuando sea necesario */
+  margin: 20px; /* Añade margen alrededor del formulario */
 }

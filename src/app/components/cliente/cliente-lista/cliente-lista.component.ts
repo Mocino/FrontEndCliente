@@ -65,18 +65,23 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   }
 
 
-  /**
-   * Método para abrir el diálogo de agregar cliente.
-   */
-  openDialogCrearCliente(){
-    this._dialog.open(ClienteAgregarAdminComponent,{
-      disableClose: true,
-      width:"370px"
-    }).afterClosed().subscribe(resultado=>{
-      if(resultado=="Creado"){
-        this.mostrarCliente();
-      }
-    })
+  openDialogCrearCliente() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '40%';
+    dialogConfig.height = '100%';
+    dialogConfig.position = {
+      right: '0',
+      top: '0'
+    };
+
+    this._dialog.open(ClienteAgregarAdminComponent, dialogConfig)
+      .afterClosed()
+      .subscribe(resultado => {
+        if (resultado === 'Creado') {
+          this.mostrarCliente();
+        }
+      });
   }
 
   /**
