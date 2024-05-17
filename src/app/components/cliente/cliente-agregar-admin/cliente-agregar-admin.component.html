@@ -1,8 +1,6 @@
-<div class="formulario-container">
 
   <form [formGroup]="formCliente" (ngSubmit)="addEditCliente()">
     <!-- Cliente -->
-    <div *ngIf="currentSection === 'cliente'">
     <div>
       <mat-form-field>
         <mat-label>Nombres</mat-label>
@@ -45,10 +43,8 @@
         <input matInput formControlName="empresa" type="text" />
       </mat-form-field>
     </div>
-    <button mat-raised-button color="primary" (click)="nextSection('contacto')">Siguiente</button>
-    </div>
+
     <!-- Contactos -->
-    <div *ngIf="currentSection === 'contacto'">
     <div formArrayName="contactos">
       <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i">
         <div>
@@ -65,12 +61,8 @@
         </div>
       </div>
     </div>
-    <button mat-raised-button (click)="previousSection()">Anterior</button>
-    <button mat-raised-button color="primary" (click)="nextSection('metodoPago')">Siguiente</button>
-  </div>
 
     <!-- Métodos de Pago -->
-    <div *ngIf="currentSection === 'metodoPago'">
     <div formArrayName="metodosDePago">
       <div *ngFor="let metodo of metodosDePago.controls; let i=index" [formGroupName]="i">
         <div>
@@ -99,10 +91,7 @@
         </div>
       </div>
     </div>
-    <button mat-raised-button (click)="previousSection()">Anterior</button>
-    <button mat-raised-button color="primary" type="submit">Guardar</button>
 
-    </div>
+    <button mat-raised-button color="primary" type="submit">Guardar</button>
   </form>
 
-</div>
