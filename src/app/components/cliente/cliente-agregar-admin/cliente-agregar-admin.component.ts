@@ -1,29 +1,37 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, map, of, switchMap, timer } from 'rxjs';
+import { Option } from 'src/app/interfaces/Cliente';
 import { ClienteService } from 'src/app/services/Cliente.service';
+import { ContactoService } from 'src/app/services/contacto.service';
+import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 
 @Component({
   selector: 'app-cliente-agregar-admin',
   templateUrl: './cliente-agregar-admin.component.html',
   styleUrls: ['./cliente-agregar-admin.component.css']
 })
-export class ClienteAgregarAdminComponent {
+export class ClienteAgregarAdminComponent implements OnInit{
 
   currentSection: 'cliente' | 'contacto' | 'metodoPago' = 'cliente';
   formCliente!: FormGroup;
+  tiposContacto: Option[] = [];
+  tiposMetodo: Option[] = [];
 
   constructor(
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
     private _clienteServicio: ClienteService,
+    private _contactoService: ContactoService,
+    private _metodoPagoService: MetodoPagoService,
   ) {
     this.formCliente = this.fb.group({
       nombres: ["", Validators.required],
       apellidos: ["", Validators.required],
       direccion: ["", Validators.required],
-      fechaNacimiento: ["", Validators.required],
-      dpi: ["", [Validators.pattern(/^\d{13}$/)]],
+      fechaNacimiento: ["", [Validators.required, this.fechaNacimientoValidator]],
+      dpi: ["", [Validators.pattern(/^\d{13}$/)], [this.dpiValidator.bind(this)]],
       nit: ["", [Validators.required, Validators.pattern(/^\d{6,12}K$/)]],
       empresa: ["", Validators.required],
       contactos: this.fb.array([this.createContactoGroup()]),
@@ -31,18 +39,39 @@ export class ClienteAgregarAdminComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.obtenerTiposContacto();
+    this.obtenerMetodosPagoSelect();
+  }
+
+  obtenerTiposContacto(): void {
+    this._contactoService.getTiposContacto().subscribe(tiposContacto => {
+      this.tiposContacto = tiposContacto;
+    });
+  }
+
+  /**
+   * Método para obtener la tipos de metodos para select.
+   */
+  obtenerMetodosPagoSelect(): void {
+    this._metodoPagoService.obtenerMetodosPagoSelect().subscribe(tiposMetodo => {
+      this.tiposMetodo = tiposMetodo;
+    });
+  }
+
+
   createContactoGroup(): FormGroup {
     return this.fb.group({
       tipoContacto: ["", Validators.required],
-      valorContacto: ["", Validators.required]
+      valorContacto: this.fb.control('', [Validators.required])
     });
   }
 
   createMetodoPagoGroup(): FormGroup {
     return this.fb.group({
       tipo: ["", Validators.required],
-      numero: ["", Validators.required],
-      fechaVencimiento: ["", Validators.required],
+      numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)]],
+      fechaVencimiento: ["", [Validators.required, this.fechaTarjetaValidator]],
       nombreTitular: ["", Validators.required]
     });
   }
@@ -98,4 +127,57 @@ export class ClienteAgregarAdminComponent {
       this.currentSection = 'contacto';
     }
   }
+
+
+  fechaNacimientoValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null;
+    }
+
+    const fechaNacimiento = new Date(control.value);
+    const edadMinima = 18;
+    const fechaActual = new Date();
+    const diferenciaFechas = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+
+    if (diferenciaFechas < edadMinima) {
+      return { menorDeEdad: true };
+    }
+
+    return null;
+  }
+
+  /**
+   * Valida si dpi ya existe.
+   */
+    dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+      return timer(300).pipe(
+          switchMap(() => {
+              if (!control.value) {
+                  return of(null);
+              }
+              return this._clienteServicio.getVerificarDPI(control.value).pipe(
+                  map((res: any) => {
+                      return res.exists ? { dpiExists: true } : null;
+                  })
+              );
+          })
+      );
+  }
+
+  fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null;
+    }
+
+    const fechaTarjeta = new Date(control.value);
+    const fechaActual = new Date();
+
+    if (fechaTarjeta < fechaActual) { //comentario
+      return { fechaAnterior: true };
+    }
+
+    return null;
+  }
+
+
 }
