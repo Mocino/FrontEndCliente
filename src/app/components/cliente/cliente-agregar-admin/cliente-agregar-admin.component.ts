@@ -14,7 +14,6 @@ import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 })
 export class ClienteAgregarAdminComponent implements OnInit{
 
-  currentSection: 'cliente' | 'contacto' | 'metodoPago' = 'cliente';
   formCliente!: FormGroup;
   tiposContacto: Option[] = [];
   tiposMetodo: Option[] = [];
@@ -42,6 +41,18 @@ export class ClienteAgregarAdminComponent implements OnInit{
   ngOnInit(): void {
     this.obtenerTiposContacto();
     this.obtenerMetodosPagoSelect();
+
+    this.formCliente.valueChanges.subscribe(() => {
+      this.validarContactos();
+    });
+  }
+
+  validarContactos() {
+    // Iterar sobre los contactos y validar el valor de contacto para cada uno
+    this.contactos.controls.forEach((control, index) => {
+      const errors = this.validarValorContacto(index);
+      control.get('valorContacto')?.setErrors(errors);
+    });
   }
 
   obtenerTiposContacto(): void {
@@ -116,19 +127,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
-  nextSection(section: 'cliente' | 'contacto' | 'metodoPago') {
-    this.currentSection = section;
-  }
-
-  previousSection() {
-    if (this.currentSection === 'contacto') {
-      this.currentSection = 'cliente';
-    } else if (this.currentSection === 'metodoPago') {
-      this.currentSection = 'contacto';
-    }
-  }
-
-
   fechaNacimientoValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return null;
@@ -149,7 +147,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
   /**
    * Valida si dpi ya existe.
    */
-    dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+  dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
       return timer(300).pipe(
           switchMap(() => {
               if (!control.value) {
@@ -178,6 +176,21 @@ export class ClienteAgregarAdminComponent implements OnInit{
 
     return null;
   }
+
+  // Nueva función para validar el valor de contacto según el tipo seleccionado
+validarValorContacto(index: number): ValidationErrors | null {
+  const contactoGroup = this.contactos.at(index) as FormGroup;
+  const tipoContacto = contactoGroup.get('tipoContacto')?.value;
+  const valorContacto = contactoGroup.get('valorContacto')?.value;
+
+  if (tipoContacto === 'teléfono' && !(/^\d{8}$/.test(valorContacto))) {
+    return { telefonoInvalido: true };
+  } else if (tipoContacto === 'email' && !(/\S+@\S+\.\S+/.test(valorContacto))) {
+    return { emailInvalido: true };
+  }
+
+  return null;
+}
 
 
 }
