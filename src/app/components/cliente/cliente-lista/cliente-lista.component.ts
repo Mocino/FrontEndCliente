@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
 import { ContantoListaComponent } from '../../contacto/contanto-lista/contanto-lista.component';
 import { MetodoPagoListaComponent } from '../../metodoPago/metodo-pago-lista/metodo-pago-lista.component';
+import { ClienteAgregarAdminComponent } from '../cliente-agregar-admin/cliente-agregar-admin.component';
 
 
 
@@ -68,7 +69,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
    * Método para abrir el diálogo de agregar cliente.
    */
   openDialogCrearCliente(){
-    this._dialog.open(ClienteAgregarComponent,{
+    this._dialog.open(ClienteAgregarAdminComponent,{
       disableClose: true,
       width:"370px"
     }).afterClosed().subscribe(resultado=>{

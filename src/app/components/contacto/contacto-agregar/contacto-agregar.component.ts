@@ -57,12 +57,12 @@ export class ContactoAgregarComponent implements OnInit {
   addEditContacto() {
     const modelo: Contacto = {
       idContacto: this.formContacto.value.idContacto || 0,
-      idCliente: this.dataCliente.idCliente!,
+      idCliente: this.dataCliente?.idCliente!,
       tipoContacto: this.formContacto.value.tipoContacto,
       valorContacto: this.formContacto.value.valorContacto,
     };
     if (modelo.idContacto === 0) {
-      this._contactoService.AgregarContacto(this.dataCliente.idCliente!, modelo).subscribe({
+      this._contactoService.AgregarContacto(this.dataCliente?.idCliente!, modelo).subscribe({
         next: () => {
           this.mostrarAlerta("Contacto creado", "Listo");
           this.contactSaved.emit();
@@ -97,7 +97,7 @@ export class ContactoAgregarComponent implements OnInit {
         if (this.esEditar && control.value === this.contactoEditar.valorContacto) {
           return of(null);
         }
-        return this._contactoService.getVerificarEmail(control.value, this.dataCliente.idCliente!).pipe(
+        return this._contactoService.getVerificarEmail(control.value, this.dataCliente?.idCliente!).pipe(
           map((res: any) => {
             return res.exists ? { emailValidar: true } : null;
           })

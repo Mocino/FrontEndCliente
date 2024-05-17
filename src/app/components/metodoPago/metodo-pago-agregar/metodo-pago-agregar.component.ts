@@ -59,7 +59,7 @@ export class MetodoPagoAgregarComponent implements OnInit {
 
     const modelo: MetodoDePago = {
       idMetodoPago: this.formMetodoPago.value.idMetodoPago || 0,
-      idCliente: this.dataCliente.idCliente!,
+      idCliente: this.dataCliente?.idCliente!,
       tipo: this.formMetodoPago.value.tipo,
       numero:           this.formMetodoPago.value.numero,
       fechaVencimiento: this.formMetodoPago.value.fechaVencimiento,
@@ -68,7 +68,7 @@ export class MetodoPagoAgregarComponent implements OnInit {
 
       if (modelo.idMetodoPago === 0) {
 
-        this._metodoPagoService.AgregarMetodosDePago(this.dataCliente.idCliente!, modelo).subscribe({
+        this._metodoPagoService.AgregarMetodosDePago(this.dataCliente?.idCliente!, modelo).subscribe({
           next: () => {
             console.log("En crear")
             this.mostrarAlerta("Metodo Pago Creado", "Listo");
@@ -81,15 +81,14 @@ export class MetodoPagoAgregarComponent implements OnInit {
           }
         });
       } else {
-        this._metodoPagoService.EditarMetodosDePago(this.dataCliente.idCliente!, this.formMetodoPago.value.idMetodoPago!, modelo).subscribe({
+        this._metodoPagoService.EditarMetodosDePago(this.dataCliente?.idCliente!, this.formMetodoPago.value.idMetodoPago!, modelo).subscribe({
           next: () => {
-            console.log("En editar")
             this.mostrarAlerta("Metodo Pago Editado", "Listo");
             this.contactSaved.emit();
             this.formClosed.emit();
             // this.obtenerTipoMetodo(this.formMetodoPago.value.idCliente);
           },
-          error: () => {
+          error: (X) => {
             this.mostrarAlerta("No se pudo editar", "Error")
           }
         });
