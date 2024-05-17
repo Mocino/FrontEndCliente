@@ -37,12 +37,14 @@ import { MetodoPagoAgregarComponent } from './metodoPago/metodo-pago-agregar/met
     ClienteAgregarComponent,
     ClienteListaComponent,
     ClienteEliminarComponent,
-    ContantoListaComponent,
-    MetodoPagoListaComponent,
-    ContantoEliminarComponent,
-    MetodoPagoEliminarComponent,
     ClienteAgregarAdminComponent,
+
+    ContantoListaComponent,
+    ContantoEliminarComponent,
     ContactoAgregarComponent,
+
+    MetodoPagoListaComponent,
+    MetodoPagoEliminarComponent,
     MetodoPagoAgregarComponent
   ],
   imports: [

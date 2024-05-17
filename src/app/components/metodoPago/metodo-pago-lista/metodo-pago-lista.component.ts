@@ -1,5 +1,5 @@
+import { Cliente } from './../../../interfaces/Cliente';
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +8,7 @@ import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { MetodoPagoEliminarComponent } from '../metodo-pago-eliminar/metodo-pago-eliminar.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
+import { MetodoPagoAgregarComponent } from '../metodo-pago-agregar/metodo-pago-agregar.component';
 
 @Component({
   selector: 'app-metodo-pago-lista',
@@ -17,37 +18,24 @@ import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
 export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MetodoPagoAgregarComponent) metodoDePagoAgregarComponent!: MetodoPagoAgregarComponent;
 
-
-  formMetodoPago!:  FormGroup;
-  tiposMetodo: Option[] = [];
+  metodoDePagoEditar!: MetodoDePago;
   displayedColumns: string[] = ['tipo', 'numero', 'fechaVencimiento', 'nombreTitular', 'acciones'];
-  dataSource = new MatTableDataSource<MetodoDePago>();
+  tiposMetodo: Option[] = [];
   showForm: boolean = false;
+  dataSource = new MatTableDataSource<MetodoDePago>();
   showEdit: boolean = false;
-  metododePagoSeleccionado!: MetodoDePago;
 
   constructor(
-    private dialogReferencia: MatDialogRef<MetodoPagoListaComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataCliente: MetodoDePago,
     private _metodoPagoService: MetodoPagoService,
-    private fb: FormBuilder,
     public _dialog: MatDialog,
     private _snackBar: MatSnackBar,
-  ) {
-    this.formMetodoPago = this.fb.group({
-      idMetodoPago: 0,
-      idCliente: 0,
-      tipo:["", Validators.required],
-      numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)], [this.numeroTarjetaValidator.bind(this)]],
-      fechaVencimiento: ["", [Validators.required, this.fechaTarjetaValidator]],
-      nombreTitular: ["", Validators.required]
-    })
-   }
+    @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente,
+  ) {}
 
   ngOnInit(): void {
-    this.obtenerTipoMetodo(this.dataCliente.idCliente);
-    this.obtenerMetodosPagoSelect();
+    this.obtenerMetodosdePago(this.dataCliente.idCliente!);
   }
 
   /**
@@ -58,107 +46,30 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       this.dataSource.paginator = this.paginator;
     }
 
+    applyFilter(event: Event) {
+      const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+      this.dataSource.filterPredicate = (data: MetodoDePago, filter: string) => {
+        const tipo = data.tipo.toLowerCase(); // Filtrar por tipo de método de pago
+        const numero = data.numero.toLowerCase();
+        const fechaVencimiento = data.fechaVencimiento.toLocaleDateString().toLowerCase(); // Convertir la fecha de vencimiento a una cadena
+        const nombreTitular = data.nombreTitular.toLowerCase();
+        return tipo.includes(filterValue) || numero.includes(filterValue) || fechaVencimiento.includes(filterValue) || nombreTitular.includes(filterValue);
+      };
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+
   /**
    * Método para obtener los tipos de método de pago del cliente.
    * @param idCliente ID del cliente.
    */
-  obtenerTipoMetodo(idCliente: number): void {
+  obtenerMetodosdePago(idCliente: number): void {
     this._metodoPagoService.getMetodosDePagoPorCliente(idCliente)
       .subscribe(tipoMetodo => {
         this.dataSource.data = tipoMetodo;
       });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
-    this.dataSource.filterPredicate = (data: MetodoDePago, filter: string) => {
-      const tipo = data.tipo.toLowerCase(); // Filtrar por tipo de método de pago
-      const numero = data.numero.toLowerCase();
-      const fechaVencimiento = data.fechaVencimiento.toLocaleDateString().toLowerCase(); // Convertir la fecha de vencimiento a una cadena
-      const nombreTitular = data.nombreTitular.toLowerCase();
-      return tipo.includes(filterValue) || numero.includes(filterValue) || fechaVencimiento.includes(filterValue) || nombreTitular.includes(filterValue);
-    };
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-
-  /**
-   * Método para obtener la tipos de metodos para select.
-   */
-  obtenerMetodosPagoSelect(): void {
-    this._metodoPagoService.obtenerMetodosPagoSelect().subscribe(tiposMetodo => {
-      this.tiposMetodo = tiposMetodo;
-    });
-  }
-
-  /**
-   * Método para agregar o editar un método de pago.
-   */
-  addEditMetodoDePago(){
-
-    const modelo: MetodoDePago = {
-      idMetodoPago: this.formMetodoPago.value.idMetodoPago || 0,
-      idCliente: this.dataCliente.idCliente,
-      tipo: this.formMetodoPago.value.tipo,
-      numero:           this.formMetodoPago.value.numero,
-      fechaVencimiento: this.formMetodoPago.value.fechaVencimiento,
-      nombreTitular:    this.formMetodoPago.value.nombreTitular,
-    }
-
-      if (modelo.idMetodoPago === 0) {
-
-        this._metodoPagoService.AgregarMetodosDePago(this.dataCliente.idCliente, modelo).subscribe({
-          next: () => {
-            console.log("En crear")
-            this.mostrarAlerta("Metodo Pago Creado", "Listo");
-            this.obtenerTipoMetodo(this.dataCliente.idCliente);
-          },
-          error: () => {
-            this.mostrarAlerta("No se pudo crear", "Error")
-          }
-        });
-      } else {
-        this._metodoPagoService.EditarMetodosDePago(this.dataCliente.idCliente, this.metododePagoSeleccionado.idMetodoPago!, modelo).subscribe({
-          next: () => {
-            console.log("En editar")
-            this.mostrarAlerta("Metodo Pago Editado", "Listo");
-            this.obtenerTipoMetodo(this.dataCliente.idCliente);
-          },
-          error: () => {
-            this.mostrarAlerta("No se pudo editar", "Error")
-          }
-        });
-      }
-  }
-
-  /**
-   * Abre un formulario para editar un método de pago.
-   * @param metodoDePago Datos del método de pago a editar.
-   */
-
-  openEditForm(metodoDePago: MetodoDePago) {
-    this.metododePagoSeleccionado = metodoDePago;
-
-    console.log("openEditForm",metodoDePago)
-    this.formMetodoPago.patchValue({
-      idMetodoPago: metodoDePago.idMetodoPago,
-      tipo: metodoDePago.tipo,
-      numero: metodoDePago.numero,
-      fechaVencimiento: metodoDePago.fechaVencimiento,
-      nombreTitular: metodoDePago.nombreTitular
-    });
-
-    console.log("metodo openEditForm idMetodosDePago:", metodoDePago.idMetodoPago)
-
-
-    this.showForm = true;
-    this.showEdit = true;
-
-    this.formMetodoPago.get('tipo')?.disable();
-
-  }
-
-  /**
+    /**
    * Método para mostrar una alerta utilizando MatSnackBar.
    * @param msg Mensaje a mostrar en la alerta.
    * @param accion Acción de la alerta.
@@ -174,16 +85,32 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
   /**
    * Alterna la visibilidad del formulario para agregar/editar un método de pago.
    */
-    toggleForm() {
-      this.showForm = !this.showForm;
-      this.showEdit = false;
-      this.formMetodoPago.reset();
-
-      if (this.formMetodoPago.get('tipo')?.disabled) {
-        this.formMetodoPago.get('tipo')?.enable();
-      }
-
+  toggleForm() {
+    this.showForm = !this.showForm;
+    this.showEdit = false;
+    if(!this.showForm){
+      this.metodoDePagoEditar = {} as MetodoDePago;
     }
+  }
+
+  /**
+   * Abre un formulario para editar un método de pago.
+   * @param metodoDePago Datos del método de pago a editar.
+   */
+
+  openEditForm(metodoDePago: MetodoDePago) {
+    this.metodoDePagoEditar = metodoDePago;
+    this.showForm = true;
+    this.showEdit = true;
+
+
+    if(this.metodoDePagoAgregarComponent){
+      this.metodoDePagoAgregarComponent.updateForm(metodoDePago)
+    }
+  }
+
+
+
 
   /**
    * Abre un diálogo para eliminar un método de pago.
@@ -198,7 +125,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
           this._metodoPagoService.deleteMetodosDePago(dataCliente.idCliente, dataCliente.idMetodoPago!).subscribe({
             next:()=>{
               this.mostrarAlerta("Metodo De Pago eliminado", "Listo");
-              this.obtenerTipoMetodo(this.dataCliente.idCliente);
+              this.obtenerMetodosdePago(this.dataCliente.idCliente!);
             }
           })
         }
@@ -219,41 +146,9 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
     }
   }
 
-
-  /**
-   * Valida si dpi ya existe.
-   */
-  numeroTarjetaValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-    return timer(300).pipe(
-        switchMap(() => {
-            if (!control.value) {
-                return of(null);
-            }
-            if (this.showEdit == true &&  control.value === this.metododePagoSeleccionado.numero) {
-              return of(null);
-            }
-            return this._metodoPagoService.getVerificarnumerotarjeta(control.value, this.dataCliente.idCliente).pipe(
-                map((res: any) => {
-                    return res.exists ? { numExists: true } : null;
-                })
-            );
-        })
-    );
-}
-
-fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
-  if (!control.value) {
-    return null;
+  onContactSaved() {
+    this._metodoPagoService.getMetodosDePagoPorCliente(this.dataCliente.idCliente!).subscribe(contactos => {
+      this.dataSource.data = contactos;
+    });
   }
-
-  const fechaTarjeta = new Date(control.value);
-  const fechaActual = new Date();
-
-  if (fechaTarjeta < fechaActual) { //comentario
-    return { fechaAnterior: true };
-  }
-
-  return null;
-}
-
 }

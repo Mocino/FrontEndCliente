@@ -131,6 +131,11 @@ export class ContactoAgregarComponent implements OnInit {
     return null;
   }
 
+    /**
+   * Método para mostrar una alerta utilizando MatSnackBar.
+   * @param msg Mensaje a mostrar en la alerta.
+   * @param accion Acción de la alerta.
+   */
   mostrarAlerta(msg: string, accion: string) {
     this._snackBar.open(msg, accion,{
       horizontalPosition: "end",

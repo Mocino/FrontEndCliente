@@ -18,57 +18,13 @@
   <mat-card style="width: 100%; overflow-x: auto; padding: 5px;">
     <mat-card-content style="padding: 8px;">
       <div *ngIf="showForm" style="padding: 2px; display: flex; justify-content: flex-end;">
-        <form [formGroup]="formMetodoPago" >
-          <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
-
-            <mat-form-field>
-              <mat-label>Tipo de Método de Pago</mat-label>
-              <mat-select formControlName="tipo" placeholder="Seleccione el tipo de contacto">
-                <mat-option *ngFor="let tipo of tiposMetodo" [value]="tipo.valor">
-                  {{ tipo.nombre }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="formMetodoPago.get('tipo')?.invalid && formMetodoPago.get('tipo')?.touched">
-                Tipo de Método es requerido
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Número de tarjeta</mat-label>
-              <input matInput formControlName="numero" placeholder="Ingrese el número" pattern="[0-9]*">
-              <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('pattern')">Ingresar solo numeros y 18 digitos</mat-error>
-              <mat-error *ngIf="formMetodoPago.get('numero')?.hasError('required') && formMetodoPago.get('numero')?.touched">
-                Campo requerido.
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Fecha de Vencimiento</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="fechaVencimiento" placeholder="Seleccione una fecha">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-              <mat-error *ngIf="formMetodoPago.get('fechaVencimiento')?.hasError('required') && formMetodoPago.get('fechaVencimiento')?.touched">
-                Campo requerido.
-              </mat-error>
-              <mat-error *ngIf="formMetodoPago.get('fechaVencimiento')?.hasError('fechaAnterior')">No se puede ingresar fechas anteriores a la de hoy</mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Nombre del Titular</mat-label>
-              <input matInput formControlName="nombreTitular" placeholder="Ingrese el nombre del titular">
-              <mat-error *ngIf="formMetodoPago.get('nombreTitular')?.hasError('required') && formMetodoPago.get('nombreTitular')?.touched">
-                Campo requerido.
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div style="margin-bottom: 1rem; display: flex; justify-content: flex-end;">
-            <button mat-raised-button type="submit" color="primary" (click)="addEditMetodoDePago()" [disabled]="formMetodoPago.invalid">
-              {{ showEdit ? 'Editar Contacto' : 'Guardar Contacto' }}
-            </button>
-          </div>
-        </form>
-      </div>
+        <app-metodo-pago-agregar
+        [dataCliente]="dataCliente"
+        [metodoDePagoEditar]="metodoDePagoEditar"
+        (formClosed)="toggleForm()"
+        (contactSaved)="onContactSaved()">
+        </app-metodo-pago-agregar>
+    </div>
 
       <div style="display: flex; flex-direction: column; align-items: stretch;">
 
