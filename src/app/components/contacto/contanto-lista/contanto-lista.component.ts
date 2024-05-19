@@ -102,6 +102,10 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
    * @param contacto Datos del contacto a eliminar.
    */
   dialogoEliminarContacto(dataCliente: Contacto){
+    if (this.dataSource.data.length <= 1) {
+      this.mostrarAlerta("No se puede eliminar el único contacto", "Error");
+      return;
+    }
     this._dialog.open(ContantoEliminarComponent,{
       disableClose: true,
       data:dataCliente

@@ -117,6 +117,10 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
    * @param dataCliente Datos del método de pago a eliminar.
    */
     dialogoEliminarMetodoPago(dataCliente: MetodoDePago){
+      if (this.dataSource.data.length <= 1) {
+        this.mostrarAlerta("No se puede eliminar el único metodo de Pago", "Error");
+        return;
+      }
       this._dialog.open(MetodoPagoEliminarComponent,{
         disableClose: true,
         data:dataCliente
