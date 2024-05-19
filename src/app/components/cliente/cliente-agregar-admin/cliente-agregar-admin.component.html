@@ -21,10 +21,9 @@
         <mat-form-field>
           <mat-label>Dirección</mat-label>
           <input matInput formControlName="direccion" type="text" />
-          <mat-error *ngIf="formCliente.get('direccion')?.hasError('required')">Direccion requerido</mat-error>
+          <mat-error *ngIf="formCliente.get('direccion')?.hasError('required')">Direccion requerida</mat-error>
         </mat-form-field>
       </div>
-
       <div>
         <mat-form-field appearance="outline">
           <mat-label>Fecha de Nacimiento</mat-label>
@@ -35,23 +34,20 @@
           <mat-error *ngIf="formCliente.get('fechaNacimiento')?.hasError('menorDeEdad')">Debe ser mayor de 18 años</mat-error>
         </mat-form-field>
       </div>
-
       <div>
         <mat-form-field>
           <mat-label>DPI</mat-label>
           <input matInput formControlName="dpi" type="text" />
+          <mat-error *ngIf="formCliente.get('dpi')?.hasError('pattern')">DPI inválido</mat-error>
+          <mat-error *ngIf="formCliente.get('dpi')?.hasError('dpiExists')">DPI ya existe</mat-error>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field>
           <mat-label>NIT</mat-label>
           <input matInput formControlName="nit" type="text" />
-          <mat-error *ngIf="formCliente.get('nit')?.hasError('required')">
-            El NIT es requerido
-          </mat-error>
-          <mat-error *ngIf="formCliente.get('nit')?.hasError('pattern')">
-            Ingrese un Nit Valido
-          </mat-error>
+          <mat-error *ngIf="formCliente.get('nit')?.hasError('required')">El NIT es requerido</mat-error>
+          <mat-error *ngIf="formCliente.get('nit')?.hasError('pattern')">Ingrese un NIT válido</mat-error>
         </mat-form-field>
       </div>
       <div>
@@ -83,14 +79,16 @@
           <mat-form-field>
             <mat-label>Valor de Contacto</mat-label>
             <input matInput formControlName="valorContacto" type="text" />
+            <mat-error *ngIf="contacto.get('valorContacto')?.hasError('required')">Valor requerido</mat-error>
+            <mat-error *ngIf="contacto.get('valorContacto')?.hasError('telefonoInvalido')">Teléfono inválido</mat-error>
+            <mat-error *ngIf="contacto.get('valorContacto')?.hasError('emailInvalido')">Email inválido</mat-error>
           </mat-form-field>
         </div>
         <button mat-raised-button color="warn" (click)="removeContacto(i)">Eliminar</button>
       </div>
     </div>
-    <button mat-raised-button color="primary" (click)="addContacto()">Añadir Contacto</button>
+    <button mat-raised-button color="primary" (click)="addContacto(); $event.preventDefault()">Añadir Contacto</button>
   </div>
-
 
   <!-- Métodos de Pago -->
   <div class="section">
@@ -111,28 +109,31 @@
           <mat-form-field>
             <mat-label>Fecha de Vencimiento</mat-label>
             <input matInput formControlName="fechaVencimiento" type="date" />
+            <mat-error *ngIf="metodo.get('fechaVencimiento')?.hasError('fechaAnterior')">Fecha anterior a la actual</mat-error>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field>
             <mat-label>Número</mat-label>
             <input matInput formControlName="numero" type="text" />
+            <mat-error *ngIf="metodo.get('numero')?.hasError('required')">Número requerido</mat-error>
+            <mat-error *ngIf="metodo.get('numero')?.hasError('pattern')">Número inválido</mat-error>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field>
             <mat-label>Nombre del Titular</mat-label>
             <input matInput formControlName="nombreTitular" type="text" />
+            <mat-error *ngIf="metodo.get('nombreTitular')?.hasError('required')">Nombre requerido</mat-error>
           </mat-form-field>
         </div>
         <button mat-raised-button color="warn" (click)="removeMetodosPago(i)">Eliminar</button>
       </div>
     </div>
-    <button mat-raised-button color="primary" (click)="addMetodosPago()">Añadir Método de Pago</button>
+    <button mat-raised-button color="primary" (click)="addContacto(); $event.preventDefault()">Añadir Método de Pago</button>
+
   </div>
 
-
   <button mat-raised-button color="primary" type="submit">Guardar</button>
-
   <button mat-raised-button mat-dialog-close color="warn">Volver</button>
 </form>
