@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, of, switchMap, timer } from 'rxjs';
 import { Option } from 'src/app/interfaces/Cliente';
@@ -19,6 +20,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
   tiposMetodo: Option[] = [];
 
   constructor(
+    private dialogReferencia: MatDialogRef<ClienteAgregarAdminComponent>,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
     private _clienteServicio: ClienteService,
@@ -121,6 +123,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
     this._clienteServicio.guardarAllDataClientes(modelo).subscribe({
       next: () => {
         this.mostrarAlerta("Cliente Creado", "Listo");
+        this.dialogReferencia.close("Creado")
       }, error: () => {
         this.mostrarAlerta("No se pudo crear", "Error");
       }
