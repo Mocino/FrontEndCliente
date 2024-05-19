@@ -67,90 +67,70 @@
   <!-- Contactos -->
   <div class="section">
     <h3>Contacto:</h3>
-    <div class="fields">
-      <div class="column">
-        <div formArrayName="contactos">
-          <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i">
-
-            <div>
-              <mat-form-field>
-                <mat-label>Tipo de Contacto</mat-label>
-                <mat-select formControlName="tipoContacto" placeholder="Seleccione el tipo de contacto">
-                  <mat-option *ngFor="let tipo of tiposContacto" [value]="tipo.valor">
-                    {{ tipo.nombre }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-          </div>
+    <div class="fields" formArrayName="contactos">
+      <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i" class="contact-group">
+        <div>
+          <mat-form-field>
+            <mat-label>Tipo de Contacto</mat-label>
+            <mat-select formControlName="tipoContacto" placeholder="Seleccione el tipo de contacto">
+              <mat-option *ngFor="let tipo of tiposContacto" [value]="tipo.valor">
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-      </div>
-      <div class="column">
-        <div formArrayName="contactos">
-          <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i">
-            <div>
-              <mat-form-field>
-                <mat-label>Valor de Contacto</mat-label>
-                <input matInput formControlName="valorContacto" type="text" />
-              </mat-form-field>
-            </div>
-          </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Valor de Contacto</mat-label>
+            <input matInput formControlName="valorContacto" type="text" />
+          </mat-form-field>
         </div>
+        <button mat-raised-button color="warn" (click)="removeContacto(i)">Eliminar</button>
       </div>
     </div>
+    <button mat-raised-button color="primary" (click)="addContacto()">Añadir Contacto</button>
   </div>
+
 
   <!-- Métodos de Pago -->
   <div class="section">
     <h3>Métodos de Pago:</h3>
-    <div class="fields">
-      <div class="column">
-        <div formArrayName="metodosDePago">
-          <div *ngFor="let metodo of metodosDePago.controls; let i=index" [formGroupName]="i">
-
-
-            <div>
-              <mat-form-field>
-                <mat-label>Metodo de Pago</mat-label>
-                <mat-select formControlName="tipo" placeholder="Seleccione el tipo de contacto">
-                  <mat-option *ngFor="let tipo of tiposMetodo" [value]="tipo.valor">
-                    {{ tipo.nombre }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-
-            <div>
-              <mat-form-field>
-                <mat-label>Fecha de Vencimiento</mat-label>
-                <input matInput formControlName="fechaVencimiento" type="date" />
-              </mat-form-field>
-            </div>
-          </div>
+    <div class="fields" formArrayName="metodosDePago">
+      <div *ngFor="let metodo of metodosDePago.controls; let i=index" [formGroupName]="i" class="metodo-group">
+        <div>
+          <mat-form-field>
+            <mat-label>Metodo de Pago</mat-label>
+            <mat-select formControlName="tipo" placeholder="Seleccione el tipo de contacto">
+              <mat-option *ngFor="let tipo of tiposMetodo" [value]="tipo.valor">
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-      </div>
-      <div class="column">
-        <div formArrayName="metodosDePago">
-          <div *ngFor="let metodo of metodosDePago.controls; let i=index" [formGroupName]="i">
-            <div>
-              <mat-form-field>
-                <mat-label>Número</mat-label>
-                <input matInput formControlName="numero" type="text" />
-              </mat-form-field>
-            </div>
-            <div>
-              <mat-form-field>
-                <mat-label>Nombre del Titular</mat-label>
-                <input matInput formControlName="nombreTitular" type="text" />
-              </mat-form-field>
-            </div>
-          </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Fecha de Vencimiento</mat-label>
+            <input matInput formControlName="fechaVencimiento" type="date" />
+          </mat-form-field>
         </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Número</mat-label>
+            <input matInput formControlName="numero" type="text" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Nombre del Titular</mat-label>
+            <input matInput formControlName="nombreTitular" type="text" />
+          </mat-form-field>
+        </div>
+        <button mat-raised-button color="warn" (click)="removeMetodosPago(i)">Eliminar</button>
       </div>
     </div>
+    <button mat-raised-button color="primary" (click)="addMetodosPago()">Añadir Método de Pago</button>
   </div>
+
 
   <button mat-raised-button color="primary" type="submit">Guardar</button>
 

@@ -193,4 +193,26 @@ validarValorContacto(index: number): ValidationErrors | null {
 }
 
 
+  addContacto(): void {
+    this.contactos.push(this.createContactoGroup());
+  }
+
+  // Nueva función para eliminar un contacto
+  removeContacto(index: number): void {
+    if (this.contactos.length > 1) {
+      this.contactos.removeAt(index);
+    }
+  }
+
+
+  addMetodosPago(): void {
+    this.metodosDePago.push(this.createMetodoPagoGroup());
+  }
+
+  removeMetodosPago(index: number): void {
+    if (this.metodosDePago.length > 1) {
+      this.metodosDePago.removeAt(index);
+    }
+  }
+
 }
