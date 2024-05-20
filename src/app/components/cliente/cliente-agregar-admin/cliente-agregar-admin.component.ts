@@ -33,7 +33,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
       direccion: ["", Validators.required],
       fechaNacimiento: ["", [Validators.required, this.fechaNacimientoValidator]],
       dpi: ["", [Validators.pattern(/^\d{13}$/)], [this.dpiValidator.bind(this)]],
-      nit: ["", [Validators.required, Validators.pattern(/^\d{6,12}K$/)]],
+      nit: ["", [Validators.required, Validators.pattern(/^(\d{6}K|\d{7}|\d{8,10}\d)$/)]],
       empresa: ["", Validators.required],
       contactos: this.fb.array([this.createContactoGroup()]),
       metodosDePago: this.fb.array([this.createMetodoPagoGroup()])
@@ -83,7 +83,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
   createMetodoPagoGroup(): FormGroup {
     return this.fb.group({
       tipo: ["", Validators.required],
-      numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)]],
+      numero: ["", [Validators.required, Validators.pattern(/^\d{13}$|^\d{18}$/)]],
       fechaVencimiento: ["", [Validators.required, this.fechaTarjetaValidator]],
       nombreTitular: ["", Validators.required]
     });
