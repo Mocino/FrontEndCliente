@@ -179,6 +179,7 @@ export class MetodoPagoAgregarComponent implements OnInit {
       fechaVencimiento: contacto.fechaVencimiento,
       nombreTitular: contacto.nombreTitular,
     });
+
   }
 
 

@@ -48,6 +48,7 @@ export class ContactoAgregarComponent implements OnInit {
     }
   }
 
+
   obtenerTiposContacto(): void {
     this._contactoService.getTiposContacto().subscribe(tiposContacto => {
       this.tiposContacto = tiposContacto;
@@ -156,5 +157,6 @@ export class ContactoAgregarComponent implements OnInit {
       tipoContacto: contacto.tipoContacto,
       valorContacto: contacto.valorContacto
     });
+    this.formContacto.get('tipoContacto')?.disable();
   }
 }

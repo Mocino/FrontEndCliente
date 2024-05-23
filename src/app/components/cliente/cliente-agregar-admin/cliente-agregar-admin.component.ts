@@ -20,6 +20,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
   formCliente!: FormGroup;
   tiposContacto: Option[] = [];
   tiposMetodo: Option[] = [];
+  private originalEmails: string[] = [];
 
   constructor(
     private dialogReferencia: MatDialogRef<ClienteAgregarAdminComponent>,
@@ -64,6 +65,8 @@ export class ClienteAgregarAdminComponent implements OnInit{
       this.dataCliente.contactos?.forEach(contacto => {
         const contactoGroup = this.createContactoGroup();
         contactoGroup.patchValue(contacto);
+        contactoGroup.get('tipoContacto')?.disable();
+        this.originalEmails.push(contacto.valorContacto);
         this.contactos.push(contactoGroup);
       });
 
@@ -71,6 +74,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
       this.dataCliente.metodosDePago?.forEach(metodo => {
         const metodoGroup = this.createMetodoPagoGroup();
         metodoGroup.patchValue(metodo);
+        metodoGroup.get('tipo')?.disable();
         this.metodosDePago.push(metodoGroup);
       });
     }
@@ -100,7 +104,8 @@ export class ClienteAgregarAdminComponent implements OnInit{
   createContactoGroup(): FormGroup {
     const group = this.fb.group({
       tipoContacto: ["", Validators.required],
-      valorContacto: ["", [Validators.required]]
+      valorContacto: ["", [Validators.required], [this.emailExistsValidator.bind(this)]]
+
     });
 
     group.get('tipoContacto')?.valueChanges.subscribe(tipoContacto => {
@@ -294,4 +299,29 @@ export class ClienteAgregarAdminComponent implements OnInit{
       });
     }
 
+    emailExistsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+      if (!control.value) {
+        return of(null);
+      }
+
+      const email = control.value;
+      const emailOriginalIndex = this.contactos.controls.findIndex((controlGroup, index) => {
+        return controlGroup.get('valorContacto')?.value === email && this.originalEmails[index] === email;
+      });
+
+      if (emailOriginalIndex !== -1) {
+        // El email no ha cambiado
+        return of(null);
+      }
+
+      return timer(300).pipe(
+        switchMap(() => {
+          return this._clienteServicio.getVerificarEmail(email).pipe(
+            map((res: any) => {
+              return res.exists ? { emailExists: true } : null;
+            })
+          );
+        })
+      );
+    }
 }

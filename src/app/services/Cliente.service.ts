@@ -11,6 +11,7 @@ export class ClienteService {
 
   private myAppUrl: string = enviroment.endpoint;
   private myApiUrl: string = 'api/Clientes/'
+  private myApiUrlcon: string = 'api/Contacto/'
 
   constructor(private http: HttpClient) { }
 
@@ -59,6 +60,14 @@ export class ClienteService {
       map(response => ({ message: response }))
     );
   }
+
+  /**
+   * verifica si un dpi esta repetido.
+   * @returns Un Observable que indica si el dpi se encuentra registrado.
+   */
+    getVerificarEmail(email: string): Observable<Object>{
+      return this.http.get<Object>(`${this.myAppUrl}${this.myApiUrlcon}verificarEmail/${email}`)
+    }
 
   /**
    * Actualiza un cliente existente.
