@@ -1,7 +1,14 @@
 .container {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  height: 100%; /* Opcional: ajusta la altura según el contenido */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
+mat-card {
+  margin-left: 0; /* Removed margin-left: 90px; */
+}
+
+.mat-table {
+  width: 100%; /* Ensure table takes full width of container */
+}
