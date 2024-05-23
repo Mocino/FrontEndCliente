@@ -56,7 +56,21 @@ export class ClienteService {
    * @returns Un Observable que indica si el cliente se guardó correctamente.
    */
   editarAllDataClientes(id: number, cliente: Cliente): Observable<any> {
-    return this.http.put(`${this.myAppUrl}${this.myApiUrl}editarClienteAlldata/${id}`, cliente, { responseType: 'text' }).pipe(
+
+    let datos = {
+      idCliente: cliente?.idCliente || '',
+      nombres: cliente?.nombres || '',
+      apellidos: cliente?.apellidos || '',
+      direccion: cliente?.direccion || '',
+      fechaNacimiento: cliente?.fechaNacimiento || '',
+      dpi: cliente?.dpi || '',
+      nit: cliente?.nit || '',
+      empresa: cliente?.empresa || '',
+      contactos: cliente?.contactos || '',
+      metodosPagos: cliente?.metodosDePago || '',
+    };
+
+    return this.http.put(`${this.myAppUrl}${this.myApiUrl}editarClienteAlldata/${id}`, datos, { responseType: 'text' }).pipe(
       map(response => ({ message: response }))
     );
   }

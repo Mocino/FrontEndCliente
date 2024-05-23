@@ -90,9 +90,10 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
   toggleForm() {
     this.showForm = !this.showForm;
     this.showEdit = false;
+
     if (!this.showForm) {
       // Emitir el evento para cerrar el formulario y resetear
-      this.contactoEditar = {} as Contacto;
+      this.contactoEditar = undefined!;
     }
   }
 

@@ -151,18 +151,19 @@ export class ClienteAgregarAdminComponent implements OnInit{
   }
 
   addEditCliente() {
-    const modelo = {
-      nombres: this.formCliente.value.nombres,
-      apellidos: this.formCliente.value.apellidos,
-      direccion: this.formCliente.value.direccion,
-      fechaNacimiento: this.formCliente.value.fechaNacimiento,
-      dpi: this.formCliente.value.dpi,
-      nit: this.formCliente.value.nit,
-      empresa: this.formCliente.value.empresa,
-      contactos: this.formCliente.value.contactos,
-      metodosPagos: this.formCliente.value.metodosDePago
-    };
+    // const modelo = {
+    //   nombres: this.formCliente.value.nombres,
+    //   apellidos: this.formCliente.value.apellidos,
+    //   direccion: this.formCliente.value.direccion,
+    //   fechaNacimiento: this.formCliente.value.fechaNacimiento,
+    //   dpi: this.formCliente.value.dpi,
+    //   nit: this.formCliente.value.nit,
+    //   empresa: this.formCliente.value.empresa,
+    //   contactos: this.formCliente.value.contactos,
+    //   metodosPagos: this.formCliente.value.metodosDePago
+    // };
 
+    const modelo: Cliente = this.formCliente.getRawValue();
 
     if(this.dataCliente == null){
       this._clienteServicio.guardarAllDataClientes(modelo).subscribe({

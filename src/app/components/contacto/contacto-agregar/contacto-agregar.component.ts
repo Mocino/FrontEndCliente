@@ -19,7 +19,6 @@ export class ContactoAgregarComponent implements OnInit {
 
   formContacto!: FormGroup;
   tiposContacto: Option[] = [];
-  esEditar: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,12 +38,16 @@ export class ContactoAgregarComponent implements OnInit {
     this.agregarValidadorValorContacto();
 
     if (this.contactoEditar) {
-      this.esEditar = true;
       this.formContacto.patchValue({
         idContacto: this.contactoEditar.idContacto,
         tipoContacto: this.contactoEditar.tipoContacto,
         valorContacto: this.contactoEditar.valorContacto
       });
+      console.log('En if: ', this.contactoEditar)
+      this.formContacto.get('tipoContacto')?.disable();
+    }else {
+      console.log('En else: ', this.contactoEditar)
+      this.formContacto.get('tipoContacto')?.enable();
     }
   }
 
@@ -55,12 +58,16 @@ export class ContactoAgregarComponent implements OnInit {
   }
 
   addEditContacto() {
-    const modelo: Contacto = {
-      idContacto: this.formContacto.value.idContacto || 0,
-      idCliente: this.dataCliente?.idCliente!,
-      tipoContacto: this.formContacto.value.tipoContacto,
-      valorContacto: this.formContacto.value.valorContacto,
-    };
+    // const modelo: Contacto = {
+    //   idContacto: this.formContacto.value.idContacto || 0,
+    //   idCliente: this.dataCliente?.idCliente!,
+    //   tipoContacto: this.formContacto.value.tipoContacto,
+    //   valorContacto: this.formContacto.value.valorContacto,
+    // };
+
+    const modelo: Contacto = this.formContacto.getRawValue();
+    modelo.idCliente = this.dataCliente?.idCliente || 0
+
     if (modelo.idContacto === 0) {
       this._contactoService.AgregarContacto(this.dataCliente?.idCliente!, modelo).subscribe({
         next: () => {
@@ -94,7 +101,7 @@ export class ContactoAgregarComponent implements OnInit {
         if (!control.value) {
           return of(null);
         }
-        if (this.esEditar && control.value === this.contactoEditar.valorContacto) {
+        if (control.value === this.contactoEditar.valorContacto) {
           return of(null);
         }
         return this._contactoService.getVerificarEmail(control.value, this.dataCliente?.idCliente!).pipe(
@@ -146,11 +153,9 @@ export class ContactoAgregarComponent implements OnInit {
 
   resetForm() {
     this.formContacto.reset();
-    this.esEditar = false;
   }
 
   updateForm(contacto: Contacto) {
-    this.esEditar = true;
     this.formContacto.patchValue({
       idContacto: contacto.idContacto,
       tipoContacto: contacto.tipoContacto,

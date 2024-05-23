@@ -127,7 +127,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * Método para abrir el diálogo de editar cliente.
+   * Método para abrir el diálogo de editar cliente. EDITAR: normalizar _matdialog
    */
   dialogoEditarCliente(dataCliente: Cliente){
     this._dialog.open(ClienteAgregarComponent,{
