@@ -90,7 +90,7 @@
                   <mat-error *ngIf="contacto.get('valorContacto')?.hasError('emailInvalido')">Email inválido</mat-error>
                 </mat-form-field>
               </div>
-              <button mat-fab color="warn" (click)="removeContacto(i); $event.preventDefault()" *ngIf="contactos.length > 1">
+              <button mat-fab color="warn" (click)="dialogoEliminarContacto(i); $event.preventDefault()" *ngIf="contactos.length > 1">
                 <mat-icon>close</mat-icon>
               </button>
             </div>
@@ -150,7 +150,7 @@
                   <mat-error *ngIf="metodo.get('nombreTitular')?.hasError('required')">Nombre requerido</mat-error>
                 </mat-form-field>
               </div>
-              <button mat-fab color="warn" (click)="removeMetodosPago(i); $event.preventDefault()" *ngIf="metodosDePago.length > 1">
+              <button mat-fab color="warn" (click)="dialogoEliminarMetodo(i); $event.preventDefault()" *ngIf="metodosDePago.length > 1">
                 <mat-icon>close</mat-icon>
               </button>
 
@@ -167,7 +167,7 @@
 
 
   <div class="button-container">
-    <button mat-raised-button color="primary" type="submit">Guardar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="formCliente.invalid">Guardar</button>
     <button mat-raised-button mat-dialog-close color="warn">Volver</button>
   </div>
 

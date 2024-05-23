@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, of, switchMap, timer } from 'rxjs';
 import { Cliente, Option } from 'src/app/interfaces/Cliente';
 import { ClienteService } from 'src/app/services/Cliente.service';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
+import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
 
 @Component({
   selector: 'app-cliente-agregar-admin',
@@ -26,6 +27,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
     private _clienteServicio: ClienteService,
     private _contactoService: ContactoService,
     private _metodoPagoService: MetodoPagoService,
+    public _dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente
   ) {
     this.formCliente = this.fb.group({
@@ -206,7 +208,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
             );
         })
     );
-}
+  }
 
 
   fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
@@ -261,5 +263,41 @@ export class ClienteAgregarAdminComponent implements OnInit{
       this.metodosDePago.removeAt(index);
     }
   }
+
+
+    /**
+   * Abre un diálogo para eliminar un contacto.
+   * @param contacto Datos del contacto a eliminar.
+   */
+    dialogoEliminarContacto(index: number): void {
+      const dialogRef = this._dialog.open(ClienteEliminarComponent, {
+        disableClose: true,
+        data: { message: '¿Está seguro que desea eliminar este contacto?' }
+      });
+
+      dialogRef.afterClosed().subscribe(resultado => {
+        if (resultado) {
+          this.removeContacto(index);
+        }
+      });
+    }
+
+
+    /**
+   * Abre un diálogo para eliminar un contacto.
+   * @param contacto Datos del contacto a eliminar.
+   */
+    dialogoEliminarMetodo(index: number): void {
+      const dialogRef = this._dialog.open(ClienteEliminarComponent, {
+        disableClose: true,
+        data: { message: '¿Está seguro que desea eliminar este contacto?' }
+      });
+
+      dialogRef.afterClosed().subscribe(resultado => {
+        if (resultado) {
+          this.removeMetodosPago(index);
+        }
+      });
+    }
 
 }
