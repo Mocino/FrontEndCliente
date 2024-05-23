@@ -8,6 +8,7 @@ import { ClienteService } from 'src/app/services/Cliente.service';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
+import { emailValidator, telefonoValidator } from 'src/app/utils/validador-utils';
 
 @Component({
   selector: 'app-cliente-agregar-admin',
@@ -79,13 +80,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
   }
 
 
-  validarContactos() {
-    // Iterar sobre los contactos y validar el valor de contacto para cada uno
-    this.contactos.controls.forEach((control, index) => {
-      const errors = this.validarValorContacto(index);
-      control.get('valorContacto')?.setErrors(errors);
-    });
-  }
 
   obtenerTiposContacto(): void {
     this._contactoService.getTiposContacto().subscribe(tiposContacto => {
@@ -104,10 +98,24 @@ export class ClienteAgregarAdminComponent implements OnInit{
 
 
   createContactoGroup(): FormGroup {
-    return this.fb.group({
+    const group = this.fb.group({
       tipoContacto: ["", Validators.required],
-      valorContacto: this.fb.control('', [Validators.required])
+      valorContacto: ["", [Validators.required]]
     });
+
+    group.get('tipoContacto')?.valueChanges.subscribe(tipoContacto => {
+      const valorContactoControl = group.get('valorContacto');
+      if (tipoContacto === 'email') {
+        valorContactoControl?.setValidators([Validators.required, emailValidator()]);
+      } else if (tipoContacto === 'teléfono') {
+        valorContactoControl?.setValidators([Validators.required, telefonoValidator()]);
+      } else {
+        valorContactoControl?.setValidators([Validators.required]);
+      }
+      valorContactoControl?.updateValueAndValidity();
+    });
+
+    return group;
   }
 
   createMetodoPagoGroup(): FormGroup {
@@ -226,20 +234,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
     return null;
   }
 
-  // Nueva función para validar el valor de contacto según el tipo seleccionado
-  validarValorContacto(index: number): ValidationErrors | null {
-    const contactoGroup = this.contactos.at(index) as FormGroup;
-    const tipoContacto = contactoGroup.get('tipoContacto')?.value;
-    const valorContacto = contactoGroup.get('valorContacto')?.value;
-
-    if (tipoContacto === 'teléfono' && !(/^\d{8}$/.test(valorContacto))) {
-      return { telefonoInvalido: true };
-    } else if (tipoContacto === 'email' && !(/\S+@\S+\.\S+/.test(valorContacto))) {
-      return { emailInvalido: true };
-    }
-
-    return null;
-  }
 
 
   addContacto(): void {
