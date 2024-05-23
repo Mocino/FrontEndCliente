@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, of, switchMap, timer } from 'rxjs';
-import { Option } from 'src/app/interfaces/Cliente';
+import { Cliente, Option } from 'src/app/interfaces/Cliente';
 import { ClienteService } from 'src/app/services/Cliente.service';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
@@ -26,6 +26,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
     private _clienteServicio: ClienteService,
     private _contactoService: ContactoService,
     private _metodoPagoService: MetodoPagoService,
+    @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente
   ) {
     this.formCliente = this.fb.group({
       nombres: ["", Validators.required],
@@ -41,13 +42,40 @@ export class ClienteAgregarAdminComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    if (this.dataCliente) {
+      this.formCliente.patchValue({
+        nombres: this.dataCliente.nombres,
+        apellidos: this.dataCliente.apellidos,
+        direccion: this.dataCliente.direccion,
+        fechaNacimiento: this.dataCliente.fechaNacimiento,
+        dpi: this.dataCliente.dpi,
+        nit: this.dataCliente.nit,
+        empresa: this.dataCliente.empresa,
+      });
+
+      // Limpiar contactos y metodos de pago iniciales
+      this.contactos.clear();
+      this.metodosDePago.clear();
+
+      // Asignar valores de contactos
+      this.dataCliente.contactos?.forEach(contacto => {
+        const contactoGroup = this.createContactoGroup();
+        contactoGroup.patchValue(contacto);
+        this.contactos.push(contactoGroup);
+      });
+
+      // Asignar valores de metodosDePago
+      this.dataCliente.metodosDePago?.forEach(metodo => {
+        const metodoGroup = this.createMetodoPagoGroup();
+        metodoGroup.patchValue(metodo);
+        this.metodosDePago.push(metodoGroup);
+      });
+    }
+
     this.obtenerTiposContacto();
     this.obtenerMetodosPagoSelect();
-
-    this.formCliente.valueChanges.subscribe(() => {
-      this.validarContactos();
-    });
   }
+
 
   validarContactos() {
     // Iterar sobre los contactos y validar el valor de contacto para cada uno
@@ -120,14 +148,28 @@ export class ClienteAgregarAdminComponent implements OnInit{
       metodosPagos: this.formCliente.value.metodosDePago
     };
 
-    this._clienteServicio.guardarAllDataClientes(modelo).subscribe({
-      next: () => {
-        this.mostrarAlerta("Cliente Creado", "Listo");
-        this.dialogReferencia.close("Creado")
-      }, error: () => {
-        this.mostrarAlerta("No se pudo crear", "Error");
-      }
-    });
+
+    if(this.dataCliente == null){
+      this._clienteServicio.guardarAllDataClientes(modelo).subscribe({
+        next: () => {
+          this.mostrarAlerta("Cliente Creado", "Listo");
+          this.dialogReferencia.close("Creado")
+        }, error: () => {
+          this.mostrarAlerta("No se pudo crear", "Error");
+        }
+      });
+    } else {
+      this._clienteServicio.editarAllDataClientes(this.dataCliente.idCliente!, modelo).subscribe({
+        next: () => {
+          this.mostrarAlerta("Cliente Editar", "Listo");
+          this.dialogReferencia.close("Editado")
+        }, error: (error) => {
+          console.error('Error al editar el cliente:', error);
+          this.mostrarAlerta("No se pudo Editar", "Error");
+        }
+      })
+
+    }
   }
 
   fechaNacimientoValidator(control: AbstractControl): ValidationErrors | null {
@@ -151,19 +193,21 @@ export class ClienteAgregarAdminComponent implements OnInit{
    * Valida si dpi ya existe.
    */
   dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-      return timer(300).pipe(
-          switchMap(() => {
-              if (!control.value) {
-                  return of(null);
-              }
-              return this._clienteServicio.getVerificarDPI(control.value).pipe(
-                  map((res: any) => {
-                      return res.exists ? { dpiExists: true } : null;
-                  })
-              );
-          })
-      );
-  }
+    if (!control.value || this.dataCliente) {
+        return of(null);
+    }
+
+    return timer(300).pipe(
+        switchMap(() => {
+            return this._clienteServicio.getVerificarDPI(control.value).pipe(
+                map((res: any) => {
+                    return res.exists ? { dpiExists: true } : null;
+                })
+            );
+        })
+    );
+}
+
 
   fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
@@ -181,19 +225,19 @@ export class ClienteAgregarAdminComponent implements OnInit{
   }
 
   // Nueva función para validar el valor de contacto según el tipo seleccionado
-validarValorContacto(index: number): ValidationErrors | null {
-  const contactoGroup = this.contactos.at(index) as FormGroup;
-  const tipoContacto = contactoGroup.get('tipoContacto')?.value;
-  const valorContacto = contactoGroup.get('valorContacto')?.value;
+  validarValorContacto(index: number): ValidationErrors | null {
+    const contactoGroup = this.contactos.at(index) as FormGroup;
+    const tipoContacto = contactoGroup.get('tipoContacto')?.value;
+    const valorContacto = contactoGroup.get('valorContacto')?.value;
 
-  if (tipoContacto === 'teléfono' && !(/^\d{8}$/.test(valorContacto))) {
-    return { telefonoInvalido: true };
-  } else if (tipoContacto === 'email' && !(/\S+@\S+\.\S+/.test(valorContacto))) {
-    return { emailInvalido: true };
+    if (tipoContacto === 'teléfono' && !(/^\d{8}$/.test(valorContacto))) {
+      return { telefonoInvalido: true };
+    } else if (tipoContacto === 'email' && !(/\S+@\S+\.\S+/.test(valorContacto))) {
+      return { emailInvalido: true };
+    }
+
+    return null;
   }
-
-  return null;
-}
 
 
   addContacto(): void {

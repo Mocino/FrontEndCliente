@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Cliente, Contacto} from '../interfaces/Cliente';
-import { Observable, of } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { enviroment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -40,14 +40,25 @@ export class ClienteService {
     return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}guardarClientes`, nuevoCliente)
   }
 
-    /**
+  /**
    * Guarda un nuevo cliente.
    * @param nuevoCliente Objeto que representa el nuevo cliente a guardar.
    * @returns Un Observable que indica si el cliente se guardó correctamente.
    */
-    guardarAllDataClientes(nuevoCliente: Cliente): Observable<Cliente> {
-      return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}clientesAlldata`, nuevoCliente)
-    }
+  guardarAllDataClientes(nuevoCliente: Cliente): Observable<Cliente> {
+    return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}clientesAlldata`, nuevoCliente)
+  }
+
+  /**
+   * Edita un nuevo cliente.
+   * @param nuevoCliente Objeto que representa al cliente a editar.
+   * @returns Un Observable que indica si el cliente se guardó correctamente.
+   */
+  editarAllDataClientes(id: number, cliente: Cliente): Observable<any> {
+    return this.http.put(`${this.myAppUrl}${this.myApiUrl}editarClienteAlldata/${id}`, cliente, { responseType: 'text' }).pipe(
+      map(response => ({ message: response }))
+    );
+  }
 
   /**
    * Actualiza un cliente existente.
@@ -55,8 +66,8 @@ export class ClienteService {
    * @param modelo Objeto que representa los datos actualizados del cliente.
    * @returns Un Observable que emite el objeto Cliente actualizado.
    */
-  updateCliente(idCliente: number, modelo: Cliente): Observable<Contacto>{
-    return this.http.put<Contacto>(`${this.myAppUrl}${this.myApiUrl}editarCliente/${idCliente}`, modelo)
+  updateCliente(idCliente: number, modelo: Cliente): Observable<Cliente>{
+    return this.http.put<Cliente>(`${this.myAppUrl}${this.myApiUrl}editarCliente/${idCliente}`, modelo)
   }
 
   /**

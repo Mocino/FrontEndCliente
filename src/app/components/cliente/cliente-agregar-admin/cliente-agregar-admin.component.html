@@ -39,7 +39,7 @@
         <mat-form-field>
           <mat-label>DPI</mat-label>
           <input matInput formControlName="dpi"  />
-          <mat-error *ngIf="formCliente.get('dpi')?.hasError('pattern')">DPI debe tener exactamente 3 digitos</mat-error>
+          <mat-error *ngIf="formCliente.get('dpi')?.hasError('pattern')">DPI debe tener exactamente 13 digitos</mat-error>
           <mat-error *ngIf="formCliente.get('dpi')?.hasError('dpiExists')">DPI ya existe</mat-error>
         </mat-form-field>
       </div>
@@ -101,6 +101,7 @@
     </div>
     <button mat-raised-button color="primary" (click)="addContacto(); $event.preventDefault()">Añadir Contacto</button>
   </div>
+
 
 
 

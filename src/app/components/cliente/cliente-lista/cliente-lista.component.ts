@@ -10,6 +10,9 @@ import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.c
 import { ContantoListaComponent } from '../../contacto/contanto-lista/contanto-lista.component';
 import { MetodoPagoListaComponent } from '../../metodoPago/metodo-pago-lista/metodo-pago-lista.component';
 import { ClienteAgregarAdminComponent } from '../cliente-agregar-admin/cliente-agregar-admin.component';
+import { forkJoin } from 'rxjs';
+import { ContactoService } from 'src/app/services/contacto.service';
+import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 
 
 
@@ -27,6 +30,8 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
 
   constructor(
     private _clienteService: ClienteService,
+    private _contactoService: ContactoService,
+    private _metodoPagoService: MetodoPagoService,
     public _dialog: MatDialog,
     private _snackBar: MatSnackBar
   ) { }
@@ -87,6 +92,43 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
   /**
    * Método para abrir el diálogo de editar cliente.
    */
+  dialogoEditarAllCliente(dataCliente: Cliente) {
+    console.log('datos de datacliente en dialogoEditarAllCliente', dataCliente);
+
+    // Obtener los contactos y métodos de pago para este cliente
+    forkJoin({
+      contactos: this._contactoService.getContactosPorCliente(dataCliente.idCliente!),
+      metodosDePago: this._metodoPagoService.getMetodosDePagoPorCliente(dataCliente.idCliente!)
+    }).subscribe(datosCompletos => {
+      // Combinar los datos básicos con los contactos y métodos de pago
+      const clienteCompleto = {
+        ...dataCliente,
+        contactos: datosCompletos.contactos,
+        metodosDePago: datosCompletos.metodosDePago
+      };
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = clienteCompleto;
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '40%';
+      dialogConfig.height = '100%';
+      dialogConfig.position = {
+        right: '0',
+        top: '0'
+      };
+
+      this._dialog.open(ClienteAgregarAdminComponent, dialogConfig)
+        .afterClosed().subscribe(resultado => {
+          if (resultado == "Editado") {
+            this.mostrarCliente();
+          }
+        });
+    });
+  }
+
+  /**
+   * Método para abrir el diálogo de editar cliente.
+   */
   dialogoEditarCliente(dataCliente: Cliente){
     this._dialog.open(ClienteAgregarComponent,{
       disableClose: true,
@@ -135,16 +177,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
 
     this._dialog.open(ContantoListaComponent, dialogConfig)
       .afterClosed()
-      .subscribe(resultado => {
-        if(resultado === "Contacto"){
-          this._clienteService.deleteCliente(dataCliente.idCliente!).subscribe({
-            next:()=>{
-              this.mostrarAlerta("Vista Contacto", "Listo");
-              this.mostrarCliente();
-            }
-          })
-        }
-      });
+      .subscribe(x => {x});
   }
 
   /**
@@ -166,16 +199,7 @@ export class ClienteListaComponent implements AfterViewInit, OnInit {
 
     this._dialog.open(MetodoPagoListaComponent, dialogConfig)
       .afterClosed()
-      .subscribe(resultado => {
-        if (resultado === "metodoPago") {
-          this._clienteService.deleteCliente(dataCliente.idCliente!).subscribe({
-            next: (data) => {
-              this.mostrarAlerta("Vista Métodos de Pago", "Listo");
-              this.mostrarCliente();
-            }
-          })
-        }
-      });
+      .subscribe(x => {x});
   }
 
 
