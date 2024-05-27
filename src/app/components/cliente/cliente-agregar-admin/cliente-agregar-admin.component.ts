@@ -8,7 +8,7 @@ import { ClienteService } from 'src/app/services/Cliente.service';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
-import { emailValidator, telefonoValidator } from 'src/app/utils/validador-utils';
+import { emailValidator, fechaNacimientoValidator, fechaTarjetaValidator, telefonoValidator } from 'src/app/utils/validador-utils';
 import { mostrarAlerta } from 'src/app/utils/aler-utils';
 
 @Component({
@@ -45,7 +45,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
       nombres: ["", Validators.required],
       apellidos: ["", Validators.required],
       direccion: ["", Validators.required],
-      fechaNacimiento: ["", [Validators.required, this.fechaNacimientoValidator]],
+      fechaNacimiento: ["", [Validators.required, fechaNacimientoValidator]],
       dpi: ["", [Validators.pattern(/^\d{13}$/)], [this.dpiValidator.bind(this)]],
       nit: ["", [Validators.required, Validators.pattern(/^(\d{6}K|\d{7}|\d{8,10}\d)$/)]],
       empresa: ["", Validators.required],
@@ -113,12 +113,10 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
-
   createContactoGroup(): FormGroup {
     const group = this.fb.group({
       tipoContacto: ["", Validators.required],
       valorContacto: ["", [Validators.required], [this.emailExistsValidator.bind(this)]]
-
     });
 
     group.get('tipoContacto')?.valueChanges.subscribe(tipoContacto => {
@@ -140,7 +138,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
     return this.fb.group({
       tipo: ["", Validators.required],
       numero: ["", [Validators.required, Validators.pattern(/^\d{13}$|^\d{18}$/)]],
-      fechaVencimiento: ["", [Validators.required, this.fechaTarjetaValidator]],
+      fechaVencimiento: ["", [Validators.required, fechaTarjetaValidator]],
       nombreTitular: ["", Validators.required]
     });
   }
@@ -186,23 +184,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
     }
   }
 
-  fechaNacimientoValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) {
-      return null;
-    }
-
-    const fechaNacimiento = new Date(control.value);
-    const edadMinima = 18;
-    const fechaActual = new Date();
-    const diferenciaFechas = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
-
-    if (diferenciaFechas < edadMinima) {
-      return { menorDeEdad: true };
-    }
-
-    return null;
-  }
-
   dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     if (!control.value || this.dataCliente) {
         return of(null);
@@ -220,19 +201,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
   }
 
 
-  fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) {
-      return null;
-    }
-
-    const fechaTarjeta = new Date(control.value);
-    const fechaActual = new Date();
-
-    if (fechaTarjeta < fechaActual) {
-      return { fechaAnterior: true };
-    }
-    return null;
-  }
 
   addContacto(): void {
     this.contactos.push(this.createContactoGroup());

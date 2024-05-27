@@ -7,6 +7,7 @@ import { Observable, map, of, switchMap, timer } from 'rxjs';
 import { Cliente } from 'src/app/interfaces/Cliente';
 import { ClienteService } from 'src/app/services/Cliente.service';
 import { mostrarAlerta } from 'src/app/utils/aler-utils';
+import { fechaNacimientoValidator } from 'src/app/utils/validador-utils';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class ClienteAgregarComponent implements OnInit{
       nombres:["", Validators.required],
       apellidos:["", Validators.required],
       direccion:["", Validators.required],
-      fechaNacimiento: ["", [Validators.required, this.fechaNacimientoValidator]],
+      fechaNacimiento: ["", [Validators.required, fechaNacimientoValidator]],
       dpi: ["", [Validators.pattern(/^\d{13}$/)], [this.dpiValidator.bind(this)]],
       nit: ["", [Validators.required, Validators.pattern(/^\d{6,12}K$/)]],
       empresa:["", Validators.required],
@@ -136,24 +137,6 @@ export class ClienteAgregarComponent implements OnInit{
             );
         })
     );
-}
-
-  fechaNacimientoValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) {
-      return null;
-    }
-
-    const fechaNacimiento = new Date(control.value);
-    const edadMinima = 18;
-    const fechaActual = new Date();
-    const diferenciaFechas = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
-
-    if (diferenciaFechas < edadMinima) {
-      return { menorDeEdad: true };
-    }
-
-    return null;
   }
-
 
 }

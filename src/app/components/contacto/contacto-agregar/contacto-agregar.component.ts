@@ -6,6 +6,7 @@ import { Observable, of, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { mostrarAlerta } from 'src/app/utils/aler-utils';
+import { emailValidator, telefonoValidator } from 'src/app/utils/validador-utils';
 
 @Component({
   selector: 'app-contacto-agregar',
@@ -44,10 +45,8 @@ export class ContactoAgregarComponent implements OnInit {
         tipoContacto: this.contactoEditar.tipoContacto,
         valorContacto: this.contactoEditar.valorContacto
       });
-      console.log('En if: ', this.contactoEditar)
       this.formContacto.get('tipoContacto')?.disable();
     }else {
-      console.log('En else: ', this.contactoEditar)
       this.formContacto.get('tipoContacto')?.enable();
     }
   }
@@ -114,25 +113,16 @@ export class ContactoAgregarComponent implements OnInit {
     this.formContacto.get('valorContacto')?.updateValueAndValidity();
   }
 
-  validarValorContacto(control: AbstractControl): { [key: string]: boolean } | null {
+  validarValorContacto(control: AbstractControl): ValidationErrors | null {
     const tipoContacto = this.formContacto.get('tipoContacto')?.value;
-    const valorContacto = control.value;
 
     if (tipoContacto === 'email') {
-      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-      if (!emailRegex.test(valorContacto)) {
-        return { emailInvalido: true };
-      }
+      return emailValidator()(control);
     } else if (tipoContacto === 'teléfono' || tipoContacto === 'celular') {
-      const telefonoRegex = /^\d{8}$/;
-      if (!telefonoRegex.test(valorContacto)) {
-        return { telefonoInvalido: true };
-      }
+      return telefonoValidator()(control);
     }
-
     return null;
   }
-
     /**
    * Método para mostrar una alerta utilizando MatSnackBar.
    * @param msg Mensaje a mostrar en la alerta.

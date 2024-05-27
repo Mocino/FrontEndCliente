@@ -23,3 +23,34 @@ export function telefonoValidator(): ValidatorFn {
     return { telefonoInvalido: true };
   };
 }
+
+export function fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+
+  const fechaTarjeta = new Date(control.value);
+  const fechaActual = new Date();
+
+  if (fechaTarjeta < fechaActual) {
+    return { fechaAnterior: true };
+  }
+  return null;
+}
+
+export function fechaNacimientoValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+
+  const fechaNacimiento = new Date(control.value);
+  const edadMinima = 18;
+  const fechaActual = new Date();
+  const diferenciaFechas = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+
+  if (diferenciaFechas < edadMinima) {
+    return { menorDeEdad: true };
+  }
+
+  return null;
+}
