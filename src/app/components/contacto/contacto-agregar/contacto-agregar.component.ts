@@ -5,6 +5,7 @@ import { ContactoService } from 'src/app/services/contacto.service';
 import { Observable, of, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { mostrarAlerta } from 'src/app/utils/aler-utils';
 
 @Component({
   selector: 'app-contacto-agregar',
@@ -58,12 +59,6 @@ export class ContactoAgregarComponent implements OnInit {
   }
 
   addEditContacto() {
-    // const modelo: Contacto = {
-    //   idContacto: this.formContacto.value.idContacto || 0,
-    //   idCliente: this.dataCliente?.idCliente!,
-    //   tipoContacto: this.formContacto.value.tipoContacto,
-    //   valorContacto: this.formContacto.value.valorContacto,
-    // };
 
     const modelo: Contacto = this.formContacto.getRawValue();
     modelo.idCliente = this.dataCliente?.idCliente || 0
@@ -143,13 +138,9 @@ export class ContactoAgregarComponent implements OnInit {
    * @param msg Mensaje a mostrar en la alerta.
    * @param accion Acción de la alerta.
    */
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,{
-      horizontalPosition: "end",
-      verticalPosition: "top",
-      duration: 3000
-    });
-  }
+    mostrarAlerta(msg: string, accion: string): void {
+      mostrarAlerta(this._snackBar, msg, accion);
+    }
 
   resetForm() {
     this.formContacto.reset();

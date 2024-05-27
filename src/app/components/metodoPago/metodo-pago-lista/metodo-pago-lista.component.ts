@@ -9,6 +9,7 @@ import { MetodoPagoEliminarComponent } from '../metodo-pago-eliminar/metodo-pago
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
 import { MetodoPagoAgregarComponent } from '../metodo-pago-agregar/metodo-pago-agregar.component';
+import { mostrarAlerta } from 'src/app/utils/aler-utils';
 
 @Component({
   selector: 'app-metodo-pago-lista',
@@ -74,12 +75,8 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
    * @param msg Mensaje a mostrar en la alerta.
    * @param accion Acción de la alerta.
    */
-    mostrarAlerta(msg:string, accion: string){
-      this._snackBar.open(msg, accion,{
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      });
+    mostrarAlerta(msg: string, accion: string): void {
+      mostrarAlerta(this._snackBar, msg, accion);
     }
 
   /**

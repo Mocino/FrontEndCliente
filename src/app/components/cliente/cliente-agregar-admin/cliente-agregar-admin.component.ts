@@ -32,6 +32,14 @@ export class ClienteAgregarAdminComponent implements OnInit{
     public _dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente
   ) {
+    this.initializeForm();
+  }
+
+  ngOnInit(): void {
+    this.initializeData();
+  }
+
+  private initializeForm(): void {
     this.formCliente = this.fb.group({
       nombres: ["", Validators.required],
       apellidos: ["", Validators.required],
@@ -45,7 +53,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
-  ngOnInit(): void {
+  private initializeData(): void {
     if (this.dataCliente) {
       this.formCliente.patchValue({
         nombres: this.dataCliente.nombres,
@@ -57,9 +65,9 @@ export class ClienteAgregarAdminComponent implements OnInit{
         empresa: this.dataCliente.empresa,
       });
 
-      // Limpiar contactos y metodos de pago iniciales
-      this.contactos.clear();
-      this.metodosDePago.clear();
+      // Limpiar contactos y métodos de pago iniciales
+      this.clearContactos();
+      this.clearMetodosDePago();
 
       // Asignar valores de contactos
       this.dataCliente.contactos?.forEach(contacto => {
@@ -70,7 +78,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
         this.contactos.push(contactoGroup);
       });
 
-      // Asignar valores de metodosDePago
+      // Asignar valores de métodos de pago
       this.dataCliente.metodosDePago?.forEach(metodo => {
         const metodoGroup = this.createMetodoPagoGroup();
         metodoGroup.patchValue(metodo);
@@ -83,6 +91,13 @@ export class ClienteAgregarAdminComponent implements OnInit{
     this.obtenerMetodosPagoSelect();
   }
 
+  private clearContactos(): void {
+    this.contactos.clear();
+  }
+
+  private clearMetodosDePago(): void {
+    this.metodosDePago.clear();
+  }
 
 
   obtenerTiposContacto(): void {
@@ -91,9 +106,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
-  /**
-   * Método para obtener la tipos de metodos para select.
-   */
   obtenerMetodosPagoSelect(): void {
     this._metodoPagoService.obtenerMetodosPagoSelect().subscribe(tiposMetodo => {
       this.tiposMetodo = tiposMetodo;
@@ -154,7 +166,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
 
     const modelo: Cliente = this.formCliente.getRawValue();
 
-
     if(this.dataCliente == null){
       this._clienteServicio.guardarAllDataClientes(modelo).subscribe({
         next: () => {
@@ -167,7 +178,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
     } else {
       this._clienteServicio.editarAllDataClientes(this.dataCliente.idCliente!, modelo).subscribe({
         next: () => {
-          this.mostrarAlerta("Cliente Editar", "Listo");
+          this.mostrarAlerta("Cliente Editado", "Listo");
           this.dialogReferencia.close("Editado")
         }, error: (error) => {
           console.error('Error al editar el cliente:', error);
@@ -195,9 +206,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
     return null;
   }
 
-  /**
-   * Valida si dpi ya existe.
-   */
   dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     if (!control.value || this.dataCliente) {
         return of(null);
@@ -223,29 +231,24 @@ export class ClienteAgregarAdminComponent implements OnInit{
     const fechaTarjeta = new Date(control.value);
     const fechaActual = new Date();
 
-    if (fechaTarjeta < fechaActual) { //comentario
+    if (fechaTarjeta < fechaActual) {
       return { fechaAnterior: true };
     }
-
     return null;
   }
-
-
 
   addContacto(): void {
     this.contactos.push(this.createContactoGroup());
   }
 
-  // Nueva función para eliminar un contacto
+  addMetodosPago(): void {
+    this.metodosDePago.push(this.createMetodoPagoGroup());
+  }
+
   removeContacto(index: number): void {
     if (this.contactos.length > 1) {
       this.contactos.removeAt(index);
     }
-  }
-
-
-  addMetodosPago(): void {
-    this.metodosDePago.push(this.createMetodoPagoGroup());
   }
 
   removeMetodosPago(index: number): void {
@@ -254,65 +257,55 @@ export class ClienteAgregarAdminComponent implements OnInit{
     }
   }
 
+  dialogoEliminarContacto(index: number): void {
+    const dialogRef = this._dialog.open(ClienteEliminarComponent, {
+      disableClose: true,
+      data: { message: '¿Está seguro que desea eliminar este contacto?' }
+    });
 
-    /**
-   * Abre un diálogo para eliminar un contacto.
-   * @param contacto Datos del contacto a eliminar.
-   */
-    dialogoEliminarContacto(index: number): void {
-      const dialogRef = this._dialog.open(ClienteEliminarComponent, {
-        disableClose: true,
-        data: { message: '¿Está seguro que desea eliminar este contacto?' }
-      });
-
-      dialogRef.afterClosed().subscribe(resultado => {
-        if (resultado) {
-          this.removeContacto(index);
-        }
-      });
-    }
-
-
-    /**
-   * Abre un diálogo para eliminar un contacto.
-   * @param contacto Datos del contacto a eliminar.
-   */
-    dialogoEliminarMetodo(index: number): void {
-      const dialogRef = this._dialog.open(ClienteEliminarComponent, {
-        disableClose: true,
-        data: { message: '¿Está seguro que desea eliminar este contacto?' }
-      });
-
-      dialogRef.afterClosed().subscribe(resultado => {
-        if (resultado) {
-          this.removeMetodosPago(index);
-        }
-      });
-    }
-
-    emailExistsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-      if (!control.value) {
-        return of(null);
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        this.removeContacto(index);
       }
+    });
+  }
 
-      const email = control.value;
-      const emailOriginalIndex = this.contactos.controls.findIndex((controlGroup, index) => {
-        return controlGroup.get('valorContacto')?.value === email && this.originalEmails[index] === email;
-      });
 
-      if (emailOriginalIndex !== -1) {
-        // El email no ha cambiado
-        return of(null);
+  dialogoEliminarMetodo(index: number): void {
+    const dialogRef = this._dialog.open(ClienteEliminarComponent, {
+      disableClose: true,
+      data: { message: '¿Está seguro que desea eliminar este contacto?' }
+    });
+
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        this.removeMetodosPago(index);
       }
+    });
+  }
 
-      return timer(300).pipe(
-        switchMap(() => {
-          return this._clienteServicio.getVerificarEmail(email).pipe(
-            map((res: any) => {
-              return res.exists ? { emailExists: true } : null;
-            })
-          );
-        })
-      );
+  emailExistsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    if (!control.value) {
+      return of(null);
     }
+
+    const email = control.value;
+    const emailOriginalIndex = this.contactos.controls.findIndex((controlGroup, index) => {
+      return controlGroup.get('valorContacto')?.value === email && this.originalEmails[index] === email;
+    });
+
+    if (emailOriginalIndex !== -1) {
+      return of(null);
+    }
+
+    return timer(300).pipe(
+      switchMap(() => {
+        return this._clienteServicio.getVerificarEmail(email).pipe(
+          map((res: any) => {
+            return res.exists ? { emailExists: true } : null;
+          })
+        );
+      })
+    );
+  }
 }

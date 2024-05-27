@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, of, switchMap, timer } from 'rxjs';
 import { Cliente } from 'src/app/interfaces/Cliente';
 import { ClienteService } from 'src/app/services/Cliente.service';
+import { mostrarAlerta } from 'src/app/utils/aler-utils';
 
 
 @Component({
@@ -69,13 +70,10 @@ export class ClienteAgregarComponent implements OnInit{
    * @param msg Mensaje a mostrar en la alerta.
    * @param accion Acción de la alerta.
    */
-  mostrarAlerta(msg:string, accion: string){
-    this._snackBar.open(msg, accion,{
-      horizontalPosition: "end",
-      verticalPosition: "top",
-      duration: 3000
-    });
+  mostrarAlerta(msg: string, accion: string): void {
+    mostrarAlerta(this._snackBar, msg, accion);
   }
+
 
   /**
    * Método para agregar o editar un cliente.
