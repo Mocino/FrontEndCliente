@@ -47,7 +47,21 @@ export class ClienteService {
    * @returns Un Observable que indica si el cliente se guardó correctamente.
    */
   guardarAllDataClientes(nuevoCliente: Cliente): Observable<Cliente> {
-    return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}clientesAlldata`, nuevoCliente)
+
+    let datos = {
+      idCliente: nuevoCliente?.idCliente || '',
+      nombres: nuevoCliente?.nombres || '',
+      apellidos: nuevoCliente?.apellidos || '',
+      direccion: nuevoCliente?.direccion || '',
+      fechaNacimiento: nuevoCliente?.fechaNacimiento || '',
+      dpi: nuevoCliente?.dpi || '',
+      nit: nuevoCliente?.nit || '',
+      empresa: nuevoCliente?.empresa || '',
+      contactos: nuevoCliente?.contactos || '',
+      metodosPagos: nuevoCliente?.metodosDePago || '',
+    };
+
+    return this.http.post<Cliente>(`${this.myAppUrl}${this.myApiUrl}clientesAlldata`, datos)
   }
 
   /**
