@@ -9,6 +9,7 @@ import { ContactoService } from 'src/app/services/contacto.service';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
 import { emailValidator, telefonoValidator } from 'src/app/utils/validador-utils';
+import { mostrarAlerta } from 'src/app/utils/aler-utils';
 
 @Component({
   selector: 'app-cliente-agregar-admin',
@@ -154,12 +155,8 @@ export class ClienteAgregarAdminComponent implements OnInit{
   }
 
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion, {
-      horizontalPosition: "end",
-      verticalPosition: "top",
-      duration: 3000
-    });
+  mostrarAlerta(msg: string, accion: string): void {
+    mostrarAlerta(this._snackBar, msg, accion);
   }
 
   addEditCliente() {
