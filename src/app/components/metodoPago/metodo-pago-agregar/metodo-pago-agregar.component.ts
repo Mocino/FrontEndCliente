@@ -5,6 +5,7 @@ import { Observable, map, of, switchMap, timer } from 'rxjs';
 import { Cliente, MetodoDePago, Option } from 'src/app/interfaces/Cliente';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { mostrarAlerta } from 'src/app/utils/aler-utils';
+import { fechaTarjetaValidator } from 'src/app/utils/validador-utils';
 
 @Component({
   selector: 'app-metodo-pago-agregar',
@@ -32,7 +33,7 @@ export class MetodoPagoAgregarComponent implements OnInit {
       idCliente: 0,
       tipo:["", Validators.required],
       numero: ["", [Validators.required, Validators.pattern(/^\d{18}$/)], [this.numeroTarjetaValidator.bind(this)]],
-      fechaVencimiento: ["", [Validators.required, this.fechaTarjetaValidator]],
+      fechaVencimiento: ["", [Validators.required, fechaTarjetaValidator]],
       nombreTitular: ["", Validators.required]
     })
   }
@@ -57,43 +58,32 @@ export class MetodoPagoAgregarComponent implements OnInit {
    * Método para agregar o editar un método de pago.
    */
   addEditMetodoDePago(){
+    const modelo: MetodoDePago = this.formMetodoPago.getRawValue();
+    modelo.idCliente = this.dataCliente?.idCliente || 0;
 
-    const modelo: MetodoDePago = {
-      idMetodoPago: this.formMetodoPago.value.idMetodoPago || 0,
-      idCliente: this.dataCliente?.idCliente!,
-      tipo: this.formMetodoPago.value.tipo,
-      numero:           this.formMetodoPago.value.numero,
-      fechaVencimiento: this.formMetodoPago.value.fechaVencimiento,
-      nombreTitular:    this.formMetodoPago.value.nombreTitular,
-    }
-
-      if (modelo.idMetodoPago === 0) {
-
-        this._metodoPagoService.AgregarMetodosDePago(this.dataCliente?.idCliente!, modelo).subscribe({
-          next: () => {
-            console.log("En crear")
-            this.mostrarAlerta("Metodo Pago Creado", "Listo");
-            this.contactSaved.emit();
-            this.formClosed.emit();
-            // this.obtenerTipoMetodo(this.formMetodoPago.value.idCliente);
-          },
-          error: () => {
-            this.mostrarAlerta("No se pudo crear", "Error")
-          }
-        });
-      } else {
+    if (modelo.idMetodoPago === 0) {
+      this._metodoPagoService.AgregarMetodosDePago(this.dataCliente?.idCliente!, modelo).subscribe({
+        next: () => {
+          this.mostrarAlerta("Metodo Pago Creado", "Listo");
+          this.contactSaved.emit();
+          this.formClosed.emit();
+        },
+        error: () => {
+          this.mostrarAlerta("No se pudo crear", "Error")
+        }
+      });
+    } else {
         this._metodoPagoService.EditarMetodosDePago(this.dataCliente?.idCliente!, this.formMetodoPago.value.idMetodoPago!, modelo).subscribe({
           next: () => {
-            this.mostrarAlerta("Metodo Pago Editado", "Listo");
-            this.contactSaved.emit();
-            this.formClosed.emit();
-            // this.obtenerTipoMetodo(this.formMetodoPago.value.idCliente);
-          },
-          error: (X) => {
-            this.mostrarAlerta("No se pudo editar", "Error")
-          }
-        });
-      }
+          this.mostrarAlerta("Metodo Pago Editado", "Listo");
+          this.contactSaved.emit();
+          this.formClosed.emit();
+        },
+        error: () => {
+          this.mostrarAlerta("No se pudo editar", "Error")
+        }
+      });
+    }
   }
 
   /**
@@ -126,30 +116,14 @@ export class MetodoPagoAgregarComponent implements OnInit {
       );
   }
 
-  fechaTarjetaValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) {
-      return null;
-    }
-
-    const fechaTarjeta = new Date(control.value);
-    const fechaActual = new Date();
-
-    if (fechaTarjeta < fechaActual) { //comentario
-      return { fechaAnterior: true };
-    }
-
-    return null;
-  }
-
-    /**
+  /**
    * Método para mostrar una alerta utilizando MatSnackBar.
    * @param msg Mensaje a mostrar en la alerta.
    * @param accion Acción de la alerta.
    */
-    mostrarAlerta(msg: string, accion: string): void {
-      mostrarAlerta(this._snackBar, msg, accion);
-    }
-
+  mostrarAlerta(msg: string, accion: string): void {
+    mostrarAlerta(this._snackBar, msg, accion);
+  }
 
   /**
    * Método para obtener los tipos de método de pago del cliente.
@@ -161,24 +135,28 @@ export class MetodoPagoAgregarComponent implements OnInit {
       });
   }
 
+  /**
+   * Formatea el formulario
+   */
   resetForm() {
     this.formMetodoPago.reset();
     this.esEditar = false;
   }
 
-  updateForm(contacto: MetodoDePago) {
+ /**
+  * Actualiza el formulario con los datos de un contacto especificado.
+  * @param metodo Datos del contacto a cargar en el formulario.
+  */
+  updateForm(metodo: MetodoDePago) {
     this.esEditar = true;
     this.formMetodoPago.patchValue({
 
-      idMetodoPago: contacto.idMetodoPago,
-      idCliente: contacto.idCliente,
-      tipo: contacto.tipo,
-      numero: contacto.numero,
-      fechaVencimiento: contacto.fechaVencimiento,
-      nombreTitular: contacto.nombreTitular,
+      idMetodoPago: metodo.idMetodoPago,
+      idCliente: metodo.idCliente,
+      tipo: metodo.tipo,
+      numero: metodo.numero,
+      fechaVencimiento: metodo.fechaVencimiento,
+      nombreTitular: metodo.nombreTitular,
     });
-
   }
-
-
 }

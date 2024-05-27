@@ -51,12 +51,18 @@ export class ContactoAgregarComponent implements OnInit {
     }
   }
 
+  /**
+   * Obtiene los tipos de contacto disponibles del servicio de contacto.
+   */
   obtenerTiposContacto(): void {
     this._contactoService.getTiposContacto().subscribe(tiposContacto => {
       this.tiposContacto = tiposContacto;
     });
   }
 
+  /**
+   * Agrega o edita un contacto según los datos ingresados en el formulario.
+   */
   addEditContacto() {
 
     const modelo: Contacto = this.formContacto.getRawValue();
@@ -89,6 +95,11 @@ export class ContactoAgregarComponent implements OnInit {
     }
   }
 
+  /**
+   * Validador asincrónico para verificar la existencia de un correo electrónico en el backend.
+   * @param control Control del formulario que contiene el correo electrónico.
+   * @returns Un observable que emite un objeto de errores de validación si el correo electrónico ya existe.
+   */
   emailValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     return timer(300).pipe(
       switchMap(() => {
@@ -107,12 +118,20 @@ export class ContactoAgregarComponent implements OnInit {
     );
   }
 
+  /**
+   * Agrega un validador dinámico al campo 'valorContacto' según el tipo de contacto seleccionado.
+   */
   agregarValidadorValorContacto() {
     const validadorValorContacto = this.validarValorContacto.bind(this);
     this.formContacto.get('valorContacto')?.setValidators([Validators.required, validadorValorContacto]);
     this.formContacto.get('valorContacto')?.updateValueAndValidity();
   }
 
+  /**
+   * Validador personalizado para validar el campo 'valorContacto' según el tipo de contacto seleccionado.
+   * @param control Control del formulario que contiene el valor del contacto.
+   * @returns Un objeto de errores de validación si el valor del contacto no es válido, de lo contrario, null.
+   */
   validarValorContacto(control: AbstractControl): ValidationErrors | null {
     const tipoContacto = this.formContacto.get('tipoContacto')?.value;
 
@@ -123,19 +142,27 @@ export class ContactoAgregarComponent implements OnInit {
     }
     return null;
   }
-    /**
+
+  /**
    * Método para mostrar una alerta utilizando MatSnackBar.
    * @param msg Mensaje a mostrar en la alerta.
    * @param accion Acción de la alerta.
    */
-    mostrarAlerta(msg: string, accion: string): void {
-      mostrarAlerta(this._snackBar, msg, accion);
-    }
+  mostrarAlerta(msg: string, accion: string): void {
+    mostrarAlerta(this._snackBar, msg, accion);
+  }
 
+  /**
+   * Formatea el formulario
+   */
   resetForm() {
     this.formContacto.reset();
   }
 
+ /**
+  * Actualiza el formulario con los datos de un contacto especificado.
+  * @param contacto Datos del contacto a cargar en el formulario.
+  */
   updateForm(contacto: Contacto) {
     this.formContacto.patchValue({
       idContacto: contacto.idContacto,

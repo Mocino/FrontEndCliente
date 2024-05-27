@@ -10,6 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Observable, Subject, map, of, switchMap, timer } from 'rxjs';
 import { MetodoPagoAgregarComponent } from '../metodo-pago-agregar/metodo-pago-agregar.component';
 import { mostrarAlerta } from 'src/app/utils/aler-utils';
+import { ocultarDigitos } from 'src/app/utils/pipes-utils';
 
 @Component({
   selector: 'app-metodo-pago-lista',
@@ -43,21 +44,21 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
    * Método del ciclo de vida AfterViewInit.
    * Se ejecuta después de que la vista y las vistas secundarias (como el paginador) se hayan inicializado.
    */
-    ngAfterViewInit(): void {
-      this.dataSource.paginator = this.paginator;
-    }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
 
-    applyFilter(event: Event) {
-      const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
-      this.dataSource.filterPredicate = (data: MetodoDePago, filter: string) => {
-        const tipo = data.tipo.toLowerCase(); // Filtrar por tipo de método de pago
-        const numero = data.numero.toLowerCase();
-        const fechaVencimiento = data.fechaVencimiento.toLocaleDateString().toLowerCase(); // Convertir la fecha de vencimiento a una cadena
-        const nombreTitular = data.nombreTitular.toLowerCase();
-        return tipo.includes(filterValue) || numero.includes(filterValue) || fechaVencimiento.includes(filterValue) || nombreTitular.includes(filterValue);
-      };
-      this.dataSource.filter = filterValue.trim().toLowerCase();
-    }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.dataSource.filterPredicate = (data: MetodoDePago, filter: string) => {
+      const tipo = data.tipo.toLowerCase(); // Filtrar por tipo de método de pago
+      const numero = data.numero.toLowerCase();
+      const fechaVencimiento = data.fechaVencimiento.toLocaleDateString().toLowerCase(); // Convertir la fecha de vencimiento a una cadena
+      const nombreTitular = data.nombreTitular.toLowerCase();
+      return tipo.includes(filterValue) || numero.includes(filterValue) || fechaVencimiento.includes(filterValue) || nombreTitular.includes(filterValue);
+    };
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   /**
    * Método para obtener los tipos de método de pago del cliente.
@@ -70,14 +71,14 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       });
   }
 
-    /**
+  /**
    * Método para mostrar una alerta utilizando MatSnackBar.
    * @param msg Mensaje a mostrar en la alerta.
    * @param accion Acción de la alerta.
    */
-    mostrarAlerta(msg: string, accion: string): void {
-      mostrarAlerta(this._snackBar, msg, accion);
-    }
+  mostrarAlerta(msg: string, accion: string): void {
+    mostrarAlerta(this._snackBar, msg, accion);
+  }
 
   /**
    * Alterna la visibilidad del formulario para agregar/editar un método de pago.
@@ -94,7 +95,6 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
    * Abre un formulario para editar un método de pago.
    * @param metodoDePago Datos del método de pago a editar.
    */
-
   openEditForm(metodoDePago: MetodoDePago) {
     this.metodoDePagoEditar = metodoDePago;
     this.showForm = true;
@@ -105,9 +105,6 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
       this.metodoDePagoAgregarComponent.updateForm(metodoDePago)
     }
   }
-
-
-
 
   /**
    * Abre un diálogo para eliminar un método de pago.
@@ -138,13 +135,7 @@ export class MetodoPagoListaComponent implements AfterViewInit, OnInit{
    * @returns El número con los primeros cinco dígitos ocultos por asteriscos (*) si tiene más de cuatro dígitos, de lo contrario devuelve el mismo número sin cambios.
    */
   ocultarDigitos(numero: string): string {
-    if (numero.length <= 8) {
-      return numero; // No se ocultan dígitos si la longitud es menor o igual a 8
-    } else {
-      const primeraParte = numero.substring(0, 4); // Obtener los primeros cuatro dígitos
-      const segundaParte = '****'; // Reemplazar los restantes con asteriscos
-      return primeraParte + segundaParte;
-    }
+    return ocultarDigitos(numero);
   }
 
   onContactSaved() {
