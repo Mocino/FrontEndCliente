@@ -8,7 +8,7 @@ import { ClienteService } from 'src/app/services/Cliente.service';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.component';
-import { emailValidator, fechaNacimientoValidator, fechaTarjetaValidator, telefonoValidator } from 'src/app/utils/validador-utils';
+import { emailExistsValidator, emailValidator, fechaNacimientoValidator, fechaTarjetaValidator, telefonoValidator } from 'src/app/utils/validador-utils';
 import { mostrarAlerta } from 'src/app/utils/aler-utils';
 
 @Component({
@@ -200,8 +200,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
     );
   }
 
-
-
   addContacto(): void {
     this.contactos.push(this.createContactoGroup());
   }
@@ -235,7 +233,6 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
-
   dialogoEliminarMetodo(index: number): void {
     const dialogRef = this._dialog.open(ClienteEliminarComponent, {
       disableClose: true,
@@ -250,27 +247,7 @@ export class ClienteAgregarAdminComponent implements OnInit{
   }
 
   emailExistsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-    if (!control.value) {
-      return of(null);
-    }
-
-    const email = control.value;
-    const emailOriginalIndex = this.contactos.controls.findIndex((controlGroup, index) => {
-      return controlGroup.get('valorContacto')?.value === email && this.originalEmails[index] === email;
-    });
-
-    if (emailOriginalIndex !== -1) {
-      return of(null);
-    }
-
-    return timer(300).pipe(
-      switchMap(() => {
-        return this._clienteServicio.getVerificarEmail(email).pipe(
-          map((res: any) => {
-            return res.exists ? { emailExists: true } : null;
-          })
-        );
-      })
-    );
+    return emailExistsValidator(control, this.contactos.controls, this.originalEmails, this._clienteServicio);
   }
+
 }

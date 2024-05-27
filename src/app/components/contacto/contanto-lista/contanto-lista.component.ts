@@ -30,7 +30,6 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
 
 
   constructor(
-    private dialogReferencia: MatDialogRef<ContantoListaComponent>,
     private _contactoService: ContactoService,
     public _dialog: MatDialog,
     private _snackBar: MatSnackBar,
@@ -90,7 +89,6 @@ export class ContantoListaComponent implements AfterViewInit, OnInit{
     this.showEdit = false;
 
     if (!this.showForm) {
-      // Emitir el evento para cerrar el formulario y resetear
       this.contactoEditar = undefined!;
     }
   }

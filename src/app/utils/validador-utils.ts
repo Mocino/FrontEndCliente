@@ -1,4 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Observable, map, of, switchMap, timer } from 'rxjs';
+import { ClienteService } from '../services/Cliente.service';
 
 // Validador para email
 export function emailValidator(): ValidatorFn {
@@ -53,4 +55,30 @@ export function fechaNacimientoValidator(control: AbstractControl): ValidationEr
   }
 
   return null;
+}
+
+
+export function emailExistsValidator(control: AbstractControl, contactos: any[], originalEmails: string[], clienteServicio: ClienteService): Observable<ValidationErrors | null> {
+  if (!control.value) {
+    return of(null);
+  }
+
+  const email = control.value;
+  const emailOriginalIndex = contactos.findIndex((controlGroup, index) => {
+    return controlGroup.get('valorContacto')?.value === email && originalEmails[index] === email;
+  });
+
+  if (emailOriginalIndex !== -1) {
+    return of(null);
+  }
+
+  return timer(300).pipe(
+    switchMap(() => {
+      return clienteServicio.getVerificarEmail(email).pipe(
+        map((res: any) => {
+          return res.exists ? { emailExists: true } : null;
+        })
+      );
+    })
+  );
 }
