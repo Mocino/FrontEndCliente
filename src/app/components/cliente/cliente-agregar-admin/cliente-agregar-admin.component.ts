@@ -40,6 +40,9 @@ export class ClienteAgregarAdminComponent implements OnInit{
     this.initializeData();
   }
 
+  /**
+   * Inicializa el formulario de cliente con sus controles y validaciones.
+   */
   private initializeForm(): void {
     this.formCliente = this.fb.group({
       nombres: ["", Validators.required],
@@ -54,6 +57,10 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
+  /**
+   * Inicializa los datos del formulario con los datos del cliente proporcionados.
+   * Si se proporcionan datos del cliente, se carga para su edición.
+   */
   private initializeData(): void {
     if (this.dataCliente) {
       this.formCliente.patchValue({
@@ -92,27 +99,42 @@ export class ClienteAgregarAdminComponent implements OnInit{
     this.obtenerMetodosPagoSelect();
   }
 
+  /**
+   * Limpia los controles del formulario de contactos.
+   */
   private clearContactos(): void {
     this.contactos.clear();
   }
 
+  /**
+   * Limpia los controles del formulario de métodos de pago.
+   */
   private clearMetodosDePago(): void {
     this.metodosDePago.clear();
   }
 
-
+  /**
+   * Obtiene los tipos de contacto disponibles desde el servicio.
+   */
   obtenerTiposContacto(): void {
     this._contactoService.getTiposContacto().subscribe(tiposContacto => {
       this.tiposContacto = tiposContacto;
     });
   }
 
+  /**
+   * Obtiene los tipos de método de pago disponibles desde el servicio.
+   */
   obtenerMetodosPagoSelect(): void {
     this._metodoPagoService.obtenerMetodosPagoSelect().subscribe(tiposMetodo => {
       this.tiposMetodo = tiposMetodo;
     });
   }
 
+  /**
+   * Crea un nuevo FormGroup para un contacto.
+   * @returns FormGroup para un contacto.
+   */
   createContactoGroup(): FormGroup {
     const group = this.fb.group({
       tipoContacto: ["", Validators.required],
@@ -134,6 +156,10 @@ export class ClienteAgregarAdminComponent implements OnInit{
     return group;
   }
 
+  /**
+   * Crea un nuevo FormGroup para un método de pago.
+   * @returns FormGroup para un método de pago.
+   */
   createMetodoPagoGroup(): FormGroup {
     return this.fb.group({
       tipo: ["", Validators.required],
@@ -143,20 +169,35 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
-
+  /**
+   * Accesor para obtener los controles de contactos del formulario.
+   * @returns FormArray de controles de contactos.
+   */
   get contactos(): FormArray {
     return this.formCliente.get('contactos') as FormArray;
   }
 
+  /**
+   * Accesor para obtener los controles de métodos de pago del formulario.
+   * @returns FormArray de controles de métodos de pago.
+   */
   get metodosDePago(): FormArray {
     return this.formCliente.get('metodosDePago') as FormArray;
   }
 
-
+  /**
+   * Muestra una alerta utilizando el servicio MatSnackBar.
+   * @param msg Mensaje para mostrar en la alerta.
+   */
   mostrarAlerta(msg: string, accion: string): void {
     mostrarAlerta(this._snackBar, msg, accion);
   }
 
+  /**
+   * Agrega o edita un cliente según los datos ingresados en el formulario.
+   * Si no hay datos de cliente, se crea uno nuevo. En caso contrario, se edita
+   * el cliente existente.
+   */
   addEditCliente() {
 
     const modelo: Cliente = this.formCliente.getRawValue();
@@ -184,6 +225,11 @@ export class ClienteAgregarAdminComponent implements OnInit{
     }
   }
 
+  /**
+   * Validador asincrónico para verificar la existencia de un DPI en el backend.
+   * @param control Control del formulario que contiene el DPI.
+   * @returns Un observable que emite un objeto de errores de validación si el DPI ya existe.
+   */
   dpiValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     if (!control.value || this.dataCliente) {
         return of(null);
@@ -200,26 +246,44 @@ export class ClienteAgregarAdminComponent implements OnInit{
     );
   }
 
+  /**
+   * Agrega un nuevo campo de contacto al formulario.
+   */
   addContacto(): void {
     this.contactos.push(this.createContactoGroup());
   }
 
+  /**
+   * Agrega un nuevo campo de método de pago al formulario.
+   */
   addMetodosPago(): void {
     this.metodosDePago.push(this.createMetodoPagoGroup());
   }
 
+  /**
+   * Elimina un campo de contacto del formulario.
+   * @param index Índice del campo de contacto a eliminar.
+   */
   removeContacto(index: number): void {
     if (this.contactos.length > 1) {
       this.contactos.removeAt(index);
     }
   }
 
+  /**
+   * Elimina un campo de método de pago del formulario.
+   * @param index Índice del campo de método de pago a eliminar.
+   */
   removeMetodosPago(index: number): void {
     if (this.metodosDePago.length > 1) {
       this.metodosDePago.removeAt(index);
     }
   }
 
+  /**
+   * Abre un diálogo para confirmar la eliminación de un contacto.
+   * @param index Índice del contacto a eliminar.
+   */
   dialogoEliminarContacto(index: number): void {
     const dialogRef = this._dialog.open(ClienteEliminarComponent, {
       disableClose: true,
@@ -233,6 +297,10 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
+  /**
+   * Abre un diálogo para confirmar la eliminación de un método de pago.
+   * @param index Índice del método de pago a eliminar.
+   */
   dialogoEliminarMetodo(index: number): void {
     const dialogRef = this._dialog.open(ClienteEliminarComponent, {
       disableClose: true,
@@ -246,6 +314,11 @@ export class ClienteAgregarAdminComponent implements OnInit{
     });
   }
 
+  /**
+   * Validador asincrónico para verificar la existencia de un correo electrónico en el backend.
+   * @param control Control del formulario que contiene el correo electrónico.
+   * @returns Un observable que emite un objeto de errores de validación si el correo electrónico ya existe.
+   */
   emailExistsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     return emailExistsValidator(control, this.contactos.controls, this.originalEmails, this._clienteServicio);
   }
