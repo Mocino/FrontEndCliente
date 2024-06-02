@@ -79,6 +79,9 @@
       <app-contactos [parentForm]="formCliente"></app-contactos>
       <app-metodos-pago [parentForm]="formCliente"></app-metodos-pago>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="formCliente.invalid">Guardar</button>
+      <div class="button-container">
+        <button mat-raised-button color="primary" type="submit" [disabled]="formCliente.invalid">Guardar</button>
+        <button mat-raised-button color="warn" type="button" mat-dialog-close>Cerrar</button>
+      </div>
     </form>
 </mat-card>

@@ -8,10 +8,6 @@ mat-form-field {
   margin: 1%;
 }
 
-button[type="submit"] {
-  margin-top: 20px;
-}
-
 .formulario-card {
   padding: 20px; /* Ajusta el espaciado interior según sea necesario */
   border-radius: 15px; /* Cambia este valor según el redondeo deseado */
@@ -34,3 +30,13 @@ button[type="submit"] {
   font-size: 24px; /* Tamaño de letra más grande */
 }
 
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px; /* Ajusta según sea necesario */
+}
+
+.button-container button {
+  margin: 0 10px; /* Ajusta según sea necesario */
+}
