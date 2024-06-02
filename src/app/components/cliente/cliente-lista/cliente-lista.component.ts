@@ -10,7 +10,7 @@ import { ClienteEliminarComponent } from '../cliente-eliminar/cliente-eliminar.c
 import { ContantoListaComponent } from '../../contacto/contanto-lista/contanto-lista.component';
 import { MetodoPagoListaComponent } from '../../metodoPago/metodo-pago-lista/metodo-pago-lista.component';
 import { ClienteAgregarAdminComponent } from '../cliente-agregar-admin/cliente-agregar-admin.component';
-import { combineLatest, forkJoin, map, switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 
