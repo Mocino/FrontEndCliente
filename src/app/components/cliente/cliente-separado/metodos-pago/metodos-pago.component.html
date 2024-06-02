@@ -1,0 +1,51 @@
+<div [formGroup]="parentForm">
+  <div formArrayName="metodosDePago">
+    <div *ngFor="let metodo of metodosDePago.controls; let i=index" [formGroupName]="i">
+      <mat-card>
+        <mat-card-content>
+          <div class="fields">
+            <mat-form-field>
+              <mat-label>Tipo de Método de Pago</mat-label>
+              <mat-select formControlName="tipo">
+                <mat-option *ngFor="let tipo of tiposMetodo" [value]="tipo.valor">
+                  {{ tipo.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Número de Tarjeta</mat-label>
+              <input matInput formControlName="numero" />
+              <mat-error *ngIf="metodosDePago.controls[i].get('numero')?.invalid && metodosDePago.controls[i].get('numero')?.touched">
+                Debe de ingresar el numero de tarjeta
+                <span *ngIf="metodosDePago.controls[i].get('numero')?.value">
+                  (
+                  {{ metodosDePago.controls[i].get('numero')?.value.length }}
+                  /
+                  {{ metodosDePago.controls[i].get('numero')?.value.length > 13 ? '18' : '13' }}
+                  )
+                </span>
+              </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field>
+              <mat-label>Fecha de Vencimiento</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="fechaVencimiento" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Nombre del Titular</mat-label>
+              <input matInput formControlName="nombreTitular" />
+            </mat-form-field>
+            <button mat-icon-button color="warn" (click)="removeMetodosPago(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" type="button" (click)="addMetodosPago()">Añadir Método de Pago</button>
+</div>

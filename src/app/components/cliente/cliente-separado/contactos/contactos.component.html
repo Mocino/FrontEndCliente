@@ -1,0 +1,28 @@
+<div [formGroup]="parentForm">
+  <div formArrayName="contactos">
+    <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i">
+      <mat-card>
+        <mat-card-content>
+          <div class="fields">
+            <mat-form-field>
+              <mat-label>Tipo de Contacto</mat-label>
+              <mat-select formControlName="tipoContacto">
+                <mat-option *ngFor="let tipo of tiposContacto" [value]="tipo.valor">
+                  {{ tipo.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Valor de Contacto</mat-label>
+              <input matInput formControlName="valorContacto" />
+            </mat-form-field>
+            <button mat-icon-button color="warn" *ngIf="contactos.length > 1" (click)="removeContacto(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" type="button" (click)="addContacto()">Añadir Contacto</button>
+</div>
