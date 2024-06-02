@@ -149,7 +149,7 @@ dialogoEditarAllCliente(dataCliente: Cliente) {
    */
   dialogoEliminarCliente(dataCliente: Cliente){
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = dataCliente;
+    dialogConfig.data = { tipo: 'Cliente', item: dataCliente };
     dialogConfig.disableClose = true;
 
     this._dialog.open(ClienteEliminarComponent, dialogConfig)

@@ -70,7 +70,7 @@ export class ContactosComponent implements OnInit {
     if (this.contactos.length > 1) {
       const dialogRef = this._dialog.open(ClienteEliminarComponent, {
         width: '350px',
-        data: {  }
+        data: { tipo: 'Contacto', item: this.contactos.at(index).value }
       });
 
       dialogRef.afterClosed().subscribe(result => {

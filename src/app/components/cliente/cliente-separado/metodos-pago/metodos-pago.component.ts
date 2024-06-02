@@ -54,11 +54,11 @@ export class MetodosPagoComponent implements OnInit {
     this.metodosDePago.push(this.createMetodoPagoGroup());
   }
 
-  DialogRemoveMetodosPago(index: number): void {
+  dialogRemoveMetodosPago(index: number): void {
     if (this.metodosDePago.length > 1) {
       const dialogRef = this._dialog.open(ClienteEliminarComponent, {
         width: '350px',
-        data: {  }
+        data: { tipo: 'Metodo de Pago', item: this.metodosDePago.at(index).value }
       });
 
       dialogRef.afterClosed().subscribe(result => {

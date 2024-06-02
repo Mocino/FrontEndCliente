@@ -12,16 +12,14 @@ export class ClienteEliminarComponent {
 
   constructor(
     private dialogReferencia: MatDialogRef<ClienteAgregarComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataCliente: Cliente
+    @Inject(MAT_DIALOG_DATA) public data: { tipo: string, item: any }
   ){}
 
 
   /**
    * dialog para confirmar la eliminacion Cliente.
    */
-  confirmarEliminar(){
-    if(this.dataCliente){
-      this.dialogReferencia.close("Eliminar")
-    }
+  confirmarEliminar() {
+    this.dialogReferencia.close("Eliminar");
   }
 }

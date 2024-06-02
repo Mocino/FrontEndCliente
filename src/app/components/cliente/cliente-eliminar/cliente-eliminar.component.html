@@ -1,10 +1,10 @@
-<h1 mat-dialog-title>Eliminar Cliente</h1>
+<h1 mat-dialog-title>Eliminar {{data.tipo}}</h1>
 <mat-dialog-content>
-  <ng-container *ngIf="dataCliente && dataCliente.nombres && dataCliente.apellidos; else defaultMsg">
-    ¿Desea eliminar el Cliente "{{dataCliente.nombres}} {{dataCliente.apellidos}}"?
+  <ng-container *ngIf="data.item && data.item.nombres && data.item.apellidos; else defaultMsg">
+    ¿Desea eliminar el {{data.tipo.toLowerCase()}} "{{data.item.nombres}} {{data.item.apellidos}}"?
   </ng-container>
   <ng-template #defaultMsg>
-    ¿Está seguro de eliminar?
+    ¿Está seguro de eliminar este {{data.tipo.toLowerCase()}}?
   </ng-template>
 </mat-dialog-content>
 
