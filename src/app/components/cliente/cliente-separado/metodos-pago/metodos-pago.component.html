@@ -11,13 +11,16 @@
                   {{ tipo.nombre }}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="metodosDePago.controls[i].get('tipo')?.invalid && metodosDePago.controls[i].get('tipo')?.touched">
+                Elija un metodo de pago
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Número de Tarjeta</mat-label>
               <input matInput formControlName="numero" />
               <mat-error *ngIf="metodosDePago.controls[i].get('numero')?.invalid && metodosDePago.controls[i].get('numero')?.touched">
-                Debe de ingresar el numero de tarjeta
+                Debe de ingresar el número de tarjeta
                 <span *ngIf="metodosDePago.controls[i].get('numero')?.value">
                   (
                   {{ metodosDePago.controls[i].get('numero')?.value.length }}
@@ -28,18 +31,24 @@
               </mat-error>
             </mat-form-field>
 
-
             <mat-form-field>
               <mat-label>Fecha de Vencimiento</mat-label>
               <input matInput [matDatepicker]="picker" formControlName="fechaVencimiento" />
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="metodosDePago.controls[i].get('fechaVencimiento')?.invalid && metodosDePago.controls[i].get('fechaVencimiento')?.touched">
+                La fecha de vencimiento es requerida
+              </mat-error>
             </mat-form-field>
+
             <mat-form-field>
               <mat-label>Nombre del Titular</mat-label>
               <input matInput formControlName="nombreTitular" />
+              <mat-error *ngIf="metodosDePago.controls[i].get('nombreTitular')?.invalid && metodosDePago.controls[i].get('nombreTitular')?.touched">
+                Debe de ingresar el nombre del titular
+              </mat-error>
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeMetodosPago(i)">
+            <button mat-icon-button color="warn" *ngIf="metodosDePago.length > 1" (click)="removeMetodosPago(i)">
               <mat-icon>close</mat-icon>
             </button>
           </div>

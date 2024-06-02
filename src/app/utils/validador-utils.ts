@@ -57,7 +57,6 @@ export function fechaNacimientoValidator(control: AbstractControl): ValidationEr
   return null;
 }
 
-
 export function emailExistsValidator(control: AbstractControl, contactos: any[], originalEmails: string[], clienteServicio: ClienteService): Observable<ValidationErrors | null> {
   if (!control.value) {
     return of(null);

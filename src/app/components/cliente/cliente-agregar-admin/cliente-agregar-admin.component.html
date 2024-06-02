@@ -1,175 +1,77 @@
-<form [formGroup]="formCliente" (ngSubmit)="addEditCliente()" class="form-container">
-  <div class="section">
-    <h3>Clientes:</h3>
-    <div class="fields">
-      <div>
-        <mat-form-field>
-          <mat-label>Nombres</mat-label>
-          <input matInput formControlName="nombres"  />
-          <mat-error *ngIf="formCliente.get('nombres')?.hasError('required')">Nombres requeridos</mat-error>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field>
-          <mat-label>Apellidos</mat-label>
-          <input matInput formControlName="apellidos"  />
-          <mat-error *ngIf="formCliente.get('apellidos')?.hasError('required')">Apellidos requeridos</mat-error>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field>
-          <mat-label>Dirección</mat-label>
-          <input matInput formControlName="direccion"  />
-          <mat-error *ngIf="formCliente.get('direccion')?.hasError('required')">Direccion requerida</mat-error>
-        </mat-form-field>
-      </div>
+<form [formGroup]="formCliente" (ngSubmit)="addEditCliente()">
+  <mat-form-field>
+    <mat-label>Nombres</mat-label>
+    <input matInput formControlName="nombres" />
+    <mat-error *ngIf="formCliente.get('nombres')?.invalid && formCliente.get('nombres')?.touched">
+      Los nombres son requeridos
+    </mat-error>
+  </mat-form-field>
 
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label>Fecha de Nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaNacimiento" autocomplete="off">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="formCliente.get('fechaNacimiento')?.hasError('required')">Fecha requerida</mat-error>
-          <mat-error *ngIf="formCliente.get('fechaNacimiento')?.hasError('menorDeEdad')">Debe ser mayor de 18 años</mat-error>
-        </mat-form-field>
-      </div>
+  <mat-form-field>
+    <mat-label>Apellidos</mat-label>
+    <input matInput formControlName="apellidos" />
+    <mat-error *ngIf="formCliente.get('apellidos')?.invalid && formCliente.get('apellidos')?.touched">
+      Los apellidos son requeridos
+    </mat-error>
+  </mat-form-field>
 
-      <div>
-        <mat-form-field>
-          <mat-label>DPI</mat-label>
-          <input matInput formControlName="dpi"  />
-          <mat-error *ngIf="formCliente.get('dpi')?.hasError('pattern')">DPI debe tener exactamente 13 digitos</mat-error>
-          <mat-error *ngIf="formCliente.get('dpi')?.hasError('dpiExists')">DPI ya existe</mat-error>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field>
-          <mat-label>NIT</mat-label>
-          <input matInput formControlName="nit"  />
-          <mat-error *ngIf="formCliente.get('nit')?.hasError('required')">El NIT es requerido</mat-error>
-          <mat-error *ngIf="formCliente.get('nit')?.hasError('pattern')">Ingrese un NIT válido</mat-error>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field>
-          <mat-label>Empresa</mat-label>
-          <input matInput formControlName="empresa"  />
-          <mat-error *ngIf="formCliente.get('empresa')?.hasError('required')">Empresa requerida</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
+  <mat-form-field>
+    <mat-label>Dirección</mat-label>
+    <input matInput formControlName="direccion" />
+    <mat-error *ngIf="formCliente.get('direccion')?.invalid && formCliente.get('direccion')?.touched">
+      La direccion es requerida
+    </mat-error>
+  </mat-form-field>
 
-  <div class="section">
-    <h3>Contactos:</h3>
-    <div formArrayName="contactos">
-      <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i">
-        <mat-card>
-          <mat-card-header>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="fields">
-              <div>
-                <mat-form-field>
-                  <mat-label>Tipo de Contacto</mat-label>
-                  <mat-select formControlName="tipoContacto" placeholder="Seleccione el tipo de contacto">
-                    <mat-option *ngFor="let tipo of tiposContacto" [value]="tipo.valor">
-                      {{ tipo.nombre }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="contacto.get('tipoContacto')?.hasError('required')">Seleccione un tipo de Contacto</mat-error>
-                </mat-form-field>
-              </div>
-              <div>
-                <mat-form-field>
-                  <mat-label>Valor de Contacto</mat-label>
-                  <input matInput formControlName="valorContacto" />
-                  <mat-error *ngIf="contacto.get('valorContacto')?.hasError('required')">Valor requerido</mat-error>
-                  <mat-error *ngIf="contacto.get('valorContacto')?.hasError('telefonoInvalido')">Teléfono inválido</mat-error>
-                  <mat-error *ngIf="contacto.get('valorContacto')?.hasError('emailInvalido')">Email inválido</mat-error>
-                  <mat-error *ngIf="contacto.get('valorContacto')?.hasError('emailExists')">Dato ya existente</mat-error>
-                </mat-form-field>
-              </div>
-              <button mat-fab color="warn" (click)="dialogoEliminarContacto(i); $event.preventDefault()" *ngIf="contactos.length > 1">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-        <div style="height: 20px;"></div>
-      </div>
-    </div>
-    <button mat-raised-button color="primary" (click)="addContacto(); $event.preventDefault()">Añadir Contacto</button>
-  </div>
+  <mat-form-field>
+    <mat-label>Fecha de Nacimiento</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="formCliente.get('fechaNacimiento')?.invalid && formCliente.get('fechaNacimiento')?.touched">
+      <ng-container *ngIf="formCliente.get('fechaNacimiento')?.errors?.['required']">
+        La fecha de nacimiento es requerida
+      </ng-container>
+      <ng-container *ngIf="formCliente.get('fechaNacimiento')?.errors?.['menorDeEdad']">
+        Debe ser mayor de 18 años
+      </ng-container>
+    </mat-error>
+  </mat-form-field>
 
+  <mat-form-field>
+    <mat-label>DPI</mat-label>
+    <input matInput formControlName="dpi" />
 
+    <mat-error *ngIf="formCliente.get('dpi')?.invalid && formCliente.get('dpi')?.touched">
+      El DPI debe tener exactamente 13 dígitos numéricos
+      <span *ngIf="formCliente.get('dpi')?.value && formCliente.get('dpi')?.value.length !== 13">
+        ({{ formCliente.get('dpi')?.value.length }}/13)
+      </span>
+    </mat-error>
 
+    <mat-error *ngIf="formCliente.get('dpi')?.hasError('dpiExists')">
+      Este DPI ya existe
+    </mat-error>
+  </mat-form-field>
 
-  <div class="section">
-    <h3>Métodos de Pago:</h3>
-    <div formArrayName="metodosDePago">
-      <div *ngFor="let metodo of metodosDePago.controls; let i=index" [formGroupName]="i">
-        <mat-card>
-          <mat-card-header>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="fields">
-              <div>
-                <mat-form-field>
-                  <mat-label>Tipo de Contacto</mat-label>
-                  <mat-select formControlName="tipo" placeholder="Seleccione el tipo de contacto">
-                    <mat-option *ngFor="let tipo of tiposMetodo" [value]="tipo.valor">
-                      {{ tipo.nombre }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="metodo.get('tipo')?.hasError('required')">Seleccione un tipo de Contacto</mat-error>
-                </mat-form-field>
-              </div>
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label>Fecha Vencimiento</mat-label>
-                  <input matInput [matDatepicker]="picker" placeholder="Fecha Vencimiento" formControlName="fechaVencimiento" autocomplete="off">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                  <mat-error *ngIf="metodo.get('fechaVencimiento')?.hasError('required')">Fecha requerida</mat-error>
-                  <mat-error *ngIf="metodo.get('fechaVencimiento')?.hasError('fechaAnterior')">La fecha debe ser mayor que la fecha actual</mat-error>
-                </mat-form-field>
-              </div>
-              <div>
-                <mat-form-field>
-                  <mat-label>Número</mat-label>
-                  <input matInput formControlName="numero"  />
-                  <mat-error *ngIf="metodo.get('numero')?.hasError('required')">Número requerido</mat-error>
-                  <mat-error *ngIf="metodo.get('numero')?.hasError('pattern')">Número inválido</mat-error>
-                </mat-form-field>
-              </div>
-              <div>
-                <mat-form-field>
-                  <mat-label>Nombre del Titular</mat-label>
-                  <input matInput formControlName="nombreTitular"  />
-                  <mat-error *ngIf="metodo.get('nombreTitular')?.hasError('required')">Nombre requerido</mat-error>
-                </mat-form-field>
-              </div>
-              <button mat-fab color="warn" (click)="dialogoEliminarMetodo(i); $event.preventDefault()" *ngIf="metodosDePago.length > 1">
-                <mat-icon>close</mat-icon>
-              </button>
+  <mat-form-field>
+    <mat-label>NIT</mat-label>
+    <input matInput formControlName="nit" />
+      <mat-error *ngIf="formCliente.get('nit')?.invalid && formCliente.get('nit')?.touched">
+        El nit es requerido
+      </mat-error>
+  </mat-form-field>
 
-            </div>
-          </mat-card-content>
-        </mat-card>
-        <!-- Agregando un espacio -->
-        <div style="height: 20px;"></div>
-      </div>
-    </div>
-    <button mat-raised-button color="primary" (click)="addMetodosPago(); $event.preventDefault()">Añadir Método de Pago</button>
-  </div>
+  <mat-form-field>
+    <mat-label>Empresa</mat-label>
+    <input matInput formControlName="empresa" />
+      <mat-error *ngIf="formCliente.get('nit')?.invalid && formCliente.get('nit')?.touched">
+        La empresa es requerida
+      </mat-error>
+  </mat-form-field>
 
+  <app-contactos [parentForm]="formCliente"></app-contactos>
+  <app-metodos-pago [parentForm]="formCliente"></app-metodos-pago>
 
-
-  <div class="button-container">
-    <button mat-raised-button color="primary" type="submit" [disabled]="formCliente.invalid">Guardar</button>
-    <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-  </div>
-
+  <button mat-raised-button color="primary" type="submit" [disabled]="formCliente.invalid">Guardar</button>
 </form>
