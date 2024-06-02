@@ -31,7 +31,6 @@ import { ClienteAgregarAdminComponent } from './cliente/cliente-agregar-admin/cl
 import { ContactoAgregarComponent } from './contacto/contacto-agregar/contacto-agregar.component';
 import { MetodoPagoAgregarComponent } from './metodoPago/metodo-pago-agregar/metodo-pago-agregar.component';
 import { MatStepperModule } from '@angular/material/stepper';
-import { ClienteComponent } from './cliente/cliente-separado/cliente/cliente.component';
 import { ContactosComponent } from './cliente/cliente-separado/contactos/contactos.component';
 import { MetodosPagoComponent } from './cliente/cliente-separado/metodos-pago/metodos-pago.component';
 
@@ -50,7 +49,6 @@ import { MetodosPagoComponent } from './cliente/cliente-separado/metodos-pago/me
     MetodoPagoListaComponent,
     MetodoPagoEliminarComponent,
     MetodoPagoAgregarComponent,
-    ClienteComponent,
     ContactosComponent,
     MetodosPagoComponent
   ],

@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Option } from 'src/app/interfaces/Cliente';
 import { ContactoService } from 'src/app/services/contacto.service';
 import { emailValidator, telefonoValidator } from 'src/app/utils/validador-utils';
+import { ClienteEliminarComponent } from '../../cliente-eliminar/cliente-eliminar.component';
 
 @Component({
   selector: 'app-contactos',
@@ -16,7 +18,8 @@ export class ContactosComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private _contactoService: ContactoService
+    private _contactoService: ContactoService,
+    public _dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -63,9 +66,19 @@ export class ContactosComponent implements OnInit {
     this.contactos.push(this.createContactoGroup());
   }
 
-  removeContacto(index: number): void {
+  dialogRemoveContacto(index: number): void {
     if (this.contactos.length > 1) {
-      this.contactos.removeAt(index);
+      const dialogRef = this._dialog.open(ClienteEliminarComponent, {
+        width: '350px',
+        data: {  }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 'Eliminar') {
+          this.contactos.removeAt(index);
+        }
+      });
     }
   }
+
 }

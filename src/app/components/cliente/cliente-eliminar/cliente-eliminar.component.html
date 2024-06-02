@@ -1,6 +1,11 @@
-<h1 mat-dialog-title> Eliminar Cliente</h1>
+<h1 mat-dialog-title>Eliminar Cliente</h1>
 <mat-dialog-content>
-  ¿Desea eliminar el Cliente "{{dataCliente.nombres+" "+dataCliente.apellidos}}"?
+  <ng-container *ngIf="dataCliente && dataCliente.nombres && dataCliente.apellidos; else defaultMsg">
+    ¿Desea eliminar el Cliente "{{dataCliente.nombres}} {{dataCliente.apellidos}}"?
+  </ng-container>
+  <ng-template #defaultMsg>
+    ¿Está seguro de eliminar?
+  </ng-template>
 </mat-dialog-content>
 
 <div>
@@ -11,7 +16,7 @@
       color="primary"
       (click)="confirmarEliminar()"
       cdkFocusInitial>
-      Si, Eliminar
+      Sí, Eliminar
     </button>
   </mat-dialog-actions>
 </div>

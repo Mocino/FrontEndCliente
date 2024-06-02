@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Option } from 'src/app/interfaces/Cliente';
 import { MetodoPagoService } from 'src/app/services/metodo-pago.service';
 import { fechaTarjetaValidator } from 'src/app/utils/validador-utils';
+import { ClienteEliminarComponent } from '../../cliente-eliminar/cliente-eliminar.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-metodos-pago',
@@ -16,7 +18,8 @@ export class MetodosPagoComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private _metodoPagoService: MetodoPagoService
+    private _metodoPagoService: MetodoPagoService,
+    public _dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -51,9 +54,18 @@ export class MetodosPagoComponent implements OnInit {
     this.metodosDePago.push(this.createMetodoPagoGroup());
   }
 
-  removeMetodosPago(index: number): void {
+  DialogRemoveMetodosPago(index: number): void {
     if (this.metodosDePago.length > 1) {
-      this.metodosDePago.removeAt(index);
+      const dialogRef = this._dialog.open(ClienteEliminarComponent, {
+        width: '350px',
+        data: {  }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 'Eliminar') {
+          this.metodosDePago.removeAt(index);
+        }
+      });
     }
   }
 }

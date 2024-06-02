@@ -35,7 +35,7 @@
           </mat-error>
         </mat-form-field>
 
-        <button mat-icon-button color="warn" *ngIf="contactos.length > 1" (click)="removeContacto(i)">
+        <button mat-icon-button color="warn" type="button" *ngIf="contactos.length > 1" (click)="dialogRemoveContacto(i)">
           <mat-icon>close</mat-icon>
         </button>
       </div>
