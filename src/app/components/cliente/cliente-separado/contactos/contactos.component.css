@@ -1,4 +1,25 @@
 mat-form-field {
-  width: 40%;
+  width: 42%;
+  margin: 1%;
+}
+
+.separator {
+  margin-top: 20px;
+  margin-bottom: 20px; /* Agrega separación en la parte inferior */
+  margin-left: 20px; /* Agrega una sangría a la izquierda */
+  margin-right: 20px; /* Agrega una sangría a la derecha */
+  border-radius: 15px; /* Bordes redondos */
+  background-color: rgba(200, 200, 200, 0.5); /* Fondo transparente gris claro */
+  padding: 10px; /* Espaciado interior */
+  text-align: left; /* Alinea el texto a la izquierda */
+  color: white; /* Color de letra blanco */
+  font-family: 'Roboto', Courier, monospace; /* Fuente monoespaciada similar a una máquina de escribir */
+  font-size: 24px; /* Tamaño de letra más grande */
+}
+
+.formulario-card {
+  padding: 20px;
+  border-radius: 5px;
   margin: 5px;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.181);
 }

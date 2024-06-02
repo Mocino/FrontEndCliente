@@ -1,39 +1,45 @@
-<div [formGroup]="parentForm">
-  <div formArrayName="contactos">
-    <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i">
-
-            <mat-form-field>
-              <mat-label>Tipo de Contacto</mat-label>
-              <mat-select formControlName="tipoContacto">
-                <mat-option *ngFor="let tipo of tiposContacto" [value]="tipo.valor">
-                  {{ tipo.nombre }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="contacto.get('tipoContacto')?.invalid && contacto.get('tipoContacto')?.touched">
-                El tipo de contacto es requerido
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Valor de Contacto</mat-label>
-              <input matInput formControlName="valorContacto" />
-              <mat-error *ngIf="contacto.get('valorContacto')?.invalid && contacto.get('valorContacto')?.touched">
-                <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['required']">
-                  El valor de contacto es requerido
-                </ng-container>
-                <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['emailInvalido']">
-                  El correo electrónico es inválido
-                </ng-container>
-                <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['telefonoInvalido']">
-                  El número de teléfono es inválido
-                </ng-container>
-              </mat-error>
-            </mat-form-field>
-
-            <button mat-icon-button color="warn" *ngIf="contactos.length > 1" (click)="removeContacto(i)">
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
+<mat-card class="formulario-card">
+  <div class="separator">
+    <span class="separator-text">Datos de Contacto</span>
   </div>
-  <button mat-raised-button color="primary" type="button" (click)="addContacto()">Añadir Contacto</button>
-</div>
+
+  <div [formGroup]="parentForm">
+    <div formArrayName="contactos">
+      <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i" class="contacto-item">
+
+        <mat-form-field>
+          <mat-label>Tipo de Contacto</mat-label>
+          <mat-select formControlName="tipoContacto">
+            <mat-option *ngFor="let tipo of tiposContacto" [value]="tipo.valor">
+              {{ tipo.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="contacto.get('tipoContacto')?.invalid && contacto.get('tipoContacto')?.touched">
+            El tipo de contacto es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Valor de Contacto</mat-label>
+          <input matInput formControlName="valorContacto" />
+          <mat-error *ngIf="contacto.get('valorContacto')?.invalid && contacto.get('valorContacto')?.touched">
+            <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['required']">
+              El valor de contacto es requerido
+            </ng-container>
+            <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['emailInvalido']">
+              El correo electrónico es inválido
+            </ng-container>
+            <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['telefonoInvalido']">
+              El número de teléfono es inválido
+            </ng-container>
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-icon-button color="warn" *ngIf="contactos.length > 1" (click)="removeContacto(i)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <button mat-raised-button color="primary" type="button" (click)="addContacto()">Añadir Contacto</button>
+  </div>
+</mat-card>

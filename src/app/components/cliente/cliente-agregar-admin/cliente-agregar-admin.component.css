@@ -1,14 +1,36 @@
 form {
-  padding: 20px;
   max-width: 600px;
   margin: 0 auto;
 }
 
 mat-form-field {
   width: 48%;
-  margin: 5px;
+  margin: 1%;
 }
 
 button[type="submit"] {
   margin-top: 20px;
 }
+
+.formulario-card {
+  padding: 20px; /* Ajusta el espaciado interior según sea necesario */
+  border-radius: 15px; /* Cambia este valor según el redondeo deseado */
+  margin: 40px; /* Agrega un margen alrededor de la tarjeta */
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.181); /* Agrega una sombra suave */
+}
+
+
+.separator {
+  margin-top: 20px;
+  margin-bottom: 20px; /* Agrega separación en la parte inferior */
+  margin-left: 20px; /* Agrega una sangría a la izquierda */
+  margin-right: 20px; /* Agrega una sangría a la derecha */
+  border-radius: 15px; /* Bordes redondos */
+  background-color: rgba(200, 200, 200, 0.5); /* Fondo transparente gris claro */
+  padding: 10px; /* Espaciado interior */
+  text-align: left; /* Alinea el texto a la izquierda */
+  color: white; /* Color de letra blanco */
+  font-family: 'Roboto', Courier, monospace; /* Fuente monoespaciada similar a una máquina de escribir */
+  font-size: 24px; /* Tamaño de letra más grande */
+}
+
