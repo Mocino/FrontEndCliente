@@ -1,9 +1,6 @@
 <div [formGroup]="parentForm">
   <div formArrayName="metodosDePago">
     <div *ngFor="let metodo of metodosDePago.controls; let i=index" [formGroupName]="i">
-      <mat-card>
-        <mat-card-content>
-          <div class="fields">
             <mat-form-field>
               <mat-label>Tipo de Método de Pago</mat-label>
               <mat-select formControlName="tipo">
@@ -52,9 +49,6 @@
               <mat-icon>close</mat-icon>
             </button>
           </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
   </div>
   <button mat-raised-button color="primary" type="button" (click)="addMetodosPago()">Añadir Método de Pago</button>
 </div>

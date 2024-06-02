@@ -1,9 +1,6 @@
 <div [formGroup]="parentForm">
   <div formArrayName="contactos">
     <div *ngFor="let contacto of contactos.controls; let i=index" [formGroupName]="i">
-      <mat-card>
-        <mat-card-content>
-          <div class="fields">
 
             <mat-form-field>
               <mat-label>Tipo de Contacto</mat-label>
@@ -37,9 +34,6 @@
               <mat-icon>close</mat-icon>
             </button>
           </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
   </div>
   <button mat-raised-button color="primary" type="button" (click)="addContacto()">Añadir Contacto</button>
 </div>
