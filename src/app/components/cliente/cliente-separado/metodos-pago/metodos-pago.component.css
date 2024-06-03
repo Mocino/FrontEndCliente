@@ -9,7 +9,7 @@ mat-form-field {
   margin-left: 20px; /* Agrega una sangría a la izquierda */
   margin-right: 20px; /* Agrega una sangría a la derecha */
   border-radius: 15px; /* Bordes redondos */
-  background-color: rgba(200, 200, 200, 0.5); /* Fondo transparente gris claro */
+  background: linear-gradient(to right, rgba(200, 200, 200, 0.5), rgba(200, 200, 200, 0) 90%); /* Fondo con gradiente */
   padding: 10px; /* Espaciado interior */
   text-align: left; /* Alinea el texto a la izquierda */
   color: white; /* Color de letra blanco */

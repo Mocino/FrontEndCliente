@@ -32,6 +32,9 @@
             <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['telefonoInvalido']">
               El número de teléfono es inválido
             </ng-container>
+            <ng-container *ngIf="contacto.get('valorContacto')?.errors?.['emailTaken']">
+              El correo electrónico ya está registrado
+            </ng-container>
           </mat-error>
         </mat-form-field>
 

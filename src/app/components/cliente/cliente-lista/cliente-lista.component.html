@@ -4,9 +4,12 @@
 
     <div style="width: 100%;">
       <mat-card>
-        <mat-card-header style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px;">
-          <h1 style="color: white; margin: 0;">Lista de Clientes</h1>
-          <div style="flex-grow: 1;"></div>
+        <mat-card-header class="header">
+
+          <div class="separator">
+            <span>Lista de Clientes</span>
+          </div>
+
           <button mat-flat-button color="primary" (click)="openDialogCrearCliente()">Nuevo</button>
         </mat-card-header>
       </mat-card>
